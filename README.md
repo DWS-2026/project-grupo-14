@@ -1,4 +1,4 @@
-# [Nombre de la Aplicación]
+# [Academia ElSoto]
 
 ## 👥 Miembros del Equipo
 | Nombre y Apellidos | Correo URJC | Usuario GitHub |
