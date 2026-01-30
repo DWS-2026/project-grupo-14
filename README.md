@@ -41,7 +41,7 @@ Describir los permisos de cada tipo de usuario e indicar de qué entidades es du
   - Es dueño de: [Ej: Sus propios Cursos, su Perfil de Usuario, sus Comentarios, Carrito de Compra]
 
 * **Administrador**: 
-  - Permisos: [Ej: Gestión completa de productos (CRUD), visualización de estadísticas (alumnos y cursos), moderación de contenido]
+  - Permisos: [Ejj: Gestión completa de productos (CRUD), visualización de estadísticas (alumnos y cursos), moderación de contenido]
   - Es dueño de: [Ej: Comentarios, Carrito de Compra, puede gestionar todos los Alumnos y Cursos]
 
 ### **Imágenes**
