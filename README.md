@@ -1,12 +1,12 @@
-# [Academia ElSoto]
+# [Academia El Soto]
 
 ## 👥 Miembros del Equipo
 | Nombre y Apellidos | Correo URJC | Usuario GitHub |
 |:--- |:--- |:--- |
-| [Nombre 1] | [email1]@alumnos.urjc.es | [User1] |
-| [Nombre 2] | [email2]@alumnos.urjc.es | [User2] |
+| [Ignacio Enfedaque Cordero] | [i.enfedaque.2024]@alumnos.urjc.es | [IEC12] |
+| [Mario Jándara Alcón] | [m.jandara.2024]@alumnos.urjc.es | [User2] |
 | [Nombre 3] | [email3]@alumnos.urjc.es | [User3] |
-| [Nombre 4] | [email4]@alumnos.urjc.es | [User4] |
+
 
 ---
 
@@ -18,15 +18,15 @@
 ### **Entidades**
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
 
-1. **[Entidad 1]**: [Ej: Usuario]
-2. **[Entidad 2]**: [Ej: Producto]
-3. **[Entidad 3]**: [Ej: Pedido]
-4. **[Entidad 4]**: [Ej: Categoría]
-
+1. **[Entidad 1]**: Alumno
+2. **[Entidad 2]**: Curso
+3. **[Entidad 3]**: Carrito de compra
+4. **[Entidad 4]**: Comentario
 **Relaciones entre entidades:**
-- [Ej: Usuario - Pedido: Un usuario puede tener múltiples pedidos (1:N)]
-- [Ej: Pedido - Producto: Un pedido puede contener múltiples productos y un producto puede estar en múltiples pedidos (N:M)]
-- [Ej: Producto - Categoría: Un producto pertenece a una categoría (N:1)]
+- [Ej: Alunno - Curso: Un alumno puede tener varios cursos y un curso tiene varios alumnos (N:M)]
+- [Ej: Alumno - Comentario: Un alumno puede tener varios comentarios (1:N)]
+- [Ej: Curso - Carrito de compra: Un carrito puede tener varios cursos (N:1)]
+- [Ej: Curso - Comentario: Un curso puede tener varios comentarios (1:N)]
 - [Descripción de otras relaciones relevantes]
 
 ### **Permisos de los Usuarios**
@@ -37,19 +37,19 @@ Describir los permisos de cada tipo de usuario e indicar de qué entidades es du
   - No es dueño de ninguna entidad
 
 * **Usuario Registrado**: 
-  - Permisos: [Ej: Gestión de perfil, realizar pedidos, crear valoraciones]
-  - Es dueño de: [Ej: Sus propios Pedidos, su Perfil de Usuario, sus Valoraciones]
+  - Permisos: [Ej: Gestión de perfil, comprar cursos, crear comentarios]
+  - Es dueño de: [Ej: Sus propios Cursos, su Perfil de Usuario, sus Comentarios, Carrito de Compra]
 
 * **Administrador**: 
-  - Permisos: [Ej: Gestión completa de productos (CRUD), visualización de estadísticas, moderación de contenido]
-  - Es dueño de: [Ej: Productos, Categorías, puede gestionar todos los Pedidos y Usuarios]
+  - Permisos: [Ej: Gestión completa de productos (CRUD), visualización de estadísticas (alumnos y cursos), moderación de contenido]
+  - Es dueño de: [Ej: Comentarios, Carrito de Compra, puede gestionar todos los Alumnos y Cursos]
 
 ### **Imágenes**
 Indicar qué entidades tendrán asociadas una o varias imágenes:
 
 - **[Entidad con imágenes 1]**: [Ej: Usuario - Una imagen de avatar por usuario]
-- **[Entidad con imágenes 2]**: [Ej: Producto - Múltiples imágenes por producto (galería)]
-- **[Entidad con imágenes 3]**: [Ej: Categoría - Una imagen representativa por categoría]
+- **[Entidad con imágenes 2]**: [Ej: Curso - Múltiples imágenes por producto (galería)]
+
 
 ---
 
