@@ -84,7 +84,63 @@
 *::after {
   box-sizing: border-box;
 }
+#btn-correo {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #dc3545;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;        /* Ahora sí se aplica */
+    transition: opacity 0.3s ease;
+}
 
+#btn-correo:hover {
+    background-color: #c82333;
+}
+banner-container {
+    background-color: #ffffff; /* Fondo blanco */
+    padding: 20px 30px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra contenido */
+    text-align: center;
+    max-width: 400px; /* Ancho máximo */
+    margin: 20px auto; /* Centrado en la página */
+    border: 1px solid #ddd; /* Borde sutil */
+}
+
+.banner-text {
+    color: #333333; /* Texto oscuro */
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.banner-button {
+    display: inline-block;
+    padding: 8px 20px;  /* Tamaño del botón */
+    background-color: #ffc107; /* Amarillo */
+    color: #ffffff; /* Texto oscuro sobre amarillo */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.banner-button:hover {
+    background-color: #e0a800; /* Amarillo más oscuro al pasar el cursor */
+}
+.logo-elsoto {
+    height: 35px !important;   /* Ajusta la altura del logo */
+    width: auto !important;    /* Mantiene la proporción original */
+}
 @media (prefers-reduced-motion: no-preference) {
   :root {
     scroll-behavior: smooth;
