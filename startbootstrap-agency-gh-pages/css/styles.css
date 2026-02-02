@@ -141,6 +141,12 @@ banner-container {
     height: 35px !important;   /* Ajusta la altura del logo */
     width: auto !important;    /* Mantiene la proporción original */
 }
+.text-muted::before {
+    content: "✔";        /* símbolo seguro */
+    color: #0d6efd;      /* azul Bootstrap */
+    margin-right: 8px;
+    font-weight: bold;
+}
 @media (prefers-reduced-motion: no-preference) {
   :root {
     scroll-behavior: smooth;
