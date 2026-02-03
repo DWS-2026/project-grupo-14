@@ -142,7 +142,7 @@ banner-container {
     width: auto !important;    /* Mantiene la proporción original */
 }
 .text-muted::before {
-    content: "✔";        /* símbolo seguro */
+           
     color: #0d6efd;      /* azul Bootstrap */
     margin-right: 8px;
     font-weight: bold;
