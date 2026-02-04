@@ -40,7 +40,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="profesores.html">Profesores</a>
                     </li>
-                    
+
                     <li class="nav-item ms-lg-3 dropdown">
                         <a class="btn btn-outline-light dropdown-toggle" href="#" role="button"
                             data-bs-toggle="dropdown">
@@ -55,7 +55,7 @@
                         </ul>
                     </li>
                     <li class="nav-item ms-lg-3">
-                        <a class="btn btn-outline-light px-4" href="admin.html" >
+                        <a class="btn btn-outline-light px-4" href="admin.html">
                             Admin
                         </a>
                     </li>
@@ -99,6 +99,80 @@
                     </ul>
                 </div>
 
+                <div class="card shadow rounded-4 p-4 mb-4">
+                    <h5 class="mb-3">Mis comentarios</h5>
+
+                    <div class="list-group list-group-flush">
+
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Matemática discreta y álgebra</strong>
+                                    <p class="mb-1 mt-1">
+                                        Muy buen curso, las explicaciones son claras y fáciles de seguir.
+                                    </p>
+                                    <small class="text-muted">Publicado hace 2 días</small>
+                                </div>
+
+                                <div class="ms-3">
+                                    <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                        data-bs-target="#editarComentarioModal">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Estructuras de datos</strong>
+                                    <p class="mb-1 mt-1">
+                                        Contenido muy completo, aunque algunas partes podrían ir más despacio.
+                                    </p>
+                                    <small class="text-muted">Publicado hace 1 semana</small>
+                                </div>
+
+                                <div class="ms-3">
+                                    <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                        data-bs-target="#editarComentarioModal">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Desarrollo web seguro</strong>
+                                    <p class="mb-1 mt-1">
+                                        Me ha ayudado mucho a entender vulnerabilidades reales.
+                                    </p>
+                                    <small class="text-muted">Publicado hace 3 semanas</small>
+                                </div>
+
+                                <div class="ms-3">
+                                    <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                        data-bs-target="#editarComentarioModal">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <div class="card shadow rounded-4 p-4">
                     <h5 class="mb-3">Configuración</h5>
                     <button class="btn btn-outline-primary mb-2">Editar perfil</button>
@@ -108,7 +182,33 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editarComentarioModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
 
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <textarea class="form-control" rows="4">
+Muy buen curso, las explicaciones son claras y fáciles de seguir.
+        </textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button class="btn btn-primary">
+                        Guardar cambios
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <!-- Footer-->
     <footer class="footer py-4">
         <div class="container">
