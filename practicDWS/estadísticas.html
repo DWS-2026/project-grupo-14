@@ -40,25 +40,25 @@
                     <li class="nav-item">
                         <a class="nav-link" href="profesores.html">Profesores</a>
                     </li>
-                    
-                    <li class="nav-item ms-lg-3 dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button"
-                            data-bs-toggle="dropdown">
-                            Óscar Soto
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="user.html">Mi perfil</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item text-danger" href="auth/login.html">Cerrar sesión</a></li>
-                        </ul>
-                    </li>
                     <li class="nav-item ms-lg-3">
                         <a class="btn btn-outline-light px-4" href="admin.html" >
                             Admin
                         </a>
                     </li>
+                    <li class="nav-item ms-lg-3 dropdown">
+                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">
+                            Estadísticas
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="admin.html">Admin</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="crear_curso.html">Crear Curso</a></li>
+                        </ul>
+                    </li>
+                    
                     </li>
                     <li class="nav-item ms-lg-3" id="carrito_compra">
                         <a class="nav-link" href="carrito.html">
@@ -81,28 +81,73 @@
                     <div class="d-flex align-items-center gap-4">
                         <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
                             style="width:80px;height:80px;font-size:32px;">
-                            OS
+                            AD
                         </div>
                         <div>
-                            <h4 class="mb-1">Óscar Soto</h4>
-                            <p class="mb-0 text-muted">o.soto@email.com</p>
+                            <h4 class="mb-1">Mira las estadísticas del curso</h4>
+                            
                         </div>
                     </div>
                 </div>
 
                 <div class="card shadow rounded-4 p-4 mb-4">
-                    <h5 class="mb-3">Mis cursos</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Matematica discreta y álgebra</li>
-                        <li class="list-group-item">Estructuras de datos</li>
-                        <li class="list-group-item">Desarrollo web seguro</li>
-                    </ul>
+                    <h5 class="mb-3">Estadísticas de cursos</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Curso</th>
+                                    <th>Profesor</th>
+                                    <th>Alumnos</th>
+                                    <th>Facturación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Matemática Discreta y Algebra</td>
+                                    <td>Frenando</td>
+                                    <td>12</td>
+                                    <td>56 €</td>
+                                </tr>
+                                <tr>
+                                    <td>Estructuras de datos</td>
+                                    <td>Pau</td>
+                                    <td>20</td>
+                                    <td>120 €</td>
+                                </tr>
+                                <tr>
+                                    <td>Desarrollo web seguro</td>
+                                    <td>Ander</td>
+                                    <td>15</td>
+                                    <td>75 €</td>
+                                </tr>
+                                <tr>
+                                    <td>Introducción a  la Programación</td>
+                                    <td>Pau</td>
+                                    <td>10</td>
+                                    <td>50 €</td>
+                                </tr>
+                                <tr>
+                                    <td>Física</td>
+                                    <td>Ander</td>
+                                    <td>15</td>
+                                    <td>150 €</td>
+                                </tr>
+                                <tr>
+                                    <td>Programación avanzada</td>
+                                    <td>Frenando</td>
+                                    <td>20</td>
+                                    <td>170 €</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="card shadow rounded-4 p-4">
                     <h5 class="mb-3">Configuración</h5>
-                    <button class="btn btn-outline-primary mb-2">Editar perfil</button>
-                    <button class="btn btn-outline-danger">Cerrar sesión</button>
+                    <button class="btn btn-outline-primary mb-2">Admin</button>
+                    <button class="btn btn-outline-danger">Crear curso</button>
                 </div>
 
             </div>

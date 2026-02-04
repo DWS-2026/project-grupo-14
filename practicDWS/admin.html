@@ -8,47 +8,61 @@
     <meta name="author" content="" />
     <title>Academia El Soto</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="../css/styles.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
 </head>
 
-<body id="page-top" class="bg-light d-flex flex-column min-vh-100">
+<body id="page-top">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="../index.html">
-                <img src="../assets/img/ELSOTO.png" alt="..." class="logo-elsoto" /></a>
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/img/ELSOTO.png" alt="..." class="logo-elsoto" /></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ms-1"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0 align-items-lg-center">
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="../informacion.html">Información</a>
+                        <a class="nav-link" href="informacion.html">Información</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../cursos.html">Cursos</a>
+                        <a class="nav-link" href="cursos.html">Cursos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../profesores.html">Profesores</a>
+                        <a class="nav-link" href="profesores.html">Profesores</a>
                     </li>
-                    
+                
                     <li class="nav-item ms-lg-3">
-                        <a class="btn btn-outline-light px-4" href="login.html" >
+                        <a class="btn btn-outline-light px-4" href="auth/login.html" >
                             Login
                         </a>
                     </li>
-                    <li class="nav-item ms-lg-3">
-                        <a class="btn btn-outline-light px-4" href="../admin.html" >
+                    <li class="nav-item ms-lg-3 dropdown">
+                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">
                             Admin
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="estadísticas.html">Estadísticas</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="crear_curso.html">Crear Curso</a></li>
+                        </ul>
+                    </li>
+                    </li>
+                    <li class="nav-item ms-lg-3" id="carrito_compra">
+                        <a class="nav-link" href="carrito.html">
+                            <i class="fa-solid fa-cart-shopping fa-xl"></i>
                         </a>
                     </li>
                 </ul>
@@ -58,37 +72,9 @@
 
     <div style="height:80px"></div>
 
-
-    <!-- REGISTER -->
-    <div class="container flex-grow-1 d-flex justify-content-center align-items-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow rounded-4 p-4">
-                <h3 class="text-center mb-4">Crear cuenta</h3>
-                <form>
-                    <div class="mb-3">
-                        <label>Nombre completo</label>
-                        <input type="text" class="form-control" placeholder="Tu nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" class="form-control" placeholder="usuario@email.com" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Contraseña</label>
-                        <input type="password" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Repetir contraseña</label>
-                        <input type="password" class="form-control" required>
-                    </div>
-                    <button class="btn btn-primary w-100">Registrarse</button>
-                </form>
-                <p class="text-center mt-3 mb-0">
-                    ¿Ya tienes cuenta?
-                    <a href="login.html">Inicia sesión</a>
-                </p>
-            </div>
-        </div>
+    <div class="container text-center mt-5">
+        <h1>Bienvenido, Admin</h1>
+        <p>Pulsa el botón de Admin en la barra de navegación para acceder a las opciones.</p>
     </div>
 
     <!-- Footer-->
@@ -111,6 +97,9 @@
             </div>
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
+
 
 </html>
