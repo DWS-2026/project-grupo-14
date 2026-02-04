@@ -40,14 +40,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="profesores.html">Profesores</a>
                     </li>
-                    
+
                     <li class="nav-item ms-lg-3">
                         <a class="btn btn-outline-light px-4" href="auth/login.html">
                             Login
                         </a>
                     </li>
                     <li class="nav-item ms-lg-3">
-                        <a class="btn btn-outline-light px-4" href="admin.html" >
+                        <a class="btn btn-outline-light px-4" href="admin.html">
                             Admin
                         </a>
                     </li>
@@ -60,6 +60,7 @@
             </div>
         </div>
     </nav>
+    <div style="height:80px"></div>
     <!-- Cursos-->
     <section class="page-section bg-light" id="portfolio">
         <div class="container">
@@ -158,15 +159,14 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <!-- botón gmail visto en clase -->
-            <a href="mailto:academiaelsoto@gmail.com?subject=Consulta%20Academia%20El%20Soto&body=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20cursos." 
-            id="btn-correo" 
-            class="btn btn-danger">
+        <a href="mailto:academiaelsoto@gmail.com?subject=Consulta%20Academia%20El%20Soto&body=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20cursos."
+            id="btn-correo" class="btn btn-danger">
             ¡Escríbenos por correo!
-            </a>
+        </a>
     </section>
     <!-- Cuando aprietas en un curso-->
     <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
@@ -207,49 +207,53 @@
                                 <br><br>
                                 <!-- Comentarios-->
                                 <section class="page-section" id="contact">
-                                <div class="container">
-                                    <div class="text-center">
-                                        <h2 class="section-heading text-uppercase">Comentarios</h2>
-                                        <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre este curso.</h3>
-                                    </div>
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- * * SB Forms Contact Form * *-->
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- This form is pre-integrated with SB Forms.-->
-                                    <!-- To make this form functional, sign up at-->
-                                    <!-- https://startbootstrap.com/solution/contact-forms-->
-                                    <!-- to get an API token!-->
-                                    <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                                        <div class="row align-items-stretch mb-5">
-                                            <div>
-                                                <div class="form-group form-group-textarea mb-md-0">
-                                                    <!-- Mensaje a escribir-->
-                                                    <textarea class="form-control" id="message" placeholder="Your Message *"
-                                                        data-sb-validations="required"></textarea>
-                                                    <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.
+                                    <div class="container">
+                                        <div class="text-center">
+                                            <h2 class="section-heading text-uppercase">Comentarios</h2>
+                                            <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre
+                                                este curso.</h3>
+                                        </div>
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- * * SB Forms Contact Form * *-->
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- This form is pre-integrated with SB Forms.-->
+                                        <!-- To make this form functional, sign up at-->
+                                        <!-- https://startbootstrap.com/solution/contact-forms-->
+                                        <!-- to get an API token!-->
+                                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                                            <div class="row align-items-stretch mb-5">
+                                                <div>
+                                                    <div class="form-group form-group-textarea mb-md-0">
+                                                        <!-- Mensaje a escribir-->
+                                                        <textarea class="form-control" id="message"
+                                                            placeholder="Your Message *"
+                                                            data-sb-validations="required"></textarea>
+                                                        <div class="invalid-feedback"
+                                                            data-sb-feedback="message:required">A message is required.
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si se ha enviado correctamente-->
-                                        <div class="d-none" id="submitSuccessMessage">
-                                            <div class="text-center text-white mb-3">
-                                                <div class="fw-bolder">Form submission successful!</div>
-                                                To activate this form, sign up at
-                                                <br />
-                                                <a
-                                                    href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                            <!-- Se ve esto si se ha enviado correctamente-->
+                                            <div class="d-none" id="submitSuccessMessage">
+                                                <div class="text-center text-white mb-3">
+                                                    <div class="fw-bolder">Form submission successful!</div>
+                                                    To activate this form, sign up at
+                                                    <br />
+                                                    <a
+                                                        href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si no se ha enviado correctamente -->
-                                        <div class="d-none" id="submitErrorMessage">
-                                            <div class="text-center text-danger mb-3">Error sending message!</div>
-                                        </div>
-                                        <!-- Boton de enviar -->
-                                        <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled"
-                                                id="submitButton" type="submit">Send Message</button></div>
-                                    </form>
-                                </div>
+                                            <!-- Se ve esto si no se ha enviado correctamente -->
+                                            <div class="d-none" id="submitErrorMessage">
+                                                <div class="text-center text-danger mb-3">Error sending message!</div>
+                                            </div>
+                                            <!-- Boton de enviar -->
+                                            <div class="text-center"><button
+                                                    class="btn btn-primary btn-xl text-uppercase disabled"
+                                                    id="submitButton" type="submit">Send Message</button></div>
+                                        </form>
+                                    </div>
                                 </section>
                             </div>
                         </div>
@@ -295,49 +299,53 @@
                                 <br><br>
                                 <!-- Comentarios-->
                                 <section class="page-section" id="contact">
-                                <div class="container">
-                                    <div class="text-center">
-                                        <h2 class="section-heading text-uppercase">Comentarios</h2>
-                                        <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre este curso.</h3>
-                                    </div>
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- * * SB Forms Contact Form * *-->
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- This form is pre-integrated with SB Forms.-->
-                                    <!-- To make this form functional, sign up at-->
-                                    <!-- https://startbootstrap.com/solution/contact-forms-->
-                                    <!-- to get an API token!-->
-                                    <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                                        <div class="row align-items-stretch mb-5">
-                                            <div>
-                                                <div class="form-group form-group-textarea mb-md-0">
-                                                    <!-- Mensaje a escribir-->
-                                                    <textarea class="form-control" id="message" placeholder="Your Message *"
-                                                        data-sb-validations="required"></textarea>
-                                                    <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.
+                                    <div class="container">
+                                        <div class="text-center">
+                                            <h2 class="section-heading text-uppercase">Comentarios</h2>
+                                            <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre
+                                                este curso.</h3>
+                                        </div>
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- * * SB Forms Contact Form * *-->
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- This form is pre-integrated with SB Forms.-->
+                                        <!-- To make this form functional, sign up at-->
+                                        <!-- https://startbootstrap.com/solution/contact-forms-->
+                                        <!-- to get an API token!-->
+                                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                                            <div class="row align-items-stretch mb-5">
+                                                <div>
+                                                    <div class="form-group form-group-textarea mb-md-0">
+                                                        <!-- Mensaje a escribir-->
+                                                        <textarea class="form-control" id="message"
+                                                            placeholder="Your Message *"
+                                                            data-sb-validations="required"></textarea>
+                                                        <div class="invalid-feedback"
+                                                            data-sb-feedback="message:required">A message is required.
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si se ha enviado correctamente-->
-                                        <div class="d-none" id="submitSuccessMessage">
-                                            <div class="text-center text-white mb-3">
-                                                <div class="fw-bolder">Form submission successful!</div>
-                                                To activate this form, sign up at
-                                                <br />
-                                                <a
-                                                    href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                            <!-- Se ve esto si se ha enviado correctamente-->
+                                            <div class="d-none" id="submitSuccessMessage">
+                                                <div class="text-center text-white mb-3">
+                                                    <div class="fw-bolder">Form submission successful!</div>
+                                                    To activate this form, sign up at
+                                                    <br />
+                                                    <a
+                                                        href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si no se ha enviado correctamente -->
-                                        <div class="d-none" id="submitErrorMessage">
-                                            <div class="text-center text-danger mb-3">Error sending message!</div>
-                                        </div>
-                                        <!-- Boton de enviar -->
-                                        <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled"
-                                                id="submitButton" type="submit">Send Message</button></div>
-                                    </form>
-                                </div>
+                                            <!-- Se ve esto si no se ha enviado correctamente -->
+                                            <div class="d-none" id="submitErrorMessage">
+                                                <div class="text-center text-danger mb-3">Error sending message!</div>
+                                            </div>
+                                            <!-- Boton de enviar -->
+                                            <div class="text-center"><button
+                                                    class="btn btn-primary btn-xl text-uppercase disabled"
+                                                    id="submitButton" type="submit">Send Message</button></div>
+                                        </form>
+                                    </div>
                                 </section>
                             </div>
                         </div>
@@ -388,49 +396,53 @@
                                 <br><br>
                                 <!-- Comentarios-->
                                 <section class="page-section" id="contact">
-                                <div class="container">
-                                    <div class="text-center">
-                                        <h2 class="section-heading text-uppercase">Comentarios</h2>
-                                        <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre este curso.</h3>
-                                    </div>
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- * * SB Forms Contact Form * *-->
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- This form is pre-integrated with SB Forms.-->
-                                    <!-- To make this form functional, sign up at-->
-                                    <!-- https://startbootstrap.com/solution/contact-forms-->
-                                    <!-- to get an API token!-->
-                                    <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                                        <div class="row align-items-stretch mb-5">
-                                            <div>
-                                                <div class="form-group form-group-textarea mb-md-0">
-                                                    <!-- Mensaje a escribir-->
-                                                    <textarea class="form-control" id="message" placeholder="Your Message *"
-                                                        data-sb-validations="required"></textarea>
-                                                    <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.
+                                    <div class="container">
+                                        <div class="text-center">
+                                            <h2 class="section-heading text-uppercase">Comentarios</h2>
+                                            <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre
+                                                este curso.</h3>
+                                        </div>
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- * * SB Forms Contact Form * *-->
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- This form is pre-integrated with SB Forms.-->
+                                        <!-- To make this form functional, sign up at-->
+                                        <!-- https://startbootstrap.com/solution/contact-forms-->
+                                        <!-- to get an API token!-->
+                                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                                            <div class="row align-items-stretch mb-5">
+                                                <div>
+                                                    <div class="form-group form-group-textarea mb-md-0">
+                                                        <!-- Mensaje a escribir-->
+                                                        <textarea class="form-control" id="message"
+                                                            placeholder="Your Message *"
+                                                            data-sb-validations="required"></textarea>
+                                                        <div class="invalid-feedback"
+                                                            data-sb-feedback="message:required">A message is required.
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si se ha enviado correctamente-->
-                                        <div class="d-none" id="submitSuccessMessage">
-                                            <div class="text-center text-white mb-3">
-                                                <div class="fw-bolder">Form submission successful!</div>
-                                                To activate this form, sign up at
-                                                <br />
-                                                <a
-                                                    href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                            <!-- Se ve esto si se ha enviado correctamente-->
+                                            <div class="d-none" id="submitSuccessMessage">
+                                                <div class="text-center text-white mb-3">
+                                                    <div class="fw-bolder">Form submission successful!</div>
+                                                    To activate this form, sign up at
+                                                    <br />
+                                                    <a
+                                                        href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si no se ha enviado correctamente -->
-                                        <div class="d-none" id="submitErrorMessage">
-                                            <div class="text-center text-danger mb-3">Error sending message!</div>
-                                        </div>
-                                        <!-- Boton de enviar -->
-                                        <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled"
-                                                id="submitButton" type="submit">Send Message</button></div>
-                                    </form>
-                                </div>
+                                            <!-- Se ve esto si no se ha enviado correctamente -->
+                                            <div class="d-none" id="submitErrorMessage">
+                                                <div class="text-center text-danger mb-3">Error sending message!</div>
+                                            </div>
+                                            <!-- Boton de enviar -->
+                                            <div class="text-center"><button
+                                                    class="btn btn-primary btn-xl text-uppercase disabled"
+                                                    id="submitButton" type="submit">Send Message</button></div>
+                                        </form>
+                                    </div>
                                 </section>
                             </div>
                         </div>
@@ -449,39 +461,39 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <br class="modal-body">
-                                <!-- Project details-->
-                                <h2 class="text-uppercase">IP</h2>
-                                <p class="item-intro text-muted">Introducción a la programación.</p>
-                                <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/4.jpg" alt="..." />
-                                <p>El objetivo de la asignatura es ofrecer al alumno una visión general del desarrollo
-                                    de algoritmos y la resolución de problemas mediante el lenguaje C, permitiendo
-                                    comprender la interacción entre el software y el hardware a bajo nivel. ¡¡Te
-                                    esperamos!!</p>
-                                <ul class="list-inline">
-                                    <li>
-                                        <strong>Profesor:</strong>
-                                        Ander Iniesta.
-                                    </li>
-                                    <li>
-                                        <strong>Alumnos:</strong>
-                                        Mínimo 6.
-                                    </li>
-                                    <li>
-                                        <strong>Precio:</strong>
-                                        130$.
-                                    </li>
-                                </ul>
-                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
-                                    type="button">
-                                    Comprar curso
-                                </button>
-                                <br><br>
-                                <!-- Comentarios-->
-                                <section class="page-section" id="contact">
+                            <!-- Project details-->
+                            <h2 class="text-uppercase">IP</h2>
+                            <p class="item-intro text-muted">Introducción a la programación.</p>
+                            <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/4.jpg" alt="..." />
+                            <p>El objetivo de la asignatura es ofrecer al alumno una visión general del desarrollo
+                                de algoritmos y la resolución de problemas mediante el lenguaje C, permitiendo
+                                comprender la interacción entre el software y el hardware a bajo nivel. ¡¡Te
+                                esperamos!!</p>
+                            <ul class="list-inline">
+                                <li>
+                                    <strong>Profesor:</strong>
+                                    Ander Iniesta.
+                                </li>
+                                <li>
+                                    <strong>Alumnos:</strong>
+                                    Mínimo 6.
+                                </li>
+                                <li>
+                                    <strong>Precio:</strong>
+                                    130$.
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                Comprar curso
+                            </button>
+                            <br><br>
+                            <!-- Comentarios-->
+                            <section class="page-section" id="contact">
                                 <div class="container">
                                     <div class="text-center">
                                         <h2 class="section-heading text-uppercase">Comentarios</h2>
-                                        <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre este curso.</h3>
+                                        <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre este
+                                            curso.</h3>
                                     </div>
                                     <!-- * * * * * * * * * * * * * * *-->
                                     <!-- * * SB Forms Contact Form * *-->
@@ -495,9 +507,11 @@
                                             <div>
                                                 <div class="form-group form-group-textarea mb-md-0">
                                                     <!-- Mensaje a escribir-->
-                                                    <textarea class="form-control" id="message" placeholder="Your Message *"
+                                                    <textarea class="form-control" id="message"
+                                                        placeholder="Your Message *"
                                                         data-sb-validations="required"></textarea>
-                                                    <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.
+                                                    <div class="invalid-feedback" data-sb-feedback="message:required">A
+                                                        message is required.
                                                     </div>
                                                 </div>
                                             </div>
@@ -517,17 +531,18 @@
                                             <div class="text-center text-danger mb-3">Error sending message!</div>
                                         </div>
                                         <!-- Boton de enviar -->
-                                        <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled"
-                                                id="submitButton" type="submit">Send Message</button></div>
+                                        <div class="text-center"><button
+                                                class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton"
+                                                type="submit">Send Message</button></div>
                                     </form>
                                 </div>
-                                </section>
-                            </div>
+                            </section>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!-- Portfolio item 5 modal popup-->
     <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
@@ -568,49 +583,53 @@
                                 <br><br>
                                 <!-- Comentarios-->
                                 <section class="page-section" id="contact">
-                                <div class="container">
-                                    <div class="text-center">
-                                        <h2 class="section-heading text-uppercase">Comentarios</h2>
-                                        <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre este curso.</h3>
-                                    </div>
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- * * SB Forms Contact Form * *-->
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- This form is pre-integrated with SB Forms.-->
-                                    <!-- To make this form functional, sign up at-->
-                                    <!-- https://startbootstrap.com/solution/contact-forms-->
-                                    <!-- to get an API token!-->
-                                    <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                                        <div class="row align-items-stretch mb-5">
-                                            <div>
-                                                <div class="form-group form-group-textarea mb-md-0">
-                                                    <!-- Mensaje a escribir-->
-                                                    <textarea class="form-control" id="message" placeholder="Your Message *"
-                                                        data-sb-validations="required"></textarea>
-                                                    <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.
+                                    <div class="container">
+                                        <div class="text-center">
+                                            <h2 class="section-heading text-uppercase">Comentarios</h2>
+                                            <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre
+                                                este curso.</h3>
+                                        </div>
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- * * SB Forms Contact Form * *-->
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- This form is pre-integrated with SB Forms.-->
+                                        <!-- To make this form functional, sign up at-->
+                                        <!-- https://startbootstrap.com/solution/contact-forms-->
+                                        <!-- to get an API token!-->
+                                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                                            <div class="row align-items-stretch mb-5">
+                                                <div>
+                                                    <div class="form-group form-group-textarea mb-md-0">
+                                                        <!-- Mensaje a escribir-->
+                                                        <textarea class="form-control" id="message"
+                                                            placeholder="Your Message *"
+                                                            data-sb-validations="required"></textarea>
+                                                        <div class="invalid-feedback"
+                                                            data-sb-feedback="message:required">A message is required.
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si se ha enviado correctamente-->
-                                        <div class="d-none" id="submitSuccessMessage">
-                                            <div class="text-center text-white mb-3">
-                                                <div class="fw-bolder">Form submission successful!</div>
-                                                To activate this form, sign up at
-                                                <br />
-                                                <a
-                                                    href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                            <!-- Se ve esto si se ha enviado correctamente-->
+                                            <div class="d-none" id="submitSuccessMessage">
+                                                <div class="text-center text-white mb-3">
+                                                    <div class="fw-bolder">Form submission successful!</div>
+                                                    To activate this form, sign up at
+                                                    <br />
+                                                    <a
+                                                        href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si no se ha enviado correctamente -->
-                                        <div class="d-none" id="submitErrorMessage">
-                                            <div class="text-center text-danger mb-3">Error sending message!</div>
-                                        </div>
-                                        <!-- Boton de enviar -->
-                                        <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled"
-                                                id="submitButton" type="submit">Send Message</button></div>
-                                    </form>
-                                </div>
+                                            <!-- Se ve esto si no se ha enviado correctamente -->
+                                            <div class="d-none" id="submitErrorMessage">
+                                                <div class="text-center text-danger mb-3">Error sending message!</div>
+                                            </div>
+                                            <!-- Boton de enviar -->
+                                            <div class="text-center"><button
+                                                    class="btn btn-primary btn-xl text-uppercase disabled"
+                                                    id="submitButton" type="submit">Send Message</button></div>
+                                        </form>
+                                    </div>
                                 </section>
                             </div>
                         </div>
@@ -658,49 +677,53 @@
                                 <br><br>
                                 <!-- Comentarios-->
                                 <section class="page-section" id="contact">
-                                <div class="container">
-                                    <div class="text-center">
-                                        <h2 class="section-heading text-uppercase">Comentarios</h2>
-                                        <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre este curso.</h3>
-                                    </div>
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- * * SB Forms Contact Form * *-->
-                                    <!-- * * * * * * * * * * * * * * *-->
-                                    <!-- This form is pre-integrated with SB Forms.-->
-                                    <!-- To make this form functional, sign up at-->
-                                    <!-- https://startbootstrap.com/solution/contact-forms-->
-                                    <!-- to get an API token!-->
-                                    <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                                        <div class="row align-items-stretch mb-5">
-                                            <div>
-                                                <div class="form-group form-group-textarea mb-md-0">
-                                                    <!-- Mensaje a escribir-->
-                                                    <textarea class="form-control" id="message" placeholder="Your Message *"
-                                                        data-sb-validations="required"></textarea>
-                                                    <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.
+                                    <div class="container">
+                                        <div class="text-center">
+                                            <h2 class="section-heading text-uppercase">Comentarios</h2>
+                                            <h3 class="section-subheading text-muted">Pon aqui tus comentarios sobre
+                                                este curso.</h3>
+                                        </div>
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- * * SB Forms Contact Form * *-->
+                                        <!-- * * * * * * * * * * * * * * *-->
+                                        <!-- This form is pre-integrated with SB Forms.-->
+                                        <!-- To make this form functional, sign up at-->
+                                        <!-- https://startbootstrap.com/solution/contact-forms-->
+                                        <!-- to get an API token!-->
+                                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                                            <div class="row align-items-stretch mb-5">
+                                                <div>
+                                                    <div class="form-group form-group-textarea mb-md-0">
+                                                        <!-- Mensaje a escribir-->
+                                                        <textarea class="form-control" id="message"
+                                                            placeholder="Your Message *"
+                                                            data-sb-validations="required"></textarea>
+                                                        <div class="invalid-feedback"
+                                                            data-sb-feedback="message:required">A message is required.
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si se ha enviado correctamente-->
-                                        <div class="d-none" id="submitSuccessMessage">
-                                            <div class="text-center text-white mb-3">
-                                                <div class="fw-bolder">Form submission successful!</div>
-                                                To activate this form, sign up at
-                                                <br />
-                                                <a
-                                                    href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                            <!-- Se ve esto si se ha enviado correctamente-->
+                                            <div class="d-none" id="submitSuccessMessage">
+                                                <div class="text-center text-white mb-3">
+                                                    <div class="fw-bolder">Form submission successful!</div>
+                                                    To activate this form, sign up at
+                                                    <br />
+                                                    <a
+                                                        href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- Se ve esto si no se ha enviado correctamente -->
-                                        <div class="d-none" id="submitErrorMessage">
-                                            <div class="text-center text-danger mb-3">Error sending message!</div>
-                                        </div>
-                                        <!-- Boton de enviar -->
-                                        <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled"
-                                                id="submitButton" type="submit">Send Message</button></div>
-                                    </form>
-                                </div>
+                                            <!-- Se ve esto si no se ha enviado correctamente -->
+                                            <div class="d-none" id="submitErrorMessage">
+                                                <div class="text-center text-danger mb-3">Error sending message!</div>
+                                            </div>
+                                            <!-- Boton de enviar -->
+                                            <div class="text-center"><button
+                                                    class="btn btn-primary btn-xl text-uppercase disabled"
+                                                    id="submitButton" type="submit">Send Message</button></div>
+                                        </form>
+                                    </div>
                                 </section>
                             </div>
                         </div>
