@@ -150,11 +150,11 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [45a41a59bc31d53cdad90bf46bb06e7be6756250]()  | [información.html]()   |
-|2| [9d96119d35964ef81efd082f11032c585a4f9899]()  | [infromación.html]()   |
-|3| [7f66a0cda8120fc57e2ef4b5f9d27f78d357f160]()  | [información.html]()   |
-|4| [45a41a59bc31d53cdad90bf46bb06e7be6756250]()  | [index.html]()   |
-|5| [9fc5d8a7c3dc9d9f1f1ecadbd84414c72917c327]()  | [Readme]()   |
+|1| [Página de información](https://github.com/DWS-2026/project-grupo-14/commit/45a41a59bc31d53cdad90bf46bb06e7be6756250)  | [información.html](startbootstrap-agency-gh-pages/index.html)   |
+|2| [Página información](https://github.com/DWS-2026/project-grupo-14/commit/9d96119d35964ef81efd082f11032c585a4f9899)  | [infromación.html](startbootstrap-agency-gh-pages/index.html)   |
+|3| [Cambios generales](https://github.com/DWS-2026/project-grupo-14/commit/86899abc26caf5fd26187b418287bb00f730e1a7)  | [información.html](practicDWS/informacion.html)   |
+|4| [Admin/Estadíticas](https://github.com/DWS-2026/project-grupo-14/commit/3df5c67183a8475b50a96f0c88f70127bd59257c)  | [index.html](practicDWS/admin.html)   |
+|5| [Readme Descripción Capturas](https://github.com/DWS-2026/project-grupo-14/commit/9fc5d8a7c3dc9d9f1f1ecadbd84414c72917c327)  | [Readme](README.md)   |
 
 ---
 
