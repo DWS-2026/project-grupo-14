@@ -69,24 +69,91 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 ### **Capturas de Pantalla y Descripción de Páginas**
 
 #### **1. Página Principal / Home**
-![Página Principal](images/home-page.png)
+![Página Principal](capturas/Captura%20index.png)
 
-> [Descripción breve: Ej: "Página de inicio que muestra los productos destacados, categorías principales y un banner promocional. Incluye barra de navegación y acceso a registro/login para usuarios no autenticados."]
+> [Descripción breve: "Página de inicio de la Academia que incluye barra de navegación con acceso a información, cursos, profesores, login, administración y carrito. Además, incluye una sección de comentarios."]
 
-#### **AQUÍ AÑADIR EL RESTO DE PÁGINAS**
+#### **2. Información / Servicios**
 
+![Página Información](capturas/Captura%20información.png)
+
+> [Descripción breve: "Página de información de Academia El Soto que muestra la historia, logros, servicios, cursos especializados y enlaces útiles de la URJC. Incluye mapa, video, botón de contacto por correo y descarga de folleto, además de barra de navegación con acceso a cursos, profesores, login administración y carrito."]
+
+#### **3. Cursos / Comentarios**
+
+![Página Cursos](capturas/Captura%20cursos.png)
+
+> [Descripción breve: "Página de cursos que muestra los cursos disponibles con imágenes, nombre, cuatrimestre y descripción. Incluye información de profesor, número mínimo de alumnos, precio, botón para comprar, botón de contacto por correo y barra de navegación con acceso al resto de botones."]
+
+![Página Cursos](capturas/Captura%20curso_comentario.png)
+
+> [Descripción breve: "Además en cada curso el usuario registrado puede poner comentarios a cerca de cada curso."]
+
+#### **4. Página Profesores**
+
+![Página Cursos](capturas/Captura%20profesores.png)
+
+> [Descripción breve: "Página de profesores de Academia El Soto que muestra al equipo docente con foto, nombre, especialidad. Incluye acceso al resto de botones."]
+
+#### **5. Login**
+
+![Página Cursos](capturas/Captura%20login.png)
+
+> [Descripción breve: "Página de inicio de sesión de la Academia que permite a los usuarios registrados acceder a su cuenta mediante email y contraseña. Incluye enlace para registrarse si no tiene cuenta. Permite acceso al resto de botones."]
+
+#### **6. Registro**
+
+![Página Cursos](capturas/Captura%20registrer.png)
+
+> [Descripción breve: "Página de registro de la Academia que permite a nuevos usuarios crear una cuenta proporcionando nombre completo, email y contraseña."]
+
+#### **7. Perfil Usuario**
+
+![Página Cursos](capturas/Captura%20user.png)
+
+> [Descripción breve: "Página de perfil de usuario ya registrado que muestra información personal, cursos inscritos, comentarios realizados y opciones de configuración. Incluye edición y eliminación de comentarios, botones para editar perfil y cerrar sesión."]
+
+#### **8. Admin**
+
+![Página Cursos](capturas/Captura%20admin.png)
+
+> [Descripción breve: "Página visible para admin de la web que muestra un mensaje de bienvenida y guía sobre cómo acceder a las opciones de administración mediante el menú."]
+
+#### **9. Admin / Estadísticas**
+
+![Página Cursos](capturas/Captura%20estadísticas.png)
+
+> [Descripción breve: "Página para administradores que muestra las estadísticas de los cursos, incluyendo nombre del curso, profesor, número de alumnos y facturación. Permite añadir, editar o eliminar cursos mediante botones de acción."]
+
+#### **10. Admin / Creación Curso**
+
+![Página Cursos](capturas/Captura%20admin_crearcurso.png)
+
+> [Descripción breve: "Página de administración para editar un curso, permitiendo modificar nombre, profesor, precio, imagen y descripción del curso."]
+
+#### **11. Admin / Usuarios**
+
+![Página Cursos](capturas/Captura%20admin_users.png)
+
+> [Descripción breve: "Página de admins que muestra los usuarios registrados, incluyendo nombre, email y número de cursos inscritos. Permite ver el perfil de cada usuario o eliminarlo."]
+
+#### **12. Carrito**
+
+![Página Cursos](capturas/Captura%20carrito.png)
+
+> [Descripción breve: ""Página de carrito de compras que muestra los cursos seleccionados por el usuario, incluyendo título, profesor, precio e imagen. Permite eliminar cursos individualmente y muestra un resumen con total de cursos y coste total, junto con un botón para finalizar la compra."]
 ### **Participación de Miembros en la Práctica 1**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - [Mario Jándara Alcón]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Sección información; Sección Admin/estadísticas. Descripción de capturas del Readme.]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
+|1| [Descripción commit 1](45a41a59bc31d53cdad90bf46bb06e7be6756250)  | [Archivo1](información.html)   |
+|2| [Descripción commit 2](9d96119d35964ef81efd082f11032c585a4f9899)  | [Archivo2](infromación.html)   |
+|3| [Descripción commit 3](7f66a0cda8120fc57e2ef4b5f9d27f78d357f160)  | [Archivo3](información.html)   |
+|4| [Descripción commit 4](45a41a59bc31d53cdad90bf46bb06e7be6756250)  | [Archivo4](index.html)   |
 |5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
 
 ---
