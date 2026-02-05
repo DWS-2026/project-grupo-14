@@ -33,22 +33,22 @@ Indicar las entidades principales que gestionará la aplicación y las relacione
 Describir los permisos de cada tipo de usuario e indicar de qué entidades es dueño:
 
 * **Usuario Anónimo**: 
-  - Permisos: [Ej: Visualización de catálogo, búsqueda de productos, registro]
+  - Permisos: [Visualización de catálogo, búsqueda de productos, registro]
   - No es dueño de ninguna entidad
 
 * **Usuario Registrado**: 
-  - Permisos: [Ej: Gestión de perfil, comprar cursos, crear comentarios]
-  - Es dueño de: [Ej: Sus propios Cursos, su Perfil de Usuario, sus Comentarios, Carrito de Compra]
+  - Permisos: [Gestión de perfil, comprar cursos, crear comentarios]
+  - Es dueño de: [Sus propios Cursos, su Perfil de Usuario, sus Comentarios, Carrito de Compra]
 
 * **Administrador**: 
-  - Permisos: [Ejj: Gestión completa de productos (CRUD), visualización de estadísticas (alumnos y cursos), moderación de contenido]
-  - Es dueño de: [Ej: Comentarios, Carrito de Compra, puede gestionar todos los Alumnos y Cursos]
+  - Permisos: [Gestión completa de productos (CRUD), visualización de estadísticas (alumnos y cursos), moderación de contenido]
+  - Es dueño de: [Comentarios, Carrito de Compra, puede gestionar todos los Alumnos y Cursos]
 
 ### **Imágenes**
 Indicar qué entidades tendrán asociadas una o varias imágenes:
 
-- **[Entidad con imágenes 1]**: [Ej: Usuario - Una imagen de avatar por usuario]
-- **[Entidad con imágenes 2]**: [Ej: Curso - Múltiples imágenes por producto (galería)]
+- **[Entidad con imágenes 1]**: [Usuario - Una imagen de avatar por usuario]
+- **[Entidad con imágenes 2]**: [Curso - Múltiples imágenes por producto (galería)]
 
 
 ---
@@ -64,7 +64,7 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 ![Diagrama de Navegación](images/Diagrama.png)
 
-> [Descripción opcional del flujo de navegación: El usuario puede acceder desde la página principal a todas las secciones mediante el menú de navegación. Los usuarios anónimos solo tienen acceso a las páginas públicas, mientras que los registrados pueden acceder a su perfil y panel de usuario.]
+> El usuario puede acceder a cualquier elemento de la web desde la página principal (información, cursos, profesorado, carrito y login). Desde el apartado información puede acceder a un folleto creado por la academia y a la intranet de la propia URJC, para que así pueda consultar sus horarios, exámenes, etc.. Desde el apartado cursos puede acceder a una pequeña descripción de cada curso, que consta de un texto informativo, de un precio y del nombre del profesor que imparte la asignatura en la academia, así como su precio. Desde el login, si no se tiene una cuenta, se puede acceder a otra página  para registrar una cuenta nueva. En profesores se puede ver a los profesores y sus estudios, y en carrito el carrito de compra de la persona. Todas las páginas pueden relacionarse entre ellas. 
 
 ### **Capturas de Pantalla y Descripción de Páginas**
 
