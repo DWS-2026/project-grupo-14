@@ -141,7 +141,7 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 ![Página Cursos](capturas/Captura%20carrito.png)
 
-> [Descripción breve: ""Página de carrito de compras que muestra los cursos seleccionados por el usuario, incluyendo título, profesor, precio e imagen. Permite eliminar cursos individualmente y muestra un resumen con total de cursos y coste total, junto con un botón para finalizar la compra."]
+> [Descripción breve: "Página de carrito de compras que muestra los cursos seleccionados por el usuario, incluyendo título, profesor, precio e imagen. Permite eliminar cursos individualmente y muestra un resumen con total de cursos y coste total, junto con un botón para finalizar la compra."]
 ### **Participación de Miembros en la Práctica 1**
 
 #### **Alumno 1 - [Mario Jándara Alcón]**
@@ -154,7 +154,7 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 |2| [Descripción commit 2](9d96119d35964ef81efd082f11032c585a4f9899)  | [Archivo2](infromación.html)   |
 |3| [Descripción commit 3](7f66a0cda8120fc57e2ef4b5f9d27f78d357f160)  | [Archivo3](información.html)   |
 |4| [Descripción commit 4](45a41a59bc31d53cdad90bf46bb06e7be6756250)  | [Archivo4](index.html)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|5| [Descripción commit 5](9fc5d8a7c3dc9d9f1f1ecadbd84414c72917c327)  | [Archivo5](Readme)   |
 
 ---
 
