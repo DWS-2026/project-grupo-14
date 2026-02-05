@@ -33,22 +33,22 @@ Indicar las entidades principales que gestionará la aplicación y las relacione
 Describir los permisos de cada tipo de usuario e indicar de qué entidades es dueño:
 
 * **Usuario Anónimo**: 
-  - Permisos: [Ej: Visualización de catálogo, búsqueda de productos, registro]
+  - Permisos: [Visualización de catálogo, búsqueda de productos, registro]
   - No es dueño de ninguna entidad
 
 * **Usuario Registrado**: 
-  - Permisos: [Ej: Gestión de perfil, comprar cursos, crear comentarios]
-  - Es dueño de: [Ej: Sus propios Cursos, su Perfil de Usuario, sus Comentarios, Carrito de Compra]
+  - Permisos: [Gestión de perfil, comprar cursos, crear comentarios]
+  - Es dueño de: [Sus propios Cursos, su Perfil de Usuario, sus Comentarios, Carrito de Compra]
 
 * **Administrador**: 
-  - Permisos: [Ejj: Gestión completa de productos (CRUD), visualización de estadísticas (alumnos y cursos), moderación de contenido]
-  - Es dueño de: [Ej: Comentarios, Carrito de Compra, puede gestionar todos los Alumnos y Cursos]
+  - Permisos: [Gestión completa de productos (CRUD), visualización de estadísticas (alumnos y cursos), moderación de contenido]
+  - Es dueño de: [Comentarios, Carrito de Compra, puede gestionar todos los Alumnos y Cursos]
 
 ### **Imágenes**
 Indicar qué entidades tendrán asociadas una o varias imágenes:
 
-- **[Entidad con imágenes 1]**: [Ej: Usuario - Una imagen de avatar por usuario]
-- **[Entidad con imágenes 2]**: [Ej: Curso - Múltiples imágenes por producto (galería)]
+- **[Entidad con imágenes 1]**: [Usuario - Una imagen de avatar por usuario]
+- **[Entidad con imágenes 2]**: [Curso - Múltiples imágenes por producto (galería)]
 
 
 ---
