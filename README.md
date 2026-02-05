@@ -164,11 +164,11 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Clase Team y clase Portfolio cambiadas a Profesorado y Cursos]((https://github.com/DWS-2026/project-grupo-14/commit/388ce8de1863f780d1bdffd17ce0cfb8330829d3))  | [index.html](startbootstrap-agency-gh-pages/index.html)   |
-|2| [separación en paginas independientes]((https://github.com/DWS-2026/project-grupo-14/commit/e3602bd3f8a4f3ee127b67eea67b75b752f4d20e))  | [profesores.html](startbootstrap-agency-gh-pages/profesores.html)   |
-|3| [Cambios en cursos e interacción entre paginas]((https://github.com/DWS-2026/project-grupo-14/commit/aa481cf8608dff0bc0547354ec6a9d639e97c24b))  | [cursos.html](startbootstrap-agency-gh-pages/cursos.html)   |
-|4| [Añadido comentarios, editado informacion  y añadido clase carrito]((https://github.com/DWS-2026/project-grupo-14/commit/f344b2437e1d4defc7e8742dda156c6670021a64))  | [carrito.html](practicDWS/carrito.html)   |
-|5| [Creación del Diagrama de navegacion]((https://github.com/DWS-2026/project-grupo-14/commit/002d77866084789895c240da0af9725052a981d4))  | [Diagrama.png](images/Diagrama.pngl)   |
+|1| [Clase Team y clase Portfolio cambiadas a Profesorado y Cursos](https://github.com/DWS-2026/project-grupo-14/commit/388ce8de1863f780d1bdffd17ce0cfb8330829d3)  | [index.html](startbootstrap-agency-gh-pages/index.html)   |
+|2| [separación en paginas independientes](https://github.com/DWS-2026/project-grupo-14/commit/e3602bd3f8a4f3ee127b67eea67b75b752f4d20e)  | [profesores.html](startbootstrap-agency-gh-pages/profesores.html)   |
+|3| [Cambios en cursos e interacción entre paginas](https://github.com/DWS-2026/project-grupo-14/commit/aa481cf8608dff0bc0547354ec6a9d639e97c24b) | [cursos.html](startbootstrap-agency-gh-pages/cursos.html)   |
+|4| [Añadido comentarios, editado informacion  y añadido clase carrito](https://github.com/DWS-2026/project-grupo-14/commit/f344b2437e1d4defc7e8742dda156c6670021a64)  | [carrito.html](practicDWS/carrito.html)   |
+|5| [Creación del Diagrama de navegacion](https://github.com/DWS-2026/project-grupo-14/commit/002d77866084789895c240da0af9725052a981d4)  | [Diagrama.png](images/Diagrama.pngl)   |
 
 ---
 
