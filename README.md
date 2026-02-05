@@ -18,16 +18,16 @@
 ### **Entidades**
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
 
-1. **[Entidad 1]**: Alumno
+1. **[Entidad 1]**: Usuario
 2. **[Entidad 2]**: Curso
 3. **[Entidad 3]**: Carrito de compra
 4. **[Entidad 4]**: Comentario
-**Relaciones entre entidades:**
-- [Ej: Alunno - Curso: Un alumno puede tener varios cursos y un curso tiene varios alumnos (N:M)]
-- [Ej: Alumno - Comentario: Un alumno puede tener varios comentarios (1:N)]
-- [Ej: Curso - Carrito de compra: Un carrito puede tener varios cursos (N:1)]
-- [Ej: Curso - Comentario: Un curso puede tener varios comentarios (1:N)]
-- [Descripción de otras relaciones relevantes]
+### **Relaciones entre entidades:**
+- Usuario - Curso: Un usuario puede tener varios cursos y un curso tiene varios usuarios (N:M)
+- Usuario - Comentario: Un alumno puede tener varios comentarios(1:N)
+- Usuario - Carrito de compra: Un usuario tiene un carrito (1:1)
+- Curso - Carrito de compra: Un carrito puede tener varios cursos (N:1)
+- Curso - Comentario: Un curso puede tener varios comentarios (1:N)
 
 ### **Permisos de los Usuarios**
 Describir los permisos de cada tipo de usuario e indicar de qué entidades es dueño:
