@@ -5,10 +5,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WebController {
-
-    @GetMapping("/cursos")
+    /* @GetMapping("/ruta")
+        public String nombreMetodo() { //Cuando el usuario entra en http://localhost:8080/ruta
+                                        // el navegador abre vista.html
+            return "vista";
+        }
+    */
+    @GetMapping("/cursos") 
     public String cursos() {
         return "cursos";
+    }
+
+    @GetMapping("/index") 
+    public String index() {
+        return "index";
     }
 
     @GetMapping("/profesores")
@@ -34,6 +44,26 @@ public class WebController {
     @GetMapping("/admin")
     public String admin() {
         return "admin";
+    }
+
+    @GetMapping("/admin_crear_curso")
+    public String admin_crear_curso() {
+        return "admin_crear_curso";
+    }
+
+    @GetMapping("/admin_editar_curso")
+    public String admin_editar_curso() {
+        return "admin_editar_curso";
+    }
+
+    @GetMapping("/admin_estadisticas")
+    public String admin_estadisticas() {
+        return "admin_estadisticas";
+    }
+
+    @GetMapping("/admin_users")
+    public String admin_users() {
+        return "admin_users";
     }
 
     @GetMapping("/carrito")
