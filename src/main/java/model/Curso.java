@@ -1,6 +1,12 @@
-package es.codeurjc.AcademiaElSoto;
+package model;
 
+@Entity
 public class Curso {
+
+    @Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id = null;
+    
     private String profesor;
     private String nombreCurso;
     private int precio;
@@ -45,5 +51,5 @@ public class Curso {
         this.descripcion = descripcion;
     }
 
-    
+
 }

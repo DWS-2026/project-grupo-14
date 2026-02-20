@@ -1,6 +1,11 @@
-package es.codeurjc.AcademiaElSoto;
+package model;
 
+@Entity
 public class Carrito {
+    @Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id = null;
+
     private String producto;
     private int precio;
 
