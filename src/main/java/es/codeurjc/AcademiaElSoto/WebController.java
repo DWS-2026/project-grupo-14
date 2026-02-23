@@ -41,8 +41,16 @@ public class WebController {
 
 
    @RequestMapping("/user")
-        public String user(Model model, @RequestParam String userName) {
-        model.addAttribute("name", userName);
+        public String user(Model model, @RequestParam String userName,
+            @RequestParam String apellidos,
+            @RequestParam String email,
+            @RequestParam String contraseña
+            ) {
+
+        model.addAttribute("userName", userName);
+        model.addAttribute("apellidos", apellidos);
+        model.addAttribute("email", email);
+        model.addAttribute("password", contraseña);
         return "user";
     }
 
