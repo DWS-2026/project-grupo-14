@@ -68,9 +68,13 @@
         <div class="col-md-6 col-lg-5">
             <div class="card shadow rounded-4 p-4">
                 <h3 class="text-center mb-4">Crear cuenta</h3>
-                <form>
+                <form action="/greeting">
                     <div class="mb-3">
-                        <label>Nombre completo</label>
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" name = "userName" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Apellidos</label>
                         <input type="text" class="form-control" placeholder="Tu nombre" required>
                     </div>
                     <div class="mb-3">

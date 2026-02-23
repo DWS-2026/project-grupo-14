@@ -1,7 +1,16 @@
 package es.codeurjc.AcademiaElSoto;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.ui.Model;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import model.Curso;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class WebController {
@@ -12,13 +21,29 @@ public class WebController {
         }
     */
     @GetMapping("/cursos") 
-    public String cursos() {
+    public String cursos(Model model) {
+        List<Curso> cursos = new ArrayList<>();
+
+        cursos.add(new Curso("Frenando Alonso", "Matemática discreta y álgebra", 130, "Mu gueno"));
+        cursos.add(new Curso("Frenando Alonso", "Matemática discreta y álgebra", 130, "Mu gueno"));
+        
+        
+
+        model.addAttribute("cursos", cursos);
         return "cursos";
+        
     }
 
     @GetMapping("/index") 
     public String index() {
         return "index";
+    }
+
+
+   @RequestMapping("/user")
+        public String user(Model model, @RequestParam String userName) {
+        model.addAttribute("name", userName);
+        return "user";
     }
 
     @GetMapping("/profesores")
@@ -71,8 +96,4 @@ public class WebController {
         return "carrito";
     }
 
-    @GetMapping("/user")
-    public String user() {
-        return "user";
-    }
 }
