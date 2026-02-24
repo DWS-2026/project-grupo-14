@@ -1,13 +1,9 @@
 package es.codeurjc.AcademiaElSoto;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.ui.Model;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import model.Curso;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
