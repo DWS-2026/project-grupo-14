@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -28,15 +28,12 @@ public class WebController {
     }
 
 
-   @PostMapping("/user")
+    @RequestMapping("/user")
         public String user(Model model, @RequestParam String userName,
             @RequestParam String apellidos,
             @RequestParam String email,
             @RequestParam String contraseña
             ) {
-        
-        String iniciales = userName.substring(0,1) + apellidos.substring(0,1);
-        model.addAttribute("iniciales", iniciales);
 
         model.addAttribute("userName", userName);
         model.addAttribute("apellidos", apellidos);
