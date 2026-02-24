@@ -1,7 +1,16 @@
 package es.codeurjc.AcademiaElSoto.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Profesores {
 
+    @Id 
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String nombre;
     private String titulacion;
 
@@ -10,6 +19,10 @@ public class Profesores {
         this.titulacion=titulacion;
     }
 
+    public Long getId(){
+        return id;
+    }
+    
     public String getNombre() {
         return nombre;
     }
