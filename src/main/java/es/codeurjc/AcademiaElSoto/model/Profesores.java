@@ -1,12 +1,7 @@
-package model;
+package es.codeurjc.AcademiaElSoto.model;
 
-@Entity
 public class Profesores {
 
-    @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id = null;
-    
     private String nombre;
     private String titulacion;
 

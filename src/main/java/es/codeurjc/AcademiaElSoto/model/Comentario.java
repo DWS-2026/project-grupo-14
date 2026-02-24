@@ -1,12 +1,8 @@
-package model;
+package es.codeurjc.AcademiaElSoto.model;
 
-@Entity
 public class Comentario {
 
-    @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id = null;
-    
+
     private String descripcion;
     private String usuario;
 
