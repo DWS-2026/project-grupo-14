@@ -5,13 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import es.codeurjc.AcademiaElSoto.model.Usuario;
-import es.codeurjc.AcademiaElSoto.repository.UserRepository;
+import es.codeurjc.AcademiaElSoto.repository.userRepository;
 
 @Service
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private userRepository userRepository;
 
     public Usuario guardarUsuario(Usuario usuario) {
         return userRepository.save(usuario);

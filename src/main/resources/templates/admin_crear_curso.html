@@ -87,40 +87,41 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
 
-                    <form class="bg-white p-4 rounded shadow">
+                    <form class="bg-white p-4 rounded shadow" action="/curso/new" method="post" enctype="multipart/form-data">
 
-                        <div class="mb-3">
-                            <label class="form-label">Imagen del curso</label>
-                            <input type="file" class="form-control" accept="image/*">
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Imagen del curso</label>
+                        <input type="file" class="form-control" name="imagen" accept="image/*">
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Nombre del curso</label>
-                            <input type="text" class="form-control" placeholder="Ej: Programación avanzada">
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del curso</label>
+                        <input type="text" class="form-control" name="nombreCurso" placeholder="Ej: Programación avanzada" required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Profesor</label>
-                            <input type="text" class="form-control" placeholder="Ej: Pau Gasoil">
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Profesor</label>
+                        <input type="text" class="form-control" name="profesor" placeholder="Ej: Pau Gasoil" required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Precio (€)</label>
-                            <input type="number" class="form-control" placeholder="Ej: 130">
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Precio (€)</label>
+                        <input type="number" class="form-control" name="precio" placeholder="Ej: 130" required>
+                    </div>
 
-                        <div class="mb-4">
-                            <label class="form-label">Descripción</label>
-                            <textarea class="form-control" rows="4" placeholder="Ej: La asignatura aborda la enseñanza de la orientación a objetos."></textarea>
-                        </div>
+                    <div class="mb-4">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" name="descripcion" rows="4"
+                            placeholder="Ej: La asignatura aborda la enseñanza de la orientación a objetos." required></textarea>
+                    </div>
 
-                        <div class="text-center mt-4">
-                            <button class="btn btn-primary btn-xl text-uppercase">
-                                Crear curso
-                            </button>
-                        </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary btn-xl text-uppercase" type="submit">
+                            Guardar cambios
+                        </button>
+                    </div>
 
-                    </form>
+                </form>
 
                 </div>
             </div>

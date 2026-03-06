@@ -17,7 +17,14 @@ public class Curso {
     private int precio;
     private String descripcion;
 
+    //Importante poner el constructor por defecto:
+
+    public Curso(){
+
+    }
+
     public Curso (String profesor, String nombreCurso, int precio, String descripcion){
+        super();
         this.descripcion=descripcion;
         this.nombreCurso=nombreCurso;
         this.precio=precio;

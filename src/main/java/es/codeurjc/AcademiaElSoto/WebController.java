@@ -17,10 +17,6 @@ public class WebController {
             return "vista";
         }
     */
-    @GetMapping("/cursos") 
-    public String cursos() {
-        return "cursos";
-    }
 
     @GetMapping("/index") 
     public String index() {
