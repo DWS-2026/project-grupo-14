@@ -40,6 +40,16 @@
             <p><strong>Profesor:</strong> {{curso.profesor}}</p>
             <p><strong>Precio:</strong> {{curso.precio}} €</p>
             <p><strong>Descripción:</strong> {{curso.descripcion}}</p>
+            
+            {{#hasImage}}
+            <img src="/curso/{{curso.id}}/image" alt="Imagen del curso" style="max-width: 400px; height: auto;" />
+            {{/hasImage}}
+
+            {{^hasImage}}
+                <img src="/no-image.png" alt="Sin imagen" style="max-width: 400px; height: auto;" />
+            {{/hasImage}}
+
+            <br><br>
 
             <div class="d-flex justify-content-between mt-3">
                 <a class="btn btn-secondary" href="/editcurso/{{curso.id}}">Editar Curso</a>

@@ -1,9 +1,12 @@
 package es.codeurjc.AcademiaElSoto.model;
 
+import java.sql.Blob;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Curso {
@@ -16,6 +19,9 @@ public class Curso {
     private String nombreCurso;
     private int precio;
     private String descripcion;
+
+    @Lob
+    private Blob imageFile;
 
     //Importante poner el constructor por defecto:
 
@@ -62,6 +68,14 @@ public class Curso {
     public void setPrecio(int precio) {
         this.precio = precio;
     }
+    
+    public Blob getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(Blob imageFile) {
+		this.imageFile = imageFile;
+	}
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
