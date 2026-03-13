@@ -40,6 +40,8 @@ public class Curso {
     public Long getId () {
         return id;
     }
+
+    
     
     public String getProfesor() {
         return profesor;
@@ -76,6 +78,10 @@ public class Curso {
 	public void setImageFile(Blob imageFile) {
 		this.imageFile = imageFile;
 	}
+
+    public void setId(Long id){
+        this.id = id;
+    }
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
