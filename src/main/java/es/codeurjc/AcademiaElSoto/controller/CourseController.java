@@ -13,6 +13,7 @@ import es.codeurjc.AcademiaElSoto.model.Curso;
 import es.codeurjc.AcademiaElSoto.repository.cursoRepository;
 import org.springframework.web.multipart.MultipartFile;
 import javax.sql.rowset.serial.SerialBlob;
+
 import org.springframework.http.MediaType;
 
 
@@ -28,8 +29,8 @@ public class CourseController {
 
     @PostConstruct
     public void init() {
-        cursoRepository.save(new Curso("Paul", "IP", 120, "Curso de introducción a Programación"));
-        cursoRepository.save(new Curso("Frenando", "DWS", 150, "Desarrollo de aplicaciones con Spring"));
+        cursoRepository.save(new Curso("Paul", "IP", 120, "Curso de introducción a Programación",12));
+        cursoRepository.save(new Curso("Frenando", "DWS", 150, "Desarrollo de aplicaciones con Spring",13));
     }
 
 
@@ -74,19 +75,19 @@ public class CourseController {
         return "bd_course/saved_course";
     }
     @GetMapping("/curso/{id}/image")
-    public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
+public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
 
-        Curso curso = cursoRepository.findById(id).orElseThrow();
+    Curso curso = cursoRepository.findById(id).orElseThrow();
 
-        if (curso.getImageFile() != null) {
-            return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(new InputStreamResource(curso.getImageFile().getBinaryStream()));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    if (curso.getImageFile() != null) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(new InputStreamResource(curso.getImageFile().getBinaryStream()));
+    } else {
+        return ResponseEntity.notFound().build();
     }
+}
 
     @GetMapping("/editcurso/{id}")
     public String editCourse(Model model, @PathVariable long id) {
@@ -103,38 +104,15 @@ public class CourseController {
     }
 
     @PostMapping("/editedcurso/{id}")
-    public String editCourseProcess(
-            Model model, 
-            @PathVariable long id, 
-            Curso editedCurso,
-            @RequestParam("imagen") MultipartFile imagen) {
+    public String editCourseProcess(Model model, @PathVariable long id, Curso editedCurso) {
 
-        Optional<Curso> op = cursoRepository.findById(id);
+        Optional<Curso> op = cursoRepository.findById(editedCurso.getId());
 
         if (op.isPresent()) {
-            Curso curso = op.get();
-
-            
-            curso.setNombreCurso(editedCurso.getNombreCurso());
-            curso.setProfesor(editedCurso.getProfesor());
-            curso.setPrecio(editedCurso.getPrecio());
-            curso.setDescripcion(editedCurso.getDescripcion());
-
-            
-            try {
-                if (!imagen.isEmpty()) {
-                    curso.setImageFile(new SerialBlob(imagen.getBytes()));
-                }
-                
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            cursoRepository.save(curso);
-
-            model.addAttribute("curso", curso);
+            editedCurso.setId(id);   // aseguramos el id correcto
+            cursoRepository.save(editedCurso);
+            model.addAttribute("curso", editedCurso);
             return "bd_course/edited_course";
-
         } else {
             return "bd_course/course_not_found";
         }

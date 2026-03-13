@@ -111,102 +111,30 @@
                                     <th>Curso</th>
                                     <th>Profesor</th>
                                     <th>Alumnos</th>
-                                    <th>Facturación</th>
+                                    <th>Precio</th>
                                     <th class="text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                {{#cursos}}
                                 <tr>
-                                    <td>Matemática Discreta y Álgebra</td>
-                                    <td>Frenando</td>
-                                    <td>12</td>
-                                    <td>56 €</td>
+                                    <td>{{nombreCurso}}</td>
+                                    <td>{{profesor}}</td>
+                                    <td>{{alumnos}}</td>
+                                    <td>{{Precio}}</td>
+                                    
                                     <td class="text-center">
-                                        <a href="/admin_editar_curso" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-pen"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash"></i>
+                                    <a href="/admin_editar_curso/{{id}}" class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <form action="/admin_borrar_curso/{{id}}" method="POST" style="display:inline;">
+                                        <button class="btn btn-sm btn-outline-danger" type="submit">
+                                        <i class="fas fa-trash"></i>
                                         </button>
+                                    </form>
                                     </td>
                                 </tr>
-
-                                <tr>
-                                    <td>Estructuras de datos</td>
-                                    <td>Pau</td>
-                                    <td>20</td>
-                                    <td>120 €</td>
-                                    <td class="text-center">
-                                        <a href="/admin_editar_curso" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-pen"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Desarrollo web seguro</td>
-                                    <td>Ander</td>
-                                    <td>15</td>
-                                    <td>75 €</td>
-                                    <td class="text-center">
-                                        <a href="/admin_editar_curso" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-pen"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Introducción a la Programación</td>
-                                    <td>Pau</td>
-                                    <td>10</td>
-                                    <td>50 €</td>
-                                    <td class="text-center">
-                                        <a href="/admin_editar_curso" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-pen"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Física</td>
-                                    <td>Ander</td>
-                                    <td>15</td>
-                                    <td>150 €</td>
-                                    <td class="text-center">
-                                        <a href="/admin_editar_curso" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-pen"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Programación avanzada</td>
-                                    <td>Frenando</td>
-                                    <td>20</td>
-                                    <td>170 €</td>
-                                    <td class="text-center">
-                                        <a href="/admin_editar_curso" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-pen"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
+                                {{/cursos}}
                             </tbody>
                         </table>
                     </div>

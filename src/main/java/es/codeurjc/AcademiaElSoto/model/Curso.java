@@ -19,6 +19,7 @@ public class Curso {
     private String nombreCurso;
     private int precio;
     private String descripcion;
+    private int alumnos;
 
     @Lob
     private Blob imageFile;
@@ -29,12 +30,13 @@ public class Curso {
 
     }
 
-    public Curso (String profesor, String nombreCurso, int precio, String descripcion){
+    public Curso (String profesor, String nombreCurso, int precio, String descripcion, int alumnos){
         super();
         this.descripcion=descripcion;
         this.nombreCurso=nombreCurso;
         this.precio=precio;
         this.profesor=profesor;
+        this.alumnos = alumnos;
     }
 
     public Long getId () {
@@ -55,6 +57,11 @@ public class Curso {
         return precio;
     }
 
+    public int getAlumnos() {
+        return alumnos;
+    }
+
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -69,6 +76,10 @@ public class Curso {
 
     public void setPrecio(int precio) {
         this.precio = precio;
+    }
+
+    public void setAlumnos(int alumnos) {
+        this.alumnos = alumnos;
     }
     
     public Blob getImageFile() {

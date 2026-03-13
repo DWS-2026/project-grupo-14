@@ -162,11 +162,30 @@
 
             </div>
         </div>
+
+        {{#cursos}}
+    <div class="col-lg-4 col-sm-6 mb-4">
+        <div class="portfolio-item">
+            <a class="portfolio-link" data-bs-toggle="modal" href="#cursoModal{{id}}">
+                <div class="portfolio-hover">
+                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                </div>
+                <img class="img-fluid" src="{{#imageFile}}/images/{{id}}{{/imageFile}}{{^imageFile}}/assets/img/no_image.png{{/imageFile}}" alt="{{nombreCurso}}" />
+            </a>
+            <div class="portfolio-caption">
+                <div class="portfolio-caption-heading">{{nombreCurso}}</div>
+                <div class="portfolio-caption-subheading text-muted">{{cuatrimestre}}</div>
+            </div>
+        </div>
+    </div>
+    {{/cursos}}
         <!-- botón gmail visto en clase -->
         <a href="mailto:academiaelsoto@gmail.com?subject=Consulta%20Academia%20El%20Soto&body=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20cursos."
             id="btn-correo" class="btn btn-danger">
             ¡Escríbenos por correo!
         </a>
+
+        
     </section>
     <!-- Cuando aprietas en un curso-->
     <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
