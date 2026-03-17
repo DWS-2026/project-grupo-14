@@ -29,14 +29,14 @@ public class SessionController {
 			@RequestParam String password) {
 
 		
-		Usuario usuario = new Usuario(); // crear usuario
+		Usuario usuario = new Usuario(); 
 
 		usuario.setNombre(userName);
 		usuario.setEmail(email);
 		usuario.setPassword(password);
 		usuario.setApellidos(apellidos);
 
-		session.setAttribute("usuario", usuario); // guardar en sesión
+		session.setAttribute("usuario", usuario); 
 
 		return "auth/resultado_formulario";
 	}
