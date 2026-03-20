@@ -57,3 +57,59 @@
             </div>
         </footer>
     </body>
+
+
+
+
+
+    <!-- Cursos-->
+    <section class="page-section bg-light" id="portfolio">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Cursos</h2>
+            <h3 class="section-subheading text-muted">Los cursos que ofrecemos.</h3>
+        </div>
+
+        <div class="row">
+
+            {{#cursos}}
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="portfolio-item">
+
+                    
+
+                    <!-- Info -->
+                    <div class="portfolio-caption">
+                        <div class="portfolio-caption-heading">
+                            {{nombreCurso}}
+                        </div>
+
+                        <div class="portfolio-caption-subheading text-muted">
+                            {{profesor}}
+                        </div>
+
+                        <div class="text-muted">
+                            {{precio}} €
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {{/cursos}}
+
+        </div>
+    </div>
+
+    <a href="mailto:academiaelsoto@gmail.com"
+       id="btn-correo" class="btn btn-danger">
+        ¡Escríbenos por correo!
+    </a>
+
+</section>
+
+        
+        <!-- botón gmail visto en clase -->
+        <a href="mailto:academiaelsoto@gmail.com?subject=Consulta%20Academia%20El%20Soto&body=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20cursos."
+            id="btn-correo" class="btn btn-danger">
+            ¡Escríbenos por correo!
+        </a>
