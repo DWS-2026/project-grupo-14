@@ -18,9 +18,9 @@ import es.codeurjc.AcademiaElSoto.repository.cartRepository;
 import org.springframework.web.multipart.MultipartFile;
 import javax.sql.rowset.serial.SerialBlob;
 import java.util.List;
+import es.codeurjc.AcademiaElSoto.repository.comentRepository;
 
 import org.springframework.http.MediaType;
-
 
 import jakarta.annotation.PostConstruct;
 
@@ -36,14 +36,16 @@ public class CourseController {
     @Autowired
     private cartRepository carritoRepository;
 
-    //Datos temporales para probar que funciona 
+    @Autowired
+    private comentRepository comentarioRepository;
+
+    // Datos temporales para probar que funciona
 
     @PostConstruct
     public void init() {
-        cursoRepository.save(new Curso("Paul", "IP", 120, "Curso de introducción a Programación",12));
-        cursoRepository.save(new Curso("Frenando", "DWS", 150, "Desarrollo de aplicaciones con Spring",13));
+        cursoRepository.save(new Curso("Paul", "IP", 120, "Curso de introducción a Programación", 12));
+        cursoRepository.save(new Curso("Frenando", "DWS", 150, "Desarrollo de aplicaciones con Spring", 13));
     }
-
 
     @GetMapping("/cursos")
     public String showCourses(Model model) {
@@ -62,6 +64,7 @@ public class CourseController {
             Curso curso = op.get();
             model.addAttribute("curso", curso);
             model.addAttribute("hasImage", curso.getImageFile() != null);
+            model.addAttribute("comentarios", comentarioRepository.findByCursoIdOrderByIdDesc(id));
 
             return "bd_course/show_course";
         } else {
@@ -85,20 +88,21 @@ public class CourseController {
 
         return "bd_course/saved_course";
     }
+
     @GetMapping("/curso/{id}/image")
-public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
+    public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
 
-    Curso curso = cursoRepository.findById(id).orElseThrow();
+        Curso curso = cursoRepository.findById(id).orElseThrow();
 
-    if (curso.getImageFile() != null) {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(new InputStreamResource(curso.getImageFile().getBinaryStream()));
-    } else {
-        return ResponseEntity.notFound().build();
+        if (curso.getImageFile() != null) {
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(new InputStreamResource(curso.getImageFile().getBinaryStream()));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-}
 
     @GetMapping("/editcurso/{id}")
     public String editCourse(Model model, @PathVariable long id) {
@@ -120,7 +124,7 @@ public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
         Optional<Curso> op = cursoRepository.findById(editedCurso.getId());
 
         if (op.isPresent()) {
-            editedCurso.setId(id);   // aseguramos el id correcto
+            editedCurso.setId(id); // aseguramos el id correcto
             cursoRepository.save(editedCurso);
             model.addAttribute("curso", editedCurso);
             return "bd_course/edited_course";
@@ -146,13 +150,14 @@ public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
     public String añadirAlCarrito(Model model, @PathVariable long id) {
 
         Optional<Curso> opCurso = cursoRepository.findById(id);
-        
-        // ¡TRUCO! Cogemos la lista de todos los usuarios y nos quedamos con el primero que haya
-        List <Usuario> usuarios = usuarioRepository.findAll();
+
+        // ¡TRUCO! Cogemos la lista de todos los usuarios y nos quedamos con el primero
+        // que haya
+        List<Usuario> usuarios = usuarioRepository.findAll();
 
         // Si el curso existe y hay al menos un usuario en la base de datos...
         if (opCurso.isPresent() && !usuarios.isEmpty()) {
-            
+
             Curso curso = opCurso.get();
             Usuario usuario = usuarios.get(0); // Cogemos al usuario de prueba (sea cual sea su ID)
 
@@ -168,11 +173,11 @@ public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
             carrito.addCurso(curso);
 
             // 3. Guardamos los cambios
-            usuarioRepository.save(usuario); 
+            usuarioRepository.save(usuario);
 
             // Redirigimos a la página de cursos para que pueda seguir comprando
-            return "redirect:/cursos"; 
-            
+            return "redirect:/cursos";
+
         } else {
             return "bd_course/course_not_found";
         }

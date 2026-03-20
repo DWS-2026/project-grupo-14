@@ -8,6 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 
+import java.util.List;
+import java.util.ArrayList;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+
 @Entity
 public class Curso {
 
@@ -24,27 +29,28 @@ public class Curso {
     @Lob
     private Blob imageFile;
 
-    //Importante poner el constructor por defecto:
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comentario> comentarios = new ArrayList<>();
 
-    public Curso(){
+    // Importante poner el constructor por defecto:
+
+    public Curso() {
 
     }
 
-    public Curso (String profesor, String nombreCurso, int precio, String descripcion, int alumnos){
+    public Curso(String profesor, String nombreCurso, int precio, String descripcion, int alumnos) {
         super();
-        this.descripcion=descripcion;
-        this.nombreCurso=nombreCurso;
-        this.precio=precio;
-        this.profesor=profesor;
+        this.descripcion = descripcion;
+        this.nombreCurso = nombreCurso;
+        this.precio = precio;
+        this.profesor = profesor;
         this.alumnos = alumnos;
     }
 
-    public Long getId () {
+    public Long getId() {
         return id;
     }
 
-    
-    
     public String getProfesor() {
         return profesor;
     }
@@ -60,7 +66,6 @@ public class Curso {
     public int getAlumnos() {
         return alumnos;
     }
-
 
     public String getDescripcion() {
         return descripcion;
@@ -81,16 +86,16 @@ public class Curso {
     public void setAlumnos(int alumnos) {
         this.alumnos = alumnos;
     }
-    
+
     public Blob getImageFile() {
-		return imageFile;
-	}
+        return imageFile;
+    }
 
-	public void setImageFile(Blob imageFile) {
-		this.imageFile = imageFile;
-	}
+    public void setImageFile(Blob imageFile) {
+        this.imageFile = imageFile;
+    }
 
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -98,5 +103,16 @@ public class Curso {
         this.descripcion = descripcion;
     }
 
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
 
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    public void addComentario(Comentario comentario) {
+        comentarios.add(comentario);
+        comentario.setCurso(this);
+    }
 }
