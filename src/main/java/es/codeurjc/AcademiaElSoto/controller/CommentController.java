@@ -36,6 +36,7 @@ public class CommentController {
             comentario.setUsuario(usuario);
             comentario.setDescripcion(descripcion);
             comentario.setCurso(curso);
+            comentario.setFechaPublicacion(java.time.LocalDateTime.now());
 
             comentarioRepository.save(comentario);
         }

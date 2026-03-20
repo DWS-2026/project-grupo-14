@@ -130,47 +130,52 @@
                                 </form>
                                 <br><br>
 
-                                <section class="page-section" id="contact">
-                                    <div class="container">
-                                        <div class="text-center">
-                                            <h2 class="section-heading text-uppercase">Comentarios</h2>
-                                            <h3 class="section-subheading text-muted">
-                                                Pon aquí tus comentarios sobre este curso.
-                                            </h3>
-                                        </div>
-
-                                        <form action="/curso/{{id}}/comentario" method="post">
-                                            <div class="mb-3">
-                                                <input type="text" name="usuario" class="form-control"
-                                                    placeholder="Tu nombre" required>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <textarea class="form-control" name="descripcion" rows="4"
-                                                    placeholder="Escribe tu comentario" required></textarea>
-                                            </div>
-
-                                            <div class="text-center">
-                                                <button class="btn btn-primary btn-xl text-uppercase" type="submit">
-                                                    Enviar comentario
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                        <div class="mt-4">
-                                            {{#comentarios}}
-                                            <div class="border rounded p-3 mb-3 bg-light text-start">
-                                                <strong>{{usuario}}</strong>
-                                                <p class="mb-0">{{descripcion}}</p>
-                                            </div>
-                                            {{/comentarios}}
-
-                                            {{^comentarios}}
-                                            <p class="text-muted">Todavía no hay comentarios para este curso.</p>
-                                            {{/comentarios}}
-                                        </div>
+                                <div class="mt-4">
+                                    <div class="text-center">
+                                        <h2 class="section-heading text-uppercase">Comentarios</h2>
+                                        <h3 class="section-subheading text-muted">
+                                            Pon aquí tus comentarios sobre este curso.
+                                        </h3>
                                     </div>
-                                </section>
+
+                                    <form action="/curso/{{id}}/comentario" method="post">
+                                        <div class="mb-3">
+                                            <input type="text" name="usuario" class="form-control"
+                                                placeholder="Tu nombre" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <textarea class="form-control" name="descripcion" rows="4"
+                                                placeholder="Escribe tu comentario" required></textarea>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button class="btn btn-primary btn-xl text-uppercase" type="submit">
+                                                Enviar comentario
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <div class="mt-4">
+                                        {{#comentarios}}
+                                        <div class="border rounded p-3 mb-3 bg-light text-start">
+                                            <strong>{{usuario}}</strong>
+                                            <small class="text-muted d-block">{{fechaFormateada}}</small>
+                                            <p class="mb-0">{{descripcion}}</p>
+                                        </div>
+                                        {{/comentarios}}
+
+                                        {{^comentarios}}
+                                        <p class="text-muted">Todavía no hay comentarios para este curso.</p>
+                                        {{/comentarios}}
+                                    </div>
+
+                                    <div class="text-center mt-4">
+                                        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                                            Cerrar
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

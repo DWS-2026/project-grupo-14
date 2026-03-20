@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Entity
 public class Comentario {
@@ -16,6 +17,7 @@ public class Comentario {
 
     private String descripcion;
     private String usuario;
+    private LocalDateTime fechaPublicacion;
 
     @ManyToOne
     @JoinColumn(name = "curso_id")
@@ -28,6 +30,7 @@ public class Comentario {
         this.descripcion = descripcion;
         this.usuario = usuario;
         this.curso = curso;
+        this.fechaPublicacion = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -56,5 +59,16 @@ public class Comentario {
 
     public void setCurso(Curso curso) {
         this.curso = curso;
+    }
+
+    public void setFechaPublicacion(LocalDateTime fechaPublicacion) {
+        this.fechaPublicacion = fechaPublicacion;
+    }
+
+    public String getFechaFormateada() {
+        if (fechaPublicacion == null) {
+            return "";
+        }
+        return fechaPublicacion.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 }

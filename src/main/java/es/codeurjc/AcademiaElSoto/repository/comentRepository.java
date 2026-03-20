@@ -8,5 +8,5 @@ import es.codeurjc.AcademiaElSoto.model.Comentario;
 
 public interface comentRepository extends JpaRepository<Comentario, Long> {
 
-    List<Comentario> findByCursoIdOrderByIdDesc(Long cursoId);
+    List<Comentario> findByCursoIdOrderByFechaPublicacionDesc(Long cursoId);
 }

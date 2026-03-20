@@ -64,7 +64,7 @@ public class CourseController {
             Curso curso = op.get();
             model.addAttribute("curso", curso);
             model.addAttribute("hasImage", curso.getImageFile() != null);
-            model.addAttribute("comentarios", comentarioRepository.findByCursoIdOrderByIdDesc(id));
+            model.addAttribute("comentarios", comentarioRepository.findByCursoIdOrderByFechaPublicacionDesc(id));
 
             return "bd_course/show_course";
         } else {
@@ -87,18 +87,6 @@ public class CourseController {
         cursoRepository.save(curso);
 
         return "bd_course/saved_course";
-    }
-    
-    @GetMapping("/admin_estadisticas")
-    public String mostrarEstadisticasAdmin(Model model) {
-        
-        // Obtenemos todos los cursos de la base de datos
-        List<Curso> cursos = cursoRepository.findAll();
-        
-        // Se los pasamos a la vista Mustache con la clave "cursos"
-        model.addAttribute("cursos", cursos);
-        
-        return "admin_estadisticas"; // Nombre de tu archivo HTML
     }
 
     @GetMapping("/curso/{id}/image")
