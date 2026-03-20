@@ -6,24 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Academia El Soto</title>
-    <!-- Favicon-->
+    <title>Academia El Soto - Admin</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-    <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 
-<body id="page-top">
-   <!-- Navigation-->
+<body id="page-top" class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="/index">
-                <img src="assets/img/ELSOTO.png" alt="..." class="logo-elsoto" /></a>
+                <img src="assets/img/ELSOTO.png" alt="..." class="logo-elsoto" />
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
@@ -47,22 +43,16 @@
                         </a>
                     </li>
                     <li class="nav-item ms-lg-3 dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button"
-                            data-bs-toggle="dropdown">
+                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             Admin
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="/admin_estadisticas">Estadísticas</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/admin_users">Usuarios</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="/index">Cerrar Sesión</a></li>
                         </ul>
-                    </li>
                     </li>
                     <li class="nav-item ms-lg-3" id="carrito_compra">
                         <a class="nav-link" href="/carrito">
@@ -76,7 +66,6 @@
 
     <div style="height:80px"></div>
 
-    <!-- PERFIL CONTENT -->
     <div class="container flex-grow-1 py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -89,16 +78,13 @@
                         </div>
                         <div>
                             <h4 class="mb-1">Estadísticas de los cursos</h4>
-
                         </div>
                     </div>
                 </div>
 
                 <div class="card shadow rounded-4 p-4 mb-4">
-
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0">Gestión de cursos</h5>
-
                         <a href="/admin_crear_curso" class="btn btn-primary">
                             <i class="fas fa-plus me-2"></i>Añadir curso
                         </a>
@@ -118,21 +104,26 @@
                             <tbody>
                                 {{#cursos}}
                                 <tr>
-                                    <td>{{nombreCurso}}</td>
+                                    <td class="fw-bold">{{nombreCurso}}</td>
                                     <td>{{profesor}}</td>
                                     <td>{{alumnos}}</td>
-                                    <td>{{Precio}}</td>
-                                    
+                                    <td>{{precio}} $</td>
                                     <td class="text-center">
-                                    <a href="/admin_editar_curso/{{id}}" class="btn btn-sm btn-outline-primary me-1">
-                                        <i class="fas fa-pen"></i>
-                                    </a>
-                                    <form action="/admin_borrar_curso/{{id}}" method="POST" style="display:inline;">
-                                        <button class="btn btn-sm btn-outline-danger" type="submit">
-                                        <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                        <a href="/editcurso/{{id}}" class="btn btn-sm btn-outline-primary me-1" title="Editar curso">
+                                            <i class="fas fa-pen"></i> Editar
+                                        </a>
+                                        <form action="/curso/{{id}}/delete" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas borrar este curso de la base de datos?');">
+                                            <button class="btn btn-sm btn-outline-danger" type="submit" title="Borrar curso">
+                                                <i class="fas fa-trash"></i> Borrar
+                                            </button>
+                                        </form>
                                     </td>
+                                </tr>
+                                {{/cursos}}
+
+                                {{^cursos}}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No hay cursos registrados en el sistema.</td>
                                 </tr>
                                 {{/cursos}}
                             </tbody>
@@ -140,29 +131,28 @@
                     </div>
                 </div>
 
-                <!-- Footer-->
-                <footer class="footer py-4">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-lg-4 text-lg-start">Copyright &copy; Your Website 2023</div>
-                            <div class="col-lg-4 my-3 my-lg-0">
-                                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i
-                                        class="fab fa-twitter"></i></a>
-                                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i
-                                        class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i
-                                        class="fab fa-linkedin-in"></i></a>
-                            </div>
-                            <div class="col-lg-4 text-lg-end">
-                                <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
-                                <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="js/scripts.js"></script>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer py-4 mt-auto bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-lg-start">Copyright &copy; Your Website 2023</div>
+                <div class="col-lg-4 my-3 my-lg-0">
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                    <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
-
-
 </html>

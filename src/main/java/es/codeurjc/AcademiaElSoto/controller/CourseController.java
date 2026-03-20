@@ -88,6 +88,18 @@ public class CourseController {
 
         return "bd_course/saved_course";
     }
+    
+    @GetMapping("/admin_estadisticas")
+    public String mostrarEstadisticasAdmin(Model model) {
+        
+        // Obtenemos todos los cursos de la base de datos
+        List<Curso> cursos = cursoRepository.findAll();
+        
+        // Se los pasamos a la vista Mustache con la clave "cursos"
+        model.addAttribute("cursos", cursos);
+        
+        return "admin_estadisticas"; // Nombre de tu archivo HTML
+    }
 
     @GetMapping("/curso/{id}/image")
     public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {

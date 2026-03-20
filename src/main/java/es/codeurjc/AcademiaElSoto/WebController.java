@@ -61,11 +61,13 @@ public class WebController {
         return "admin_editar_curso";
     }
 
-    @GetMapping("/admin_estadisticas")
+    /* 
+     @GetMapping("/admin_estadisticas")
     public String admin_estadisticas() {
         return "admin_estadisticas";
     }
-
+    */
+   
     @GetMapping("/admin_users")
     public String admin_users() {
         return "admin_users";
