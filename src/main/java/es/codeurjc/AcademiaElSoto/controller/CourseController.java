@@ -43,8 +43,7 @@ public class CourseController {
 
     @PostConstruct
     public void init() {
-        cursoRepository.save(new Curso("Paul", "IP", 120, "Curso de introducción a Programación", 12));
-        cursoRepository.save(new Curso("Frenando", "DWS", 150, "Desarrollo de aplicaciones con Spring", 13));
+        
     }
 
     @GetMapping("/cursos")
@@ -87,6 +86,17 @@ public class CourseController {
         cursoRepository.save(curso);
 
         return "bd_course/saved_course";
+    }
+
+    @GetMapping("/admin_estadisticas")
+    public String mostrarEstadisticasAdmin(Model model) {
+        // Obtenemos todos los cursos de la base de datos
+        List<Curso> cursos = cursoRepository.findAll();
+        
+        // Se los pasamos a la vista Mustache con la clave "cursos"
+        model.addAttribute("cursos", cursos);
+        
+        return "admin_estadisticas"; // Nombre de tu archivo HTML
     }
 
     @GetMapping("/curso/{id}/image")
