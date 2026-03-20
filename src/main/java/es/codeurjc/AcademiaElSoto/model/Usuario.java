@@ -1,13 +1,13 @@
 package es.codeurjc.AcademiaElSoto.model;
 
+
+import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
-import jakarta.persistence.*;
-
-@Entity
-@SessionScope
 @Component
+@SessionScope
+@Entity
 public class Usuario {
 
     @Id
@@ -20,6 +20,9 @@ public class Usuario {
     private String email;
     private String password;
     private String apellidos;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Carrito carrito;
 
     public Usuario() {
     }
@@ -39,7 +42,13 @@ public class Usuario {
         return apellidos;
     }
 
-    
+    public Carrito getCarrito() {
+        return carrito;
+    }
+
+    public void setCarrito(Carrito carrito) {
+        this.carrito = carrito;
+    }
 
     public Long getId() {
         return id;

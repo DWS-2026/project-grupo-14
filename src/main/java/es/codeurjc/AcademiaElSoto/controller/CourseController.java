@@ -9,10 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import es.codeurjc.AcademiaElSoto.model.Carrito;
 import es.codeurjc.AcademiaElSoto.model.Curso;
+import es.codeurjc.AcademiaElSoto.model.Usuario;
 import es.codeurjc.AcademiaElSoto.repository.cursoRepository;
+import es.codeurjc.AcademiaElSoto.repository.userRepository;
+import es.codeurjc.AcademiaElSoto.repository.cartRepository;
 import org.springframework.web.multipart.MultipartFile;
 import javax.sql.rowset.serial.SerialBlob;
+import java.util.List;
 
 import org.springframework.http.MediaType;
 
@@ -24,6 +29,12 @@ public class CourseController {
 
     @Autowired
     private cursoRepository cursoRepository;
+
+    @Autowired
+    private userRepository usuarioRepository;
+
+    @Autowired
+    private cartRepository carritoRepository;
 
     //Datos temporales para probar que funciona 
 
@@ -130,4 +141,41 @@ public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
             return "bd_course/course_not_found";
         }
     }
+
+    @PostMapping("/curso/{id}/add-carrito")
+    public String añadirAlCarrito(Model model, @PathVariable long id) {
+
+        Optional<Curso> opCurso = cursoRepository.findById(id);
+        
+        // ¡TRUCO! Cogemos la lista de todos los usuarios y nos quedamos con el primero que haya
+        List <Usuario> usuarios = usuarioRepository.findAll();
+
+        // Si el curso existe y hay al menos un usuario en la base de datos...
+        if (opCurso.isPresent() && !usuarios.isEmpty()) {
+            
+            Curso curso = opCurso.get();
+            Usuario usuario = usuarios.get(0); // Cogemos al usuario de prueba (sea cual sea su ID)
+
+            // 1. Obtenemos el carrito del usuario. Si no tiene, le creamos uno nuevo.
+            Carrito carrito = usuario.getCarrito();
+            if (carrito == null) {
+                carrito = new Carrito("Carrito de " + usuario.getNombre(), 0);
+                carrito.setUsuario(usuario);
+                usuario.setCarrito(carrito);
+            }
+
+            // 2. Añadimos el curso al carrito
+            carrito.addCurso(curso);
+
+            // 3. Guardamos los cambios
+            usuarioRepository.save(usuario); 
+
+            // Redirigimos a la página de cursos para que pueda seguir comprando
+            return "redirect:/cursos"; 
+            
+        } else {
+            return "bd_course/course_not_found";
+        }
+    }
+
 }

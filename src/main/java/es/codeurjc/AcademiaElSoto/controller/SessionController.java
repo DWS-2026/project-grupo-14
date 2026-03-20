@@ -1,4 +1,4 @@
-package es.codeurjc.AcademiaElSoto.repository;
+package es.codeurjc.AcademiaElSoto.controller;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
