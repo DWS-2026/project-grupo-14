@@ -1,196 +1,167 @@
 package es.codeurjc.AcademiaElSoto.controller;
 
+import java.util.List;
 import java.util.Optional;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import es.codeurjc.AcademiaElSoto.model.Carrito;
-import es.codeurjc.AcademiaElSoto.model.Curso;
-import es.codeurjc.AcademiaElSoto.model.Usuario;
-import es.codeurjc.AcademiaElSoto.repository.cursoRepository;
-import es.codeurjc.AcademiaElSoto.repository.userRepository;
-import es.codeurjc.AcademiaElSoto.repository.cartRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import javax.sql.rowset.serial.SerialBlob;
-import java.util.List;
-import es.codeurjc.AcademiaElSoto.repository.comentRepository;
 
-import org.springframework.http.MediaType;
-
+import es.codeurjc.AcademiaElSoto.model.Cart;
+import es.codeurjc.AcademiaElSoto.model.Course;
+import es.codeurjc.AcademiaElSoto.model.User;
+import es.codeurjc.AcademiaElSoto.repository.CartRepository;
+import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
+import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
+import es.codeurjc.AcademiaElSoto.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 
 @Controller
 public class CourseController {
 
     @Autowired
-    private cursoRepository cursoRepository;
+    private CourseRepository courseRepository;
 
     @Autowired
-    private userRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private cartRepository carritoRepository;
+    private CartRepository cartRepository;
 
     @Autowired
-    private comentRepository comentarioRepository;
+    private CommentRepository commentRepository;
 
-    // Datos temporales para probar que funciona
-
+    // Temporary data to verify that everything works.
     @PostConstruct
     public void init() {
-        
     }
 
-    @GetMapping("/cursos")
+    @GetMapping("/courses")
     public String showCourses(Model model) {
-
-        model.addAttribute("cursos", cursoRepository.findAll());
-
-        return "cursos";
+        model.addAttribute("courses", courseRepository.findAll());
+        return "courses";
     }
 
-    @GetMapping("/curso/{id}")
+    @GetMapping("/course/{id}")
     public String showCourse(Model model, @PathVariable long id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
 
-        Optional<Curso> op = cursoRepository.findById(id);
-
-        if (op.isPresent()) {
-            Curso curso = op.get();
-            model.addAttribute("curso", curso);
-            model.addAttribute("hasImage", curso.getImageFile() != null);
-            model.addAttribute("comentarios", comentarioRepository.findByCursoIdOrderByFechaPublicacionDesc(id));
-
-            return "bd_course/show_course";
-        } else {
-            return "bd_course/course_not_found";
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            model.addAttribute("course", course);
+            model.addAttribute("hasImage", course.getImageFile() != null);
+            model.addAttribute("comments", commentRepository.findByCourseIdOrderByPublicationDateDesc(id));
+            return "course_db/show_course";
         }
+
+        return "course_db/course_not_found";
     }
 
-    @PostMapping("/curso/new")
-    public String newCourse(Model model, Curso curso,
-            @RequestParam MultipartFile imagen) {
-
+    @PostMapping("/course/new")
+    public String newCourse(Model model, Course course, @RequestParam MultipartFile image) {
         try {
-            if (!imagen.isEmpty()) {
-                curso.setImageFile(new SerialBlob(imagen.getBytes()));
+            if (!image.isEmpty()) {
+                course.setImageFile(new SerialBlob(image.getBytes()));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
-        cursoRepository.save(curso);
-
-        return "bd_course/saved_course";
+        courseRepository.save(course);
+        return "course_db/saved_course";
     }
 
-    @GetMapping("/admin_estadisticas")
-    public String mostrarEstadisticasAdmin(Model model) {
-        // Obtenemos todos los cursos de la base de datos
-        List<Curso> cursos = cursoRepository.findAll();
-        
-        // Se los pasamos a la vista Mustache con la clave "cursos"
-        model.addAttribute("cursos", cursos);
-        
-        return "admin_estadisticas"; // Nombre de tu archivo HTML
+    @GetMapping("/admin_statistics")
+    public String showAdminStatistics(Model model) {
+        // Retrieve all courses from the database.
+        List<Course> courses = courseRepository.findAll();
+        model.addAttribute("courses", courses);
+        return "admin_statistics";
     }
 
-    @GetMapping("/curso/{id}/image")
+    @GetMapping("/course/{id}/image")
     public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
+        Course course = courseRepository.findById(id).orElseThrow();
 
-        Curso curso = cursoRepository.findById(id).orElseThrow();
-
-        if (curso.getImageFile() != null) {
+        if (course.getImageFile() != null) {
             return ResponseEntity
                     .ok()
                     .contentType(MediaType.IMAGE_JPEG)
-                    .body(new InputStreamResource(curso.getImageFile().getBinaryStream()));
-        } else {
-            return ResponseEntity.notFound().build();
+                    .body(new InputStreamResource(course.getImageFile().getBinaryStream()));
         }
+
+        return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/editcurso/{id}")
+    @GetMapping("/edit-course/{id}")
     public String editCourse(Model model, @PathVariable long id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
 
-        Optional<Curso> op = cursoRepository.findById(id);
-
-        if (op.isPresent()) {
-            Curso curso = op.get();
-            model.addAttribute("curso", curso);
-            return "bd_course/edit_course_page";
-        } else {
-            return "bd_course/course_not_found";
+        if (courseOptional.isPresent()) {
+            model.addAttribute("course", courseOptional.get());
+            return "course_db/edit_course_page";
         }
+
+        return "course_db/course_not_found";
     }
 
-    @PostMapping("/editedcurso/{id}")
-    public String editCourseProcess(Model model, @PathVariable long id, Curso editedCurso) {
+    @PostMapping("/edited-course/{id}")
+    public String editCourseProcess(Model model, @PathVariable long id, Course editedCourse) {
+        Optional<Course> courseOptional = courseRepository.findById(editedCourse.getId());
 
-        Optional<Curso> op = cursoRepository.findById(editedCurso.getId());
-
-        if (op.isPresent()) {
-            editedCurso.setId(id); // aseguramos el id correcto
-            cursoRepository.save(editedCurso);
-            model.addAttribute("curso", editedCurso);
-            return "bd_course/edited_course";
-        } else {
-            return "bd_course/course_not_found";
+        if (courseOptional.isPresent()) {
+            editedCourse.setId(id);
+            courseRepository.save(editedCourse);
+            model.addAttribute("course", editedCourse);
+            return "course_db/edited_course";
         }
+
+        return "course_db/course_not_found";
     }
 
-    @PostMapping("/curso/{id}/delete")
+    @PostMapping("/course/{id}/delete")
     public String deleteCourse(Model model, @PathVariable long id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
 
-        Optional<Curso> curso = cursoRepository.findById(id);
-
-        if (curso.isPresent()) {
-            cursoRepository.deleteById(id);
-            return "bd_course/deleted_course";
-        } else {
-            return "bd_course/course_not_found";
+        if (courseOptional.isPresent()) {
+            courseRepository.deleteById(id);
+            return "course_db/deleted_course";
         }
+
+        return "course_db/course_not_found";
     }
 
-    @PostMapping("/curso/{id}/add-carrito")
-    public String añadirAlCarrito(Model model, @PathVariable long id) {
+    @PostMapping("/course/{id}/add-cart")
+    public String addToCart(Model model, @PathVariable long id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        List<User> users = userRepository.findAll();
 
-        Optional<Curso> opCurso = cursoRepository.findById(id);
+        if (courseOptional.isPresent() && !users.isEmpty()) {
+            Course course = courseOptional.get();
+            User user = users.get(0);
 
-        // ¡TRUCO! Cogemos la lista de todos los usuarios y nos quedamos con el primero
-        // que haya
-        List<Usuario> usuarios = usuarioRepository.findAll();
-
-        // Si el curso existe y hay al menos un usuario en la base de datos...
-        if (opCurso.isPresent() && !usuarios.isEmpty()) {
-
-            Curso curso = opCurso.get();
-            Usuario usuario = usuarios.get(0); // Cogemos al usuario de prueba (sea cual sea su ID)
-
-            // 1. Obtenemos el carrito del usuario. Si no tiene, le creamos uno nuevo.
-            Carrito carrito = usuario.getCarrito();
-            if (carrito == null) {
-                carrito = new Carrito("Carrito de " + usuario.getNombre(), 0);
-                carrito.setUsuario(usuario);
-                usuario.setCarrito(carrito);
+            Cart cart = user.getCart();
+            if (cart == null) {
+                cart = new Cart("Cart of " + user.getUserName(), 0);
+                cart.setUser(user);
+                user.setCart(cart);
             }
 
-            // 2. Añadimos el curso al carrito
-            carrito.addCurso(curso);
-
-            // 3. Guardamos los cambios
-            usuarioRepository.save(usuario);
-
-            // Redirigimos a la página de cursos para que pueda seguir comprando
-            return "redirect:/cursos";
-
-        } else {
-            return "bd_course/course_not_found";
+            cart.addCourse(course);
+            userRepository.save(user);
+            return "redirect:/courses";
         }
-    }
 
+        return "course_db/course_not_found";
+    }
 }

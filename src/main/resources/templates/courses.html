@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8" />
@@ -28,13 +28,13 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0 align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="/informacion">Información</a>
+                        <a class="nav-link" href="/information">Información</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/cursos">Cursos</a>
+                        <a class="nav-link" href="/courses">Cursos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/profesores">Profesores</a>
+                        <a class="nav-link" href="/teachers">Profesores</a>
                     </li>
 
                     <li class="nav-item ms-lg-3">
@@ -47,8 +47,8 @@
                             Admin
                         </a>
                     </li>
-                    <li class="nav-item ms-lg-3" id="carrito_compra">
-                        <a class="nav-link" href="/carrito">
+                    <li class="nav-item ms-lg-3" id="cart_purchase">
+                        <a class="nav-link" href="/cart">
                             <i class="fa-solid fa-cart-shopping fa-xl"></i>
                         </a>
                     </li>
@@ -65,35 +65,35 @@
             </div>
 
             <div class="row">
-                {{#cursos}}
+                {{#courses}}
                 <div class="col-lg-4 col-sm-6 mb-4">
                     <div class="portfolio-item">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal{{id}}">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="/curso/{{id}}/image" alt="..."
+                            <img class="img-fluid" src="/course/{{id}}/image" alt="..."
                                 onerror="this.src='assets/img/portfolio/1.jpg'" />
                         </a>
                         <div class="portfolio-caption">
-                            <div class="portfolio-caption-heading">{{nombreCurso}}</div>
-                            <div class="portfolio-caption-subheading text-muted">{{descripcion}}</div>
+                            <div class="portfolio-caption-heading">{{courseName}}</div>
+                            <div class="portfolio-caption-subheading text-muted">{{description}}</div>
                         </div>
                     </div>
                 </div>
-                {{/cursos}}
+                {{/courses}}
             </div>
         </div>
 
         <div class="text-center mt-4">
             <a href="mailto:academiaelsoto@gmail.com?subject=Consulta%20Academia%20El%20Soto&body=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20cursos."
-                id="btn-correo" class="btn btn-danger">
+                id="btn-email" class="btn btn-danger">
                 ¡Escríbenos por correo!
             </a>
         </div>
     </section>
 
-    {{#cursos}}
+    {{#courses}}
     <div class="portfolio-modal modal fade" id="portfolioModal{{id}}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -103,27 +103,27 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div class="modal-body">
-                                <h2 class="text-uppercase">{{nombreCurso}}</h2>
-                                <p class="item-intro text-muted">{{descripcion}}</p>
-                                <img class="img-fluid d-block mx-auto" src="/curso/{{id}}/image" alt="..."
+                                <h2 class="text-uppercase">{{courseName}}</h2>
+                                <p class="item-intro text-muted">{{description}}</p>
+                                <img class="img-fluid d-block mx-auto" src="/course/{{id}}/image" alt="..."
                                     onerror="this.src='assets/img/portfolio/1.jpg'" />
 
                                 <ul class="list-inline">
                                     <li>
                                         <strong>Profesor:</strong>
-                                        {{profesor}}
+                                        {{teacher}}
                                     </li>
                                     <li>
                                         <strong>Alumnos:</strong>
-                                        Mínimo {{alumnos}}.
+                                        Mínimo {{students}}.
                                     </li>
                                     <li>
                                         <strong>Precio:</strong>
-                                        {{precio}}$.
+                                        {{price}}$.
                                     </li>
                                 </ul>
 
-                                <form action="/curso/{{id}}/add-carrito" method="post">
+                                <form action="/course/{{id}}/add-cart" method="post">
                                     <button type="submit" class="btn btn-warning btn-xl text-uppercase shadow">
                                         <i class="fas fa-shopping-cart me-2"></i> COMPRAR CURSO
                                     </button>
@@ -138,14 +138,14 @@
                                         </h3>
                                     </div>
 
-                                    <form action="/curso/{{id}}/comentario" method="post">
+                                    <form action="/course/{{id}}/comment" method="post">
                                         <div class="mb-3">
-                                            <input type="text" name="usuario" class="form-control"
+                                            <input type="text" name="user" class="form-control"
                                                 placeholder="Tu nombre" required>
                                         </div>
 
                                         <div class="mb-3">
-                                            <textarea class="form-control" name="descripcion" rows="4"
+                                            <textarea class="form-control" name="description" rows="4"
                                                 placeholder="Escribe tu comentario" required></textarea>
                                         </div>
 
@@ -157,17 +157,17 @@
                                     </form>
 
                                     <div class="mt-4">
-                                        {{#comentarios}}
+                                        {{#comments}}
                                         <div class="border rounded p-3 mb-3 bg-light text-start">
-                                            <strong>{{usuario}}</strong>
-                                            <small class="text-muted d-block">{{fechaFormateada}}</small>
-                                            <p class="mb-0">{{descripcion}}</p>
+                                            <strong>{{user}}</strong>
+                                            <small class="text-muted d-block">{{formattedDate}}</small>
+                                            <p class="mb-0">{{description}}</p>
                                         </div>
-                                        {{/comentarios}}
+                                        {{/comments}}
 
-                                        {{^comentarios}}
+                                        {{^comments}}
                                         <p class="text-muted">Todavía no hay comentarios para este curso.</p>
-                                        {{/comentarios}}
+                                        {{/comments}}
                                     </div>
 
                                     <div class="text-center mt-4">
@@ -183,7 +183,7 @@
             </div>
         </div>
     </div>
-    {{/cursos}}
+    {{/courses}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>

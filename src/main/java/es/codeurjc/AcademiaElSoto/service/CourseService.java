@@ -11,56 +11,55 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import es.codeurjc.AcademiaElSoto.model.Curso;
-import es.codeurjc.AcademiaElSoto.repository.cursoRepository;
+import es.codeurjc.AcademiaElSoto.model.Course;
+import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
 
 @Service
 public class CourseService {
 
     @Autowired
-    private cursoRepository cursoRepository;
+    private CourseRepository courseRepository;
 
-    // Guardar o actualizar un curso sin imagen
-    public void save(Curso curso) {
-        cursoRepository.save(curso);
+    // Save or update a course without an image.
+    public void save(Course course) {
+        courseRepository.save(course);
     }
 
-    // Guardar o actualizar un curso con imagen (Blob)
-    public void save(Curso curso, MultipartFile imageFile) throws IOException {
+    // Save or update a course with an image.
+    public void save(Course course, MultipartFile imageFile) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 Blob blob = new SerialBlob(imageFile.getBytes());
-                curso.setImageFile(blob);
+                course.setImageFile(blob);
             } catch (Exception e) {
-                throw new IOException("Error al crear el Blob de la imagen", e);
+                throw new IOException("Error creating the image Blob", e);
             }
         }
-        this.save(curso);
+        this.save(course);
     }
 
-    // Buscar todos los cursos
-    public List<Curso> findAll() {
-        return cursoRepository.findAll();
+    // Find all courses.
+    public List<Course> findAll() {
+        return courseRepository.findAll();
     }
 
-    // Buscar por id
-    public Optional<Curso> findById(Long id) {
-        return cursoRepository.findById(id);
+    // Find by id.
+    public Optional<Course> findById(Long id) {
+        return courseRepository.findById(id);
     }
 
-    // Buscar por profesor
-    public List<Curso> findByProfesor(String profesor) {
-        return cursoRepository.findByProfesor(profesor);
+    // Find by teacher.
+    public List<Course> findByTeacher(String teacher) {
+        return courseRepository.findByTeacher(teacher);
     }
 
-    // Buscar por nombre de curso
-    public List<Curso> findByNombreCurso(String nombreCurso) {
-        return cursoRepository.findByNombreCurso(nombreCurso);
+    // Find by course name.
+    public List<Course> findByCourseName(String courseName) {
+        return courseRepository.findByCourseName(courseName);
     }
 
-    // Eliminar un curso por id
+    // Delete a course by id.
     public void deleteById(Long id) {
-        cursoRepository.deleteById(id);
+        courseRepository.deleteById(id);
     }
-
 }

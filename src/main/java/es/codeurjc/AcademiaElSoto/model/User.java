@@ -1,72 +1,60 @@
 package es.codeurjc.AcademiaElSoto.model;
 
-
-import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Component
 @SessionScope
 @Entity
-public class Usuario {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String info;
-
     private String userName;
     private String email;
     private String password;
-    private String apellidos;
+    private String lastName;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Carrito carrito;
+    private Cart cart;
 
-    public Usuario() {
+    public User() {
     }
 
-    public Usuario(String userName, String apellidos, String email, String password) {
+    public User(String userName, String lastName, String email, String password) {
         this.userName = userName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.apellidos = apellidos;
-    }
-
-    public void setApellidos(String apellidos){
-        this.apellidos = apellidos;
-    }
-
-    public String getApellidos(){
-        return apellidos;
-    }
-
-    public Carrito getCarrito() {
-        return carrito;
-    }
-
-    public void setCarrito(Carrito carrito) {
-        this.carrito = carrito;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getInfo(){
+    public String getInfo() {
         return info;
     }
 
-    public void setInfo(String info){
+    public void setInfo(String info) {
         this.info = info;
     }
 
-    public String getNombre() {
+    public String getUserName() {
         return userName;
     }
 
-    public void setNombre(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -84,5 +72,21 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

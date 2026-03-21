@@ -4,68 +4,51 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Academia El Soto</title>
-    <!-- Favicon-->
+    <title>Editar Curso - Academia El Soto</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
+    <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
+    <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <!-- Core theme CSS -->
+    <link href="../css/styles.css" rel="stylesheet" />
 </head>
 
 <body id="page-top">
-   <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
+     <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="/index">
-                <img src="assets/img/ELSOTO.png" alt="..." class="logo-elsoto" /></a>
+                <img src="/../assets/img/ELSOTO.png" alt="..." class="logo-elsoto" /></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ms-1"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0 align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="/informacion">Información</a>
+                        <a class="nav-link" href="/information">Información</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/cursos">Cursos</a>
+                        <a class="nav-link" href="/courses">Cursos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/profesores">Profesores</a>
+                        <a class="nav-link" href="/teachers">Profesores</a>
                     </li>
 
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-outline-light px-4" href="/login">
+                            Login
+                        </a>
+                    </li>
                     <li class="nav-item ms-lg-3">
                         <a class="btn btn-outline-light px-4" href="/admin">
                             Admin
                         </a>
                     </li>
-                    <li class="nav-item ms-lg-3 dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button"
-                            data-bs-toggle="dropdown">
-                            Admin
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/admin_estadisticas">Estadísticas</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="/admin_users">Usuarios</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item text-danger" href="/index">Cerrar Sesión</a></li>
-                        </ul>
-                    </li>
-                    </li>
-                    <li class="nav-item ms-lg-3" id="carrito_compra">
-                        <a class="nav-link" href="/carrito">
+                    <li class="nav-item ms-lg-3" id="cart_purchase">
+                        <a class="nav-link" href="/cart">
                             <i class="fa-solid fa-cart-shopping fa-xl"></i>
                         </a>
                     </li>
@@ -76,49 +59,48 @@
 
     <div style="height:80px"></div>
 
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-7">
+    <section class="page-section bg-light" style="padding-top:120px;">
+        <div class="container">
 
-                <div class="card shadow rounded-4 p-4">
+            <div class="text-center mb-5">
+                <h2 class="section-heading text-uppercase">Editar curso</h2>
+                <h3 class="section-subheading text-muted">Panel de administración</h3>
+            </div>
 
-                    <h4 class="mb-4 text-center">Editar curso</h4>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
 
-                    <form>
+                    <form class="bg-white p-4 rounded shadow" action="/edited-course/{{course.id}}" method="post"> <!-- Edit course form -->
 
                         <div class="mb-3">
                             <label class="form-label">Nombre del curso</label>
-                            <input type="text" class="form-control" value="Matemática Discreta y Álgebra">
+                            <input type="text" name="courseName" class="form-control" value="{{course.courseName}}" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Profesor</label>
-                            <input type="text" class="form-control" value="Frenando Alonso">
+                            <input type="text" name="teacher" class="form-control" value="{{course.teacher}}" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Precio (€)</label>
-                            <input type="number" class="form-control" value="130">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Imagen del curso</label>
-                            <input type="file" class="form-control">
-                            <small class="text-muted">Si no subes una nueva imagen se mantendrá la actual</small>
+                            <input type="number" name="price" class="form-control" value="{{course.price}}" required>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label">Descripción</label>
-                            <textarea class="form-control"
-                                rows="4">Curso completo de matemáticas aplicadas para ingeniería.</textarea>
+                            <textarea name="description" class="form-control" rows="4" required>{{course.description}}</textarea>
                         </div>
 
-                        <div class="d-flex justify-content-between">
-                            <a href="/admin_estadisticas" class="btn btn-outline-secondary">
-                                Cancelar
-                            </a>
+                        <div class="mb-4">
+                            <label class="form-label">Alumnos</label>
+                            <input type="number" name="students" class="form-control" value="{{course.students}}" required>
+                        </div>
 
-                            <button class="btn btn-primary">
+                        <input type="hidden" name="id" value="{{course.id}}"/>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary btn-xl text-uppercase" type="submit">
                                 Guardar cambios
                             </button>
                         </div>
@@ -126,10 +108,10 @@
                     </form>
 
                 </div>
-
             </div>
+
         </div>
-    </div>
+    </section>
 
     <!-- Footer-->
     <footer class="footer py-4">
@@ -151,6 +133,7 @@
             </div>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
 </body>

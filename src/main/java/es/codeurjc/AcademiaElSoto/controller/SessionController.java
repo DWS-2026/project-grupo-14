@@ -1,58 +1,49 @@
 package es.codeurjc.AcademiaElSoto.controller;
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import es.codeurjc.AcademiaElSoto.model.Usuario;
+import es.codeurjc.AcademiaElSoto.model.User;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class SessionController {
 
-	@Autowired
-	private Usuario usuario;
+    @Autowired
+    private User user;
 
-	private String infoCompartida;
+    private String sharedInfo;
 
-	
+    @PostMapping("/user")
+    public String user(Model model, HttpSession session,
+            @RequestParam String userName,
+            @RequestParam String lastName,
+            @RequestParam String email,
+            @RequestParam String password) {
 
-	@PostMapping("/user")
-	public String user(Model model, HttpSession session,
-			@RequestParam String userName,
-			@RequestParam String apellidos,
-			@RequestParam String email,
-			@RequestParam String password) {
+        User user = new User();
+        user.setUserName(userName);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setLastName(lastName);
 
-		
-		Usuario usuario = new Usuario(); 
+        session.setAttribute("user", user);
+        return "auth/form_result";
+    }
 
-		usuario.setNombre(userName);
-		usuario.setEmail(email);
-		usuario.setPassword(password);
-		usuario.setApellidos(apellidos);
+    @GetMapping("/showResults")
+    public String showResults(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
 
-		session.setAttribute("usuario", usuario); 
+        if (user != null) {
+            model.addAttribute("userName", user.getUserName());
+            model.addAttribute("lastName", user.getLastName());
+            model.addAttribute("email", user.getEmail());
+        }
 
-		return "auth/resultado_formulario";
-	}
-
-	@GetMapping("/mostrarResultados")
-		public String mostrarResultados(HttpSession session, Model model) {
-
-		
-		Usuario usuario = (Usuario) session.getAttribute("usuario");
-
-		if (usuario != null) {
-			model.addAttribute("userName", usuario.getNombre());
-			model.addAttribute("apellidos", usuario.getApellidos());
-			model.addAttribute("email", usuario.getEmail());
-		}
-
-		return "user";
-	}
+        return "user";
+    }
 }

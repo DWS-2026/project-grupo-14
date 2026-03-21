@@ -1,63 +1,58 @@
 package es.codeurjc.AcademiaElSoto.controller;
 
-import es.codeurjc.AcademiaElSoto.model.Carrito;
-import es.codeurjc.AcademiaElSoto.model.Curso;
-import es.codeurjc.AcademiaElSoto.repository.cartRepository;
-import es.codeurjc.AcademiaElSoto.repository.cursoRepository;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-// Importante importar HttpSession (dependiendo de tu versión de Spring Boot puede ser javax o jakarta)
-import jakarta.servlet.http.HttpSession; 
-import java.util.Optional;
+import es.codeurjc.AcademiaElSoto.model.Cart;
+import es.codeurjc.AcademiaElSoto.model.Course;
+import es.codeurjc.AcademiaElSoto.repository.CartRepository;
+import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CartController {
 
     @Autowired
-    private cartRepository cartRepository;
+    private CartRepository cartRepository;
 
     @Autowired
-    private cursoRepository cursoRepository;
+    private CourseRepository courseRepository;
 
-    @PostMapping("/carrito/add")
-    public String agregarAlCarrito(@RequestParam("cursoId") Long cursoId, HttpSession session) {
-        
-        // 1. Buscamos el curso en la base de datos por su ID
-        Optional<Curso> cursoOpt = cursoRepository.findById(cursoId);
+    @PostMapping("/cart/add")
+    public String addToCart(@RequestParam("courseId") Long courseId, HttpSession session) {
 
-        if (cursoOpt.isPresent()) {
-            Curso curso = cursoOpt.get();
-            Carrito carrito = null;
+        // 1. Look up the course in the database by its ID.
+        Optional<Course> courseOpt = courseRepository.findById(courseId);
 
-            // 2. Buscamos si el usuario ya tiene un carrito guardado en su sesión actual
-            Long carritoId = (Long) session.getAttribute("carritoId");
+        if (courseOpt.isPresent()) {
+            Course course = courseOpt.get();
+            Cart cart = null;
 
-            if (carritoId != null) {
-                // Si ya tiene un ID de carrito, lo recuperamos de la base de datos
-                carrito = cartRepository.findById(carritoId).orElse(null);
+            // 2. Check whether the user already has a cart stored in the current session.
+            Long cartId = (Long) session.getAttribute("cartId");
+
+            if (cartId != null) {
+                cart = cartRepository.findById(cartId).orElse(null);
             }
 
-            // 3. Si no tiene carrito (es el primer curso que añade) o no se encontró en la BD
-            if (carrito == null) {
-                carrito = new Carrito("Carrito de la compra", 0);
+            // 3. If there is no cart yet, create one.
+            if (cart == null) {
+                cart = new Cart("Shopping cart", 0);
             }
 
-            // 4. Añadimos el curso a la lista del carrito 
-            // (Llamamos al método addCurso() que creamos en la entidad Carrito)
-            carrito.addCurso(curso);
+            // 4. Add the selected course to the cart.
+            cart.addCourse(course);
 
-            // 5. Guardamos el carrito en la base de datos para que se actualice la lista y el precio
-            cartRepository.save(carrito);
-
-            // 6. ¡Muy importante! Guardamos el ID de este carrito en la sesión del usuario
-            // Así, cuando añada un segundo curso, sabremos cuál es su carrito
-            session.setAttribute("carritoId", carrito.getId());
+            // 5. Save the cart and keep its ID in the session.
+            cartRepository.save(cart);
+            session.setAttribute("cartId", cart.getId());
         }
 
-        // 7. Redirigimos al usuario de vuelta a la página de cursos
-        return "redirect:/cursos"; 
+        // 6. Redirect the user back to the courses page.
+        return "redirect:/courses";
     }
 }

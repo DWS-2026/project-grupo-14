@@ -1,30 +1,33 @@
 package es.codeurjc.AcademiaElSoto.controller;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import es.codeurjc.AcademiaElSoto.model.Usuario;
-import es.codeurjc.AcademiaElSoto.service.UserService;
-
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import es.codeurjc.AcademiaElSoto.model.User;
+import es.codeurjc.AcademiaElSoto.service.UserService;
+
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    // Guardar usuario
+    // Save a user.
     @PostMapping
-    public Usuario crearUsuario(@RequestBody Usuario usuario) {
-        return userService.guardarUsuario(usuario);
+    public User createUser(@RequestBody User user) {
+        return userService.saveUser(user);
     }
 
-    // Obtener todos los usuarios
+    // Get all users.
     @GetMapping
-    public List<Usuario> obtenerUsuarios() {
-        return userService.obtenerUsuarios();
+    public List<User> getUsers() {
+        return userService.getUsers();
     }
-
 }

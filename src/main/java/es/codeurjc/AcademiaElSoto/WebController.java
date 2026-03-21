@@ -1,39 +1,33 @@
 package es.codeurjc.AcademiaElSoto;
 
-import org.springframework.ui.Model;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 public class WebController {
-    /* @GetMapping("/ruta")
-        public String nombreMetodo() { //Cuando el usuario entra en http://localhost:8080/ruta
-                                        // el navegador abre vista.html
-            return "vista";
-        }
-    */
 
-    @GetMapping("/index") 
+    /*
+     @GetMapping("/route")
+     public String methodName() {
+         // When the user accesses http://localhost:8080/route
+         // the browser opens view.html
+         return "view";
+     }
+     */
+
+    @GetMapping("/index")
     public String index() {
         return "index";
     }
 
-
-    
-
-    @GetMapping("/profesores")
-    public String profesores() {
-        return "profesores";
+    @GetMapping("/teachers")
+    public String teachers() {
+        return "teachers";
     }
 
-    @GetMapping("/informacion")
-    public String informacion() {
-        return "informacion";
+    @GetMapping("/information")
+    public String information() {
+        return "information";
     }
 
     @GetMapping("/login")
@@ -51,31 +45,30 @@ public class WebController {
         return "admin";
     }
 
-    @GetMapping("/admin_crear_curso")
-    public String admin_crear_curso() {
-        return "admin_crear_curso";
+    @GetMapping("/admin_create_course")
+    public String adminCreateCourse() {
+        return "admin_create_course";
     }
 
-    @GetMapping("/admin_editar_curso")
-    public String admin_editar_curso() {
-        return "admin_editar_curso";
+    @GetMapping("/admin_edit_course")
+    public String adminEditCourse() {
+        return "admin_edit_course";
     }
 
-    /* 
-     @GetMapping("/admin_estadisticas")
-    public String admin_estadisticas() {
-        return "admin_estadisticas";
+    /*
+    @GetMapping("/admin_statistics")
+    public String adminStatistics() {
+        return "admin_statistics";
     }
     */
-   
+
     @GetMapping("/admin_users")
-    public String admin_users() {
+    public String adminUsers() {
         return "admin_users";
     }
 
-    @GetMapping("/carrito")
-    public String carrito() {
-        return "carrito";
+    @GetMapping("/cart")
+    public String cart() {
+        return "cart";
     }
-
 }

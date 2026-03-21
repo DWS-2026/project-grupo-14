@@ -28,13 +28,13 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/informacion">Información</a>
+                        <a class="nav-link" href="/information">Información</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/cursos">Cursos</a>
+                        <a class="nav-link" href="/courses">Cursos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/profesores">Profesores</a>
+                        <a class="nav-link" href="/teachers">Profesores</a>
                     </li>
 
                     <li class="nav-item ms-lg-3">
@@ -47,15 +47,15 @@
                             Admin
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/admin_estadisticas">Estadísticas</a></li>
+                            <li><a class="dropdown-item" href="/admin_statistics">Estadísticas</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/admin_users">Usuarios</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="/index">Cerrar Sesión</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item ms-lg-3" id="carrito_compra">
-                        <a class="nav-link" href="/carrito">
+                    <li class="nav-item ms-lg-3" id="cart_purchase">
+                        <a class="nav-link" href="/cart">
                             <i class="fa-solid fa-cart-shopping fa-xl"></i>
                         </a>
                     </li>
@@ -85,7 +85,7 @@
                 <div class="card shadow rounded-4 p-4 mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0">Gestión de cursos</h5>
-                        <a href="/admin_crear_curso" class="btn btn-primary">
+                        <a href="/admin_create_course" class="btn btn-primary">
                             <i class="fas fa-plus me-2"></i>Añadir curso
                         </a>
                     </div>
@@ -102,30 +102,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#cursos}}
+                                {{#courses}}
                                 <tr>
-                                    <td class="fw-bold">{{nombreCurso}}</td>
-                                    <td>{{profesor}}</td>
-                                    <td>{{alumnos}}</td>
-                                    <td>{{precio}} $</td>
+                                    <td class="fw-bold">{{courseName}}</td>
+                                    <td>{{teacher}}</td>
+                                    <td>{{students}}</td>
+                                    <td>{{price}} $</td>
                                     <td class="text-center">
-                                        <a href="/editcurso/{{id}}" class="btn btn-sm btn-outline-primary me-1" title="Editar curso">
+                                        <a href="/edit-course/{{id}}" class="btn btn-sm btn-outline-primary me-1" title="Editar curso">
                                             <i class="fas fa-pen"></i> Editar
                                         </a>
-                                        <form action="/curso/{{id}}/delete" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas borrar este curso de la base de datos?');">
+                                        <form action="/course/{{id}}/delete" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas borrar este curso de la base de datos?');">
                                             <button class="btn btn-sm btn-outline-danger" type="submit" title="Borrar curso">
                                                 <i class="fas fa-trash"></i> Borrar
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
-                                {{/cursos}}
+                                {{/courses}}
 
-                                {{^cursos}}
+                                {{^courses}}
                                 <tr>
                                     <td colspan="5" class="text-center text-muted py-4">No hay cursos registrados en el sistema.</td>
                                 </tr>
-                                {{/cursos}}
+                                {{/courses}}
                             </tbody>
                         </table>
                     </div>
