@@ -11380,17 +11380,19 @@ section#contact form#contactForm :-ms-input-placeholder {
 .comment-textarea {
     resize: vertical;
     white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 .comment-content {
     white-space: pre-line;
     overflow-wrap: anywhere;
-    word-break: break-word;
+    word-break: break-all;
+    overflow-x: hidden;
     max-width: 100%;
 }
-
 .comment-box {
     max-width: 100%;
     overflow: hidden;
