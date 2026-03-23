@@ -79,7 +79,9 @@
 
                         <div class="mb-4">
                             <label class="form-label">Descripción</label>
-                            <textarea name="description" class="form-control" rows="4" required>{{comment.description}}</textarea>
+                            <textarea name="description" class="form-control comment-textarea" rows="6" maxlength="500"
+                                required>{{comment.description}}</textarea>
+                            <small class="text-muted">Máximo 500 caracteres</small>
                         </div>
 
                         <input type="hidden" name="id" value="{{comment.id}}" />
