@@ -39,6 +39,10 @@ public class Comment {
         return id;
     }
 
+    public void setId(Long id){
+        this.id = id;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -72,9 +76,13 @@ public class Comment {
     }
 
     public String getFormattedDate() {
-        if (publicationDate == null) {
-            return "";
-        }
-        return publicationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        if (publicationDate == null) return "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return publicationDate.format(formatter);
+    }
+
+
+    public LocalDateTime getPublicationDateRaw() {
+        return publicationDate;
     }
 }

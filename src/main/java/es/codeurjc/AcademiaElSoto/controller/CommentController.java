@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,8 @@ import es.codeurjc.AcademiaElSoto.model.Comment;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
+import org.springframework.ui.Model;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -42,6 +45,77 @@ public class CommentController {
             commentRepository.save(comment);
         }
 
-        return "redirect:/courses";
+        return "redirect:/courses"; 
     }
+
+    @GetMapping("/comments")
+    public String showComments(Model model) {
+        model.addAttribute("comments", commentRepository.findAll());
+        return "admin_comment"; 
+    }
+
+    @GetMapping("/comment/{id}")
+    public String showComment(Model model, @PathVariable long id) {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+
+        if (commentOptional.isPresent()) {
+            model.addAttribute("comment", commentOptional.get());
+            return "comment_db/show_comment";
+        }
+
+        return "comment_db/comment_not_found";
+    }
+
+    @GetMapping("/edit-comment/{id}")
+    public String editComment(Model model, @PathVariable long id) {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+
+        if (commentOptional.isPresent()) {
+            model.addAttribute("comment", commentOptional.get());
+            return "comment_db/edit_comment_page";
+        }
+
+        return "comment_db/comment_not_found";
+    }
+
+    @PostMapping("/comment/{id}/delete")
+    public String deleteComment(Model model, @PathVariable long id) {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+
+        if (commentOptional.isPresent()) {
+            commentRepository.deleteById(id);
+            return "comment_db/deleted_comment";
+        }
+
+        return "comment_db/comment_not_found";
+    }
+
+    @PostMapping("/edited-comment/{id}")
+    public String editCommentProcess(Model model,
+                                    @PathVariable long id,
+                                    Comment editedComment) {
+
+        Optional<Comment> commentOptional = commentRepository.findById(editedComment.getId());
+
+        if (commentOptional.isPresent()) {
+            
+            editedComment.setId(id);
+            commentRepository.save(editedComment);
+            model.addAttribute("comment", editedComment);
+            return "comment_db/edited_comment";
+        }
+
+        return "comment_db/comment_not_found";
+    }
+
+    @GetMapping("/admin_comment")
+    public String showAdminComments(Model model) {
+        
+        List<Comment> comments = commentRepository.findAll();
+
+        model.addAttribute("comments", comments);
+
+        return "admin_comment"; 
+    }
+
 }
