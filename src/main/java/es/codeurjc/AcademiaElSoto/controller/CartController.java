@@ -124,4 +124,30 @@ public class CartController {
         // 4. Recargamos la página del carrito para ver el cambio
         return "redirect:/cart";
     }
+
+
+    @PostMapping("/complete-purchase")
+    public String completePurchase(HttpSession session, Model model) {
+
+        // 1. Obtenemos el carrito de la sesión
+        Long cartId = (Long) session.getAttribute("cartId");
+        List<Course> cartCourses = new ArrayList<>();
+
+        if (cartId != null) {
+            Optional<Cart> cartOpt = cartRepository.findById(cartId);
+            if (cartOpt.isPresent() && cartOpt.get().getCourses() != null) {
+                cartCourses = cartOpt.get().getCourses();
+            }
+        }
+
+        // 2. Comprobamos si hay cursos en el carrito
+        if (cartCourses.isEmpty()) {
+            // No hay cursos -> redirigir a página de error
+            return "course_purchase_error"; // el nombre de tu HTML sin .html
+        } else {
+            // Hay cursos -> procesar compra y mostrar confirmación
+            // Aquí podrías agregar lógica de pago o marcar cursos como comprados
+            return "completed_purchase"; // el nombre de tu HTML sin .html
+        }
+    }
 }

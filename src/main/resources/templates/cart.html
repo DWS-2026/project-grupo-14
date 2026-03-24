@@ -120,17 +120,21 @@
                             <span class="text-primary">{{totalPrice}}€</span>
                         </div>
 
-                        {{#totalCourses}}
-                        <button class="btn btn-primary w-100 btn-xl text-uppercase shadow-sm">
-                            Finalizar compra
-                        </button>
-                        {{/totalCourses}}
                         
-                        {{^totalCourses}}
-                        <button class="btn btn-secondary w-100 btn-xl text-uppercase shadow-sm" disabled>
-                            Finalizar compra
-                        </button>
-                        {{/totalCourses}}
+                        
+                        {{#totalCourses}}
+                            <form action="/complete-purchase" method="post">
+                                <button type="submit" class="btn btn-primary w-100 btn-xl text-uppercase shadow-sm">
+                                    Finalizar compra
+                                </button>
+                            </form>
+                            {{/totalCourses}}
+
+                            {{^totalCourses}}
+                            <button class="btn btn-secondary w-100 btn-xl text-uppercase shadow-sm" disabled>
+                                Finalizar compra
+                            </button>
+                            {{/totalCourses}}
                     </div>
                 </div>
 
