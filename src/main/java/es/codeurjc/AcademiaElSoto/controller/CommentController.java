@@ -115,6 +115,7 @@ public class CommentController {
 
             originalComment.setUser(cleanUser);
             originalComment.setDescription(cleanDescription);
+            
 
             commentRepository.save(originalComment);
             model.addAttribute("comment", originalComment);

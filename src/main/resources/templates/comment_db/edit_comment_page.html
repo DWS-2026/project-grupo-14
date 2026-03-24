@@ -83,6 +83,15 @@
                                 required>{{comment.description}}</textarea>
                             <small class="text-muted">Máximo 500 caracteres</small>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Curso</label>
+                            <p class="form-control-plaintext">{{#comment.course}}{{courseName}}{{/comment.course}}</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Fecha</label>
+                            <p class="form-control-plaintext">{{comment.formattedDate}}</p>
+                        </div>
 
                         <input type="hidden" name="id" value="{{comment.id}}" />
 
