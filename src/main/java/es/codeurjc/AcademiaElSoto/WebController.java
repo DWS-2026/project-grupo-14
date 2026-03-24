@@ -30,6 +30,7 @@ public class WebController {
         return "information";
     }
 
+    /*
     @GetMapping("/login")
     public String login() {
         return "auth/login";
@@ -39,6 +40,8 @@ public class WebController {
     public String register() {
         return "auth/register";
     }
+    */
+    
 
     @GetMapping("/admin")
     public String admin() {
