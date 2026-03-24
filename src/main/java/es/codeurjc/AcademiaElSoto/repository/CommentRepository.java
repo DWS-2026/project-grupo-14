@@ -9,4 +9,6 @@ import es.codeurjc.AcademiaElSoto.model.Comment;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findByCourseIdOrderByPublicationDateDesc(Long courseId);
+
+    List<Comment> findByUser(String user);
 }

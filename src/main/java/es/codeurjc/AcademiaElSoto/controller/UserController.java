@@ -1,6 +1,7 @@
 package es.codeurjc.AcademiaElSoto.controller;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.User;
+import es.codeurjc.AcademiaElSoto.model.Comment;
 import es.codeurjc.AcademiaElSoto.service.UserService;
+import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
 import es.codeurjc.AcademiaElSoto.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private UserService userService;
@@ -80,7 +86,7 @@ public class UserController {
                 session.setAttribute("cartId", loggedUser.getCart().getId());
             }
             
-            return "redirect:/courses"; 
+            return "redirect:/profile"; 
         } else {
             model.addAttribute("error", "Usuario, correo o contraseña incorrectos.");
             return "login";
@@ -92,5 +98,28 @@ public class UserController {
     public String logout(HttpSession session) {
         session.invalidate(); // Destruye la sesión (incluido el carrito)
         return "redirect:/index";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(Model model, HttpSession session) {
+        
+        User loggedUser = (User) session.getAttribute("loggedUser");
+
+        if (loggedUser != null) {
+            // 1. Pasamos los datos básicos
+            model.addAttribute("userName", loggedUser.getUserName());
+            model.addAttribute("lastName", loggedUser.getLastName());
+            model.addAttribute("email", loggedUser.getEmail());
+            
+            // 2. Buscamos TODOS los comentarios que ha escrito este usuario
+            List<Comment> misComentarios = commentRepository.findByUser(loggedUser.getUserName());
+            
+            // 3. Se los pasamos a Mustache para que los pinte
+            model.addAttribute("userComments", misComentarios);
+            
+            return "user"; 
+        }
+
+        return "redirect:/login"; 
     }
 }
