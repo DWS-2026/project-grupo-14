@@ -140,13 +140,16 @@
 
                                     <form action="/course/{{id}}/comment" method="post">
                                         <div class="mb-3">
-                                            <input type="text" name="user" class="form-control"
-                                                placeholder="Tu nombre" required>
+                                            <input type="text" name="user" class="form-control" placeholder="Tu nombre"
+                                                required>
                                         </div>
 
                                         <div class="mb-3">
-                                            <textarea class="form-control" name="description" rows="4"
-                                                placeholder="Escribe tu comentario" required></textarea>
+                                            <textarea class="form-control comment-textarea" name="description" rows="4"
+                                                maxlength="500" wrap="hard" placeholder="Escribe tu comentario"
+                                                required></textarea>
+
+                                            <small class="text-muted">Máximo 500 caracteres</small>
                                         </div>
 
                                         <div class="text-center">
@@ -158,10 +161,10 @@
 
                                     <div class="mt-4">
                                         {{#comments}}
-                                        <div class="border rounded p-3 mb-3 bg-light text-start">
+                                        <div class="border rounded p-3 mb-3 bg-light text-start comment-box">
                                             <strong>{{user}}</strong>
                                             <small class="text-muted d-block">{{formattedDate}}</small>
-                                            <p class="mb-0">{{description}}</p>
+                                            <p class="mb-0 comment-content">{{description}}</p>
                                         </div>
                                         {{/comments}}
 

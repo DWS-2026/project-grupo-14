@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Academia El Soto - Admin</title>
+    <title>Academia El Soto - Admin Comentarios</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
@@ -33,28 +33,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/courses">Cursos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/teachers">Profesores</a>
-                    </li>
-
                     <li class="nav-item ms-lg-3">
-                        <a class="btn btn-outline-light px-4" href="/admin">
-                            Admin
-                        </a>
-                    </li>
-                    <li class="nav-item ms-lg-3 dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Admin
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/admin_statistics">Estadísticas</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/admin_users">Usuarios</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/admin_comment">Comentarios</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="/index">Cerrar Sesión</a></li>
-                        </ul>
+                        <a class="btn btn-outline-light px-4" href="/admin">Admin</a>
                     </li>
                     <li class="nav-item ms-lg-3" id="cart_purchase">
                         <a class="nav-link" href="/cart">
@@ -73,61 +53,50 @@
             <div class="col-lg-8">
 
                 <div class="card shadow rounded-4 p-4 mb-4">
-                    <div class="d-flex align-items-center gap-4">
-                        <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                            style="width:80px;height:80px;font-size:32px;">
-                            AD
-                        </div>
-                        <div>
-                            <h4 class="mb-1">Estadísticas de los cursos</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow rounded-4 p-4 mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0">Gestión de cursos</h5>
-                        <a href="/admin_create_course" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Añadir curso
-                        </a>
+                        <h5 class="mb-0">Gestión de comentarios</h5>
+                        
                     </div>
 
                     <div class="table-responsive">
                         <table class="table table-striped align-middle">
                             <thead>
                                 <tr>
+                                    <th>Usuario</th>
+                                    <th>Comentario</th>
+                                    <th>Fecha publicación</th>
                                     <th>Curso</th>
-                                    <th>Profesor</th>
-                                    <th>Alumnos</th>
-                                    <th>Precio</th>
                                     <th class="text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#courses}}
+                                {{#comments}}
                                 <tr>
-                                    <td class="fw-bold">{{courseName}}</td>
-                                    <td>{{teacher}}</td>
-                                    <td>{{students}}</td>
-                                    <td>{{price}} $</td>
+                                    <td class="fw-bold">{{user}}</td>
+                                    <td class="comment-preview-cell">{{shortDescription}}</td>
+                                    <td>{{formattedDate}}</td>
+                                    <td>{{#course}}
+                                        {{courseName}}
+                                        {{/course}}
+                                    </td>
                                     <td class="text-center">
-                                        <a href="/edit-course/{{id}}" class="btn btn-sm btn-outline-primary me-1" title="Editar curso">
+                                        <a href="/edit-comment/{{id}}" class="btn btn-sm btn-outline-primary me-1" title="Editar comentario">
                                             <i class="fas fa-pen"></i> Editar
                                         </a>
-                                        <form action="/course/{{id}}/delete" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas borrar este curso de la base de datos?');">
-                                            <button class="btn btn-sm btn-outline-danger" type="submit" title="Borrar curso">
+                                        <form action="/comment/{{id}}/delete" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas borrar este comentario?');">
+                                            <button class="btn btn-sm btn-outline-danger" type="submit" title="Borrar comentario">
                                                 <i class="fas fa-trash"></i> Borrar
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
-                                {{/courses}}
+                                {{/comments}}
 
-                                {{^courses}}
+                                {{^comments}}
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">No hay cursos registrados en el sistema.</td>
+                                    <td colspan="5" class="text-center text-muted py-4">No hay comentarios registrados en el sistema.</td>
                                 </tr>
-                                {{/courses}}
+                                {{/comments}}
                             </tbody>
                         </table>
                     </div>

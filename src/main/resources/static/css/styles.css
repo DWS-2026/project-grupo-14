@@ -11376,3 +11376,24 @@ section#contact form#contactForm :-ms-input-placeholder {
   font-size: 0.9rem;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+.comment-textarea {
+    resize: vertical;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+.comment-content {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+.comment-box {
+    max-width: 100%;
+    overflow: hidden;
+}
