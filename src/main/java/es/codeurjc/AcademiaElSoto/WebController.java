@@ -67,8 +67,9 @@ public class WebController {
         return "admin_users";
     }
 
-    @GetMapping("/cart")
+    /*@GetMapping("/cart")
     public String cart() {
         return "cart";
     }
+    */
 }

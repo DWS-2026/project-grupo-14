@@ -44,6 +44,19 @@ public class CourseController {
     // Temporary data to verify that everything works.
     @PostConstruct
     public void init() {
+        // 2. Creamos nuestro usuario de prueba
+        User testUser = new User("EstudiantePrueba", "Pérez", "test@test.com", "1234");
+        
+        // Le asignamos un carrito vacío para que no dé errores al comprar
+        Cart emptyCart = new Cart();
+        testUser.setCart(emptyCart);
+        
+        // Guardamos el usuario en la base de datos
+        userRepository.save(testUser);
+
+        // 3. Creamos un par de cursos en inglés para probar que la web funciona
+        courseRepository.save(new Course("Pau Gasoil", "Java Programming", 150, "Learn Java from scratch", 20));
+        courseRepository.save(new Course("Frenando Alonso", "Spring Boot Masterclass", 200, "Advanced web development", 15));
     }
 
     @GetMapping("/courses")
@@ -141,6 +154,7 @@ public class CourseController {
         return "course_db/course_not_found";
     }
 
+    /* Ya lo tenemos en el cart controller
     @PostMapping("/course/{id}/add-cart")
     public String addToCart(Model model, @PathVariable long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
@@ -163,5 +177,5 @@ public class CourseController {
         }
 
         return "course_db/course_not_found";
-    }
+    }*/
 }
