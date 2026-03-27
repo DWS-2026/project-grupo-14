@@ -1,5 +1,8 @@
 package es.codeurjc.AcademiaElSoto.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -8,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 @Component
@@ -27,6 +31,9 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
+
+    @ManyToMany
+    private List<Course> purchasedCourses = new ArrayList<>();
 
     public User() {
     }
@@ -88,5 +95,17 @@ public class User {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public List<Course> getPurchasedCourses() {
+        return purchasedCourses;
+    }
+
+    public void setPurchasedCourses(List<Course> purchasedCourses) {
+        this.purchasedCourses = purchasedCourses;
+    }
+
+    public void addPurchasedCourse(Course course) {
+        this.purchasedCourses.add(course);
     }
 }

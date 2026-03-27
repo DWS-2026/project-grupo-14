@@ -61,7 +61,9 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item" href="/admin_comment">Comentarios</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                             <li><a class="dropdown-item text-danger" href="/index">Cerrar Sesión</a></li>
                         </ul>
                     </li>
@@ -95,53 +97,42 @@
                                 <th>#</th>
                                 <th>Nombre</th>
                                 <th>Email</th>
-                                <th>Cursos inscritos</th>
+                                <th>Cursos comprados</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {{#users}}
                             <tr>
-                                <td>1</td>
-                                <td>Ana Pérez</td>
-                                <td>ana@email.com</td>
-                                <td>2</td>
+                                <td>{{id}}</td>
+                                <td>{{fullName}}</td>
+                                <td>{{email}}</td>
+                                <td>
+                                    {{totalPurchasedCourses}} - {{purchasedCourseNames}}
+                                </td>
                                 <td class="d-flex gap-1">
-                                    <a href="/user" class="btn btn-sm btn-primary">
+                                    <a href="/admin/user/{{id}}" class="btn btn-sm btn-primary">
                                         Ver perfil
                                     </a>
-                                    <button class="btn btn-sm btn-outline-danger" title="Eliminar usuario">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+
+                                    <form action="/admin/user/{{id}}/delete" method="POST" style="display:inline;"
+                                        onsubmit="return confirm('¿Estás seguro de que quieres borrar este usuario?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            title="Eliminar usuario">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
+                            {{/users}}
+
+                            {{^users}}
                             <tr>
-                                <td>2</td>
-                                <td>Carlos Ruiz</td>
-                                <td>carlos@email.com</td>
-                                <td>1</td>
-                                <td class="d-flex gap-1">
-                                    <a href="/user" class="btn btn-sm btn-primary">
-                                        Ver perfil
-                                    </a>
-                                    <button class="btn btn-sm btn-outline-danger" title="Eliminar usuario">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                <td colspan="5" class="text-center text-muted">
+                                    No hay usuarios registrados.
                                 </td>
                             </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Óscar Soto</td>
-                                <td>o.soto@email.com</td>
-                                <td>3</td>
-                                <td class="d-flex gap-1">
-                                    <a href="/user" class="btn btn-sm btn-primary">
-                                        Ver perfil
-                                    </a>
-                                    <button class="btn btn-sm btn-outline-danger" title="Eliminar usuario">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            {{/users}}
                         </tbody>
                     </table>
                 </div>

@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 
 import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.Course;
+import es.codeurjc.AcademiaElSoto.model.User;
+import es.codeurjc.AcademiaElSoto.repository.UserRepository;
 import es.codeurjc.AcademiaElSoto.repository.CartRepository;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
 import jakarta.servlet.http.HttpSession;
@@ -27,9 +29,12 @@ public class CartController {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/cart")
     public String viewCart(HttpSession session, Model model) {
-        
+
         // 1. Preparamos unos valores por defecto (carrito vacío)
         int totalCourses = 0;
         int totalPrice = 0;
@@ -37,17 +42,17 @@ public class CartController {
 
         // 2. Buscamos si el usuario tiene un carrito en su sesión actual
         Long cartId = (Long) session.getAttribute("cartId");
-        
+
         if (cartId != null) {
             Optional<Cart> cartOpt = cartRepository.findById(cartId);
-            
+
             if (cartOpt.isPresent()) {
                 Cart cart = cartOpt.get();
-                
+
                 if (cart.getCourses() != null) {
                     cartCourses = cart.getCourses();
                     totalCourses = cartCourses.size();
-                    
+
                     // Calculamos el precio total
                     for (Course c : cartCourses) {
                         totalPrice += c.getPrice(); // O getPrecio() según lo tengas en Course.java
@@ -55,16 +60,17 @@ public class CartController {
                 }
             }
         }
-        
+
         // 3. ¡LA CLAVE! Siempre le pasamos los datos al HTML, aunque sean 0.
         model.addAttribute("cartCourses", cartCourses);
         model.addAttribute("totalCourses", totalCourses);
         model.addAttribute("totalPrice", totalPrice);
-        
+
         return "cart";
     }
 
-    // Le ponemos EXACTAMENTE la misma ruta que tiene el action de tu formulario HTML
+    // Le ponemos EXACTAMENTE la misma ruta que tiene el action de tu formulario
+    // HTML
     @PostMapping("/course/{id}/add-cart")
     public String addToCart(@PathVariable long id, HttpSession session) {
 
@@ -96,58 +102,84 @@ public class CartController {
         }
 
         // 6. Redirigimos al usuario de vuelta a la página de cursos
-        return "redirect:/courses"; 
+        return "redirect:/courses";
     }
 
     @PostMapping("/cart/remove/{id}")
     public String removeCourse(@PathVariable long id, HttpSession session) {
-        
+
         // 1. Buscamos el ID del carrito en la sesión
         Long cartId = (Long) session.getAttribute("cartId");
-        
+
         if (cartId != null) {
             Optional<Cart> cartOpt = cartRepository.findById(cartId);
             Optional<Course> courseOpt = courseRepository.findById(id);
-            
+
             if (cartOpt.isPresent() && courseOpt.isPresent()) {
                 Cart cart = cartOpt.get();
                 Course course = courseOpt.get();
-                
+
                 // 2. Eliminamos el curso de la lista del carrito
                 cart.getCourses().remove(course);
-                
+
                 // 3. Guardamos el carrito actualizado
                 cartRepository.save(cart);
             }
         }
-        
+
         // 4. Recargamos la página del carrito para ver el cambio
         return "redirect:/cart";
     }
 
-
     @PostMapping("/complete-purchase")
     public String completePurchase(HttpSession session, Model model) {
 
-        // 1. Obtenemos el carrito de la sesión
         Long cartId = (Long) session.getAttribute("cartId");
+        User loggedUser = (User) session.getAttribute("loggedUser");
+
+        if (loggedUser == null) {
+            return "redirect:/login";
+        }
+
         List<Course> cartCourses = new ArrayList<>();
+        Cart cart = null;
 
         if (cartId != null) {
             Optional<Cart> cartOpt = cartRepository.findById(cartId);
-            if (cartOpt.isPresent() && cartOpt.get().getCourses() != null) {
-                cartCourses = cartOpt.get().getCourses();
+            if (cartOpt.isPresent()) {
+                cart = cartOpt.get();
+                if (cart.getCourses() != null) {
+                    cartCourses = cart.getCourses();
+                }
             }
         }
 
-        // 2. Comprobamos si hay cursos en el carrito
         if (cartCourses.isEmpty()) {
-            // No hay cursos -> redirigir a página de error
-            return "course_purchase_error"; // el nombre de tu HTML sin .html
-        } else {
-            // Hay cursos -> procesar compra y mostrar confirmación
-            // Aquí podrías agregar lógica de pago o marcar cursos como comprados
-            return "completed_purchase"; // el nombre de tu HTML sin .html
+            return "course_purchase_error";
         }
+
+        Optional<User> userOpt = userRepository.findById(loggedUser.getId());
+
+        if (userOpt.isPresent()) {
+            User userFromDb = userOpt.get();
+
+            for (Course course : cartCourses) {
+                if (!userFromDb.getPurchasedCourses().contains(course)) {
+                    userFromDb.addPurchasedCourse(course);
+                }
+            }
+
+            if (cart != null) {
+                cart.getCourses().clear();
+                cart.setPrice(0);
+                cartRepository.save(cart);
+            }
+
+            userRepository.save(userFromDb);
+
+            session.setAttribute("loggedUser", userFromDb);
+        }
+
+        return "completed_purchase";
     }
 }
