@@ -20,6 +20,11 @@ public class WebController {
         return "index";
     }
 
+    @GetMapping("/")
+    public String barra() {
+        return "index";
+    }
+
     @GetMapping("/teachers")
     public String teachers() {
         return "teachers";

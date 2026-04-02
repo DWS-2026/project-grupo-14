@@ -98,6 +98,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/loginerror")
+    public String loginError() {
+        return "auth/loginerror";
+    }
+
     // Ruta extra para cerrar sesión
     @GetMapping("/logout")
     public String logout(HttpSession session) {
