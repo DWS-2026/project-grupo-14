@@ -107,18 +107,13 @@
                                 <td>{{id}}</td>
                                 <td>{{fullName}}</td>
                                 <td>{{email}}</td>
-                                <td>
-                                    {{totalPurchasedCourses}} - {{purchasedCourseNames}}
-                                </td>
+                                <td>{{totalPurchasedCourses}} - {{purchasedCourseNames}}</td>
                                 <td class="d-flex gap-1">
-                                    <a href="/admin/user/{{id}}" class="btn btn-sm btn-primary">
-                                        Ver perfil
-                                    </a>
-
+                                    <a href="/admin/user/{{id}}" class="btn btn-sm btn-primary">Ver perfil</a>
+                                    <a href="/admin/user/edit/{{id}}" class="btn btn-sm btn-primary">Editar perfil</a>
                                     <form action="/admin/user/{{id}}/delete" method="POST" style="display:inline;"
                                         onsubmit="return confirm('¿Estás seguro de que quieres borrar este usuario?');">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"
-                                            title="Eliminar usuario">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar usuario">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -136,7 +131,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
 
         </div>

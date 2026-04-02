@@ -169,7 +169,7 @@ public class UserController {
         Optional<User> userOpt = userRepository.findById(id);
 
         if (userOpt.isEmpty()) {
-            return "redirect:/admin_users";
+            return "user_db/user_not_found";
         }
 
         User user = userOpt.get();
@@ -202,6 +202,51 @@ public class UserController {
             userRepository.delete(user);
         }
 
-        return "redirect:/admin_users";
+        return "user_db/deleted_user";
+    }
+
+    @GetMapping("/admin/user/edit/{id}")
+    public String editUser(Model model, @PathVariable Long id) {
+
+        Optional<User> userOpt = userRepository.findById(id);
+
+        if (userOpt.isPresent()) {
+
+            User user = userOpt.get();
+
+            model.addAttribute("id", user.getId());
+            model.addAttribute("userName", user.getUserName());
+            model.addAttribute("lastName", user.getLastName());
+            model.addAttribute("email", user.getEmail());
+
+            return "user_db/edit_user_page"; 
+        }
+
+        return "user_db/user_not_found";
+    }
+
+    @PostMapping("/admin/user/edited/{id}")
+    public String editUserProcess(Model model, @PathVariable Long id, User editedUser) {
+
+        Optional<User> userOpt = userRepository.findById(id);
+
+        if (userOpt.isPresent()) {
+
+            User existingUser = userOpt.get();
+
+            
+            editedUser.setId(id);
+            editedUser.setCart(existingUser.getCart());
+            editedUser.setPurchasedCourses(existingUser.getPurchasedCourses());
+
+            userRepository.save(editedUser);
+            model.addAttribute("userName", editedUser.getUserName());
+            model.addAttribute("lastName", editedUser.getLastName());
+            model.addAttribute("email", editedUser.getEmail());
+
+            return "user_db/edited_user";
+        }
+
+        return "user_db/user_not_found";
     }
 }
