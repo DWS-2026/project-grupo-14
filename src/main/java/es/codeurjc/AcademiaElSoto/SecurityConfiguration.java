@@ -16,64 +16,86 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
-		authProvider.setPasswordEncoder(passwordEncoder());
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService() {
+        UserDetails user = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("pass"))
+                .roles("USER")
+                .build();
 
-		return authProvider;
-	}
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("admin123"))
+                .roles("ADMIN")
+                .build();
 
-	@Bean
-	public InMemoryUserDetailsManager userDetailsService() {
-		UserDetails user = User.builder()
-				.username("user")
-				.password(passwordEncoder().encode("pass"))
-				.roles("USER")
-				.build();
-		 
-		/* ESTO ES PARA LUEGO METER LO DE ADMIN
-		UserDetails admin = User.builder()
-				.username("admin")
-				.password(passwordEncoder().encode("admin123"))
-				.roles("ADMIN")
-				.build();
-				*/
-		return new InMemoryUserDetailsManager(user);
-	}
+        return new InMemoryUserDetailsManager(user, admin);
+    }
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		
-		http.authenticationProvider(authenticationProvider());
-		
-		http
-			.authorizeHttpRequests(authorize -> authorize
-					// PUBLIC PAGES
-					.requestMatchers("/", "/css/**", "/js/**", "/img/**", "/assets/**").permitAll()
-					// PRIVATE PAGES
-					.anyRequest().authenticated())
-			.formLogin(formLogin -> formLogin
-					.loginPage("/login")
-					.failureUrl("/loginerror")
-					.defaultSuccessUrl("/admin")
-					.permitAll()
-			)
-			.logout(logout -> logout
-					.logoutUrl("/logout")
-					.logoutSuccessUrl("/")
-					.permitAll()
-			);
-		
-		// Disable CSRF at the moment
-		http.csrf(csrf -> csrf.disable());
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
-		return http.build();
-	}
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.authenticationProvider(authenticationProvider());
+
+        http
+            .authorizeHttpRequests(authorize -> authorize
+                // 🌐 Páginas públicas
+                .requestMatchers("/", "/teachers", "/information", "/index",
+                                 "/courses", "/css/**", "/js/**", "/img/**", "/assets/**",
+                                 "/error/**", "/register").permitAll()
+
+                // 👤 Páginas USER
+                .requestMatchers("/user", "/complete-purchase", "/cart")
+                    .hasAnyRole("USER", "ADMIN") // ADMIN también puede entrar si quieres
+
+                // 👑 Páginas ADMIN
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                // 🔐 Cualquier otra requiere autenticación
+                .anyRequest().authenticated()
+            )
+
+            // 🔑 Form Login
+            .formLogin(form -> form
+                .loginPage("/login")                 // URL de login personalizada
+                .loginProcessingUrl("/login")        // URL de procesamiento
+                .failureUrl("/loginerror")           // error login
+                .successHandler((req, res, auth) -> { // redirige según rol
+                    boolean isAdmin = auth.getAuthorities().stream()
+                            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                    if (isAdmin) {
+                        res.sendRedirect("/admin");
+                    } else {
+                        res.sendRedirect("/indx");
+                    }
+                })
+                .permitAll()
+            )
+
+            
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .permitAll()
+            )
+
+            // 🚫 Desactivar CSRF por ahora (solo para pruebas)
+            .csrf(csrf -> csrf.disable());
+
+        return http.build();
+    }
 
 }
 

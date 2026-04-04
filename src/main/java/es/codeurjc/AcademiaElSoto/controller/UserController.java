@@ -43,9 +43,11 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String showLoginuserForm() {
         return "auth/login";
     }
+
+    
 
     // --- RUTAS PARA PROCESAR LOS DATOS (POST) ---
 
