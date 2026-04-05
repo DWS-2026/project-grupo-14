@@ -20,8 +20,13 @@ import es.codeurjc.AcademiaElSoto.service.UserService;
 import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
 import es.codeurjc.AcademiaElSoto.repository.UserRepository;
 import es.codeurjc.AcademiaElSoto.dto.AdminUserView;
+import org.springframework.security.web.csrf.CsrfToken;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+
 
 @Controller
 public class UserController {
@@ -54,31 +59,39 @@ public class UserController {
     @PostMapping("/register")
     public String registerUser(Model model, User user) {
 
-        // Comprobamos si el nombre o el correo ya existen
         if (userRepository.findByUserName(user.getUserName()).isPresent() ||
-                userRepository.findByEmail(user.getEmail()).isPresent()) {
+        userRepository.findByEmail(user.getEmail()).isPresent()) {
+        model.addAttribute("error", "El nombre de usuario o el correo ya están en uso. ¡Prueba con otro!");
+        return "auth/register";
+    }
 
-            model.addAttribute("error", "El nombre de usuario o el correo ya están en uso. ¡Prueba con otro!");
-            return "auth/register";
-        }
+    // Codificamos la contraseña con BCrypt
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Le creamos un carrito vacío y se lo damos al usuario
-        Cart newCart = new Cart("Carrito de " + user.getUserName(), 0);
-        user.setCart(newCart);
+    // Le creamos un carrito vacío y se lo damos al usuario
+    Cart newCart = new Cart("Carrito de " + user.getUserName(), 0);
+    user.setCart(newCart);
 
-        // Guardamos el usuario
-        userRepository.save(user);
+    // Le damos un rol por defecto
+    user.setRoles(List.of("USER"));  // <-- Importante para Spring Security
 
-        return "redirect:/login";
+    // Guardamos el usuario
+    userRepository.save(user);
+
+    return "redirect:/login";
     }
 
     @PostMapping("/login")
     public String loginUser(Model model,
             @RequestParam String usernameOrEmail,
             @RequestParam String password,
-            HttpSession session) {
+            HttpSession session,
+        HttpServletRequest request) {
 
         Optional<User> userOpt = userRepository.findByUserNameOrEmail(usernameOrEmail, usernameOrEmail);
+
+        CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+        model.addAttribute("token", token.getToken());
 
         // Si el usuario existe y la contraseña es correcta:
         if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {

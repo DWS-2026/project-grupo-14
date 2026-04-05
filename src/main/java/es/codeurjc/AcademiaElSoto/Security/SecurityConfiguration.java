@@ -1,4 +1,5 @@
-package es.codeurjc.AcademiaElSoto;
+package es.codeurjc.AcademiaElSoto.Security;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,34 +16,23 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Autowired
+    public RepositoryUserDetailsService userDetailService;
+    
 	@Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("pass"))
-                .roles("USER")
-                .build();
+	public DaoAuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailService);
+		authProvider.setPasswordEncoder(passwordEncoder());
 
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin123"))
-                .roles("ADMIN")
-                .build();
+		return authProvider;
+	}
 
-        return new InMemoryUserDetailsManager(user, admin);
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+    
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -78,7 +68,7 @@ public class SecurityConfiguration {
                     if (isAdmin) {
                         res.sendRedirect("/admin");
                     } else {
-                        res.sendRedirect("/indx");
+                        res.sendRedirect("/index");
                     }
                 })
                 .permitAll()
@@ -89,10 +79,9 @@ public class SecurityConfiguration {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .permitAll()
-            )
+            );
 
-            // 🚫 Desactivar CSRF por ahora (solo para pruebas)
-            .csrf(csrf -> csrf.disable());
+            
 
         return http.build();
     }

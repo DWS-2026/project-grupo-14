@@ -70,6 +70,7 @@
                 {{/error}}
 
                 <form action="/register" method="POST">
+                    <input type="hidden" name="_csrf" value="{{token}}"/>
                     <div class="mb-3">
                         <label>Nombre</label>
                         <input type="text" class="form-control" name="userName" placeholder="Tu nombre" required>

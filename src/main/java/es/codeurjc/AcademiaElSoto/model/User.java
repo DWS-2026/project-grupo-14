@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,14 +37,24 @@ public class User {
     @ManyToMany
     private List<Course> purchasedCourses = new ArrayList<>();
 
+    private String encodedPassword;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+	private List<String> roles;
+
     public User() {
     }
 
-    public User(String userName, String lastName, String email, String password) {
+    public User(String userName, String lastName, String email, String password,
+             String... roles) {
+
         this.userName = userName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+
+        
+        this.roles = List.of(roles);
     }
 
     public Long getId() {
@@ -65,7 +77,21 @@ public class User {
         this.id = id;
     }
 
-    
+    public String getEncodedPassword() {
+		return encodedPassword;
+	}
+
+	public void setEncodedPassword(String encodedPassword) {
+		this.encodedPassword = encodedPassword;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
 
     public void setUserName(String userName) {
         this.userName = userName;
