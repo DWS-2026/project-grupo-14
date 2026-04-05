@@ -26,8 +26,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
-
 @Controller
 public class UserController {
 
@@ -39,6 +37,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // --- RUTAS PARA MOSTRAR LOS FORMULARIOS (GET) ---
 
@@ -52,33 +53,32 @@ public class UserController {
         return "auth/login";
     }
 
-    
-
     // --- RUTAS PARA PROCESAR LOS DATOS (POST) ---
 
     @PostMapping("/register")
     public String registerUser(Model model, User user) {
 
         if (userRepository.findByUserName(user.getUserName()).isPresent() ||
-        userRepository.findByEmail(user.getEmail()).isPresent()) {
-        model.addAttribute("error", "El nombre de usuario o el correo ya están en uso. ¡Prueba con otro!");
-        return "auth/register";
-    }
+                userRepository.findByEmail(user.getEmail()).isPresent()) {
+            model.addAttribute("error", "El nombre de usuario o el correo ya están en uso. ¡Prueba con otro!");
+            return "auth/register";
+        }
 
-    // Codificamos la contraseña con BCrypt
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Codificamos la contraseña con BCrypt
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        
 
-    // Le creamos un carrito vacío y se lo damos al usuario
-    Cart newCart = new Cart("Carrito de " + user.getUserName(), 0);
-    user.setCart(newCart);
+        // Le creamos un carrito vacío y se lo damos al usuario
+        Cart newCart = new Cart("Carrito de " + user.getUserName(), 0);
+        user.setCart(newCart);
 
-    // Le damos un rol por defecto
-    user.setRoles(List.of("USER"));  // <-- Importante para Spring Security
+        // Le damos un rol por defecto
+        user.setRoles(List.of("USER")); // <-- Importante para Spring Security
 
-    // Guardamos el usuario
-    userRepository.save(user);
+        // Guardamos el usuario
+        userRepository.save(user);
 
-    return "redirect:/login";
+        return "redirect:/login";
     }
 
     @PostMapping("/login")
@@ -86,7 +86,7 @@ public class UserController {
             @RequestParam String usernameOrEmail,
             @RequestParam String password,
             HttpSession session,
-        HttpServletRequest request) {
+            HttpServletRequest request) {
 
         Optional<User> userOpt = userRepository.findByUserNameOrEmail(usernameOrEmail, usernameOrEmail);
 
@@ -94,7 +94,7 @@ public class UserController {
         model.addAttribute("token", token.getToken());
 
         // Si el usuario existe y la contraseña es correcta:
-        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
+        if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getPassword())) {
 
             User loggedUser = userOpt.get();
 
@@ -239,7 +239,7 @@ public class UserController {
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
 
-            return "user_db/edit_user_page"; 
+            return "user_db/edit_user_page";
         }
 
         return "user_db/user_not_found";
@@ -254,7 +254,6 @@ public class UserController {
 
             User existingUser = userOpt.get();
 
-            
             editedUser.setId(id);
             editedUser.setCart(existingUser.getCart());
             editedUser.setPurchasedCourses(existingUser.getPurchasedCourses());
