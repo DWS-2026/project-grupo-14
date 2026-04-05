@@ -42,7 +42,6 @@ public class CourseController {
     private CommentRepository commentRepository;
 
     // Temporary data to verify that everything works.
-    
 
     @GetMapping("/courses")
     public String showCourses(Model model) {
@@ -65,7 +64,7 @@ public class CourseController {
         return "course_db/course_not_found";
     }
 
-    @PostMapping("/course/new")
+    @PostMapping("/admin/courses/new")
     public String newCourse(Model model, Course course, @RequestParam MultipartFile image) {
         try {
             if (!image.isEmpty()) {
@@ -79,12 +78,12 @@ public class CourseController {
         return "course_db/saved_course";
     }
 
-    @GetMapping("/admin_statistics")
+    @GetMapping("/admin/statistics")
     public String showAdminStatistics(Model model) {
         // Retrieve all courses from the database.
         List<Course> courses = courseRepository.findAll();
         model.addAttribute("courses", courses);
-        return "admin_statistics";
+        return "admin/admin_statistics";
     }
 
     @GetMapping("/course/{id}/image")
@@ -101,7 +100,7 @@ public class CourseController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/edit-course/{id}")
+    @GetMapping("/admin/courses/{id}/edit")
     public String editCourse(Model model, @PathVariable long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
 
@@ -113,21 +112,40 @@ public class CourseController {
         return "course_db/course_not_found";
     }
 
-    @PostMapping("/edited-course/{id}")
-    public String editCourseProcess(Model model, @PathVariable long id, Course editedCourse) {
-        Optional<Course> courseOptional = courseRepository.findById(editedCourse.getId());
+    @PostMapping("/admin/courses/{id}/edit")
+    public String editCourseProcess(Model model,
+            @PathVariable long id,
+            Course editedCourse,
+            @RequestParam(required = false) MultipartFile image) {
+
+        Optional<Course> courseOptional = courseRepository.findById(id);
 
         if (courseOptional.isPresent()) {
-            editedCourse.setId(id);
-            courseRepository.save(editedCourse);
-            model.addAttribute("course", editedCourse);
+            Course existingCourse = courseOptional.get();
+
+            existingCourse.setCourseName(editedCourse.getCourseName());
+            existingCourse.setTeacher(editedCourse.getTeacher());
+            existingCourse.setPrice(editedCourse.getPrice());
+            existingCourse.setDescription(editedCourse.getDescription());
+            existingCourse.setStudents(editedCourse.getStudents());
+
+            try {
+                if (image != null && !image.isEmpty()) {
+                    existingCourse.setImageFile(new SerialBlob(image.getBytes()));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            courseRepository.save(existingCourse);
+            model.addAttribute("course", existingCourse);
             return "course_db/edited_course";
         }
 
         return "course_db/course_not_found";
     }
 
-    @PostMapping("/course/{id}/delete")
+    @PostMapping("/admin/courses/{id}/delete")
     public String deleteCourse(Model model, @PathVariable long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
 
@@ -139,28 +157,31 @@ public class CourseController {
         return "course_db/course_not_found";
     }
 
-    /* Ya lo tenemos en el cart controller
-    @PostMapping("/course/{id}/add-cart")
-    public String addToCart(Model model, @PathVariable long id) {
-        Optional<Course> courseOptional = courseRepository.findById(id);
-        List<User> users = userRepository.findAll();
-
-        if (courseOptional.isPresent() && !users.isEmpty()) {
-            Course course = courseOptional.get();
-            User user = users.get(0);
-
-            Cart cart = user.getCart();
-            if (cart == null) {
-                cart = new Cart("Cart of " + user.getUserName(), 0);
-                cart.setUser(user);
-                user.setCart(cart);
-            }
-
-            cart.addCourse(course);
-            userRepository.save(user);
-            return "redirect:/courses";
-        }
-
-        return "course_db/course_not_found";
-    }*/
+    /*
+     * Ya lo tenemos en el cart controller
+     * 
+     * @PostMapping("/course/{id}/add-cart")
+     * public String addToCart(Model model, @PathVariable long id) {
+     * Optional<Course> courseOptional = courseRepository.findById(id);
+     * List<User> users = userRepository.findAll();
+     * 
+     * if (courseOptional.isPresent() && !users.isEmpty()) {
+     * Course course = courseOptional.get();
+     * User user = users.get(0);
+     * 
+     * Cart cart = user.getCart();
+     * if (cart == null) {
+     * cart = new Cart("Cart of " + user.getUserName(), 0);
+     * cart.setUser(user);
+     * user.setCart(cart);
+     * }
+     * 
+     * cart.addCourse(course);
+     * userRepository.save(user);
+     * return "redirect:/courses";
+     * }
+     * 
+     * return "course_db/course_not_found";
+     * }
+     */
 }

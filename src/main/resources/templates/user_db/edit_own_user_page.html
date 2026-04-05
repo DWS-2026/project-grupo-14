@@ -26,9 +26,8 @@
                     <h3 class="mb-4 text-center">Editar Usuario</h3>
 
 
-                    <form action="/admin/user/{{id}}/edit" method="post">
+                    <form action="/profile/edit" method="post">
                         <input type="hidden" name="_csrf" value="{{token}}" />
-                        <input type="hidden" name="id" value="{{id}}" />
 
                         <!-- Username -->
                         <div class="mb-3">
@@ -57,7 +56,7 @@
 
                         <!-- BOTONES -->
                         <div class="d-flex justify-content-between mt-4">
-                            <a href="/admin/users" class="btn btn-secondary">Cancelar</a>
+                            <a href="/profile" class="btn btn-secondary">Cancelar</a>
                             <button type="submit" class="btn btn-primary">Guardar cambios</button>
                         </div>
 

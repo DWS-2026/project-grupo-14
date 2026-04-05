@@ -121,7 +121,66 @@ public class UserController {
         return "user";
     }
 
-    @GetMapping("/admin_users")
+    @GetMapping("/profile/edit")
+    public String editOwnProfile(Model model,
+            org.springframework.security.core.Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        String username = authentication.getName();
+        Optional<User> userOpt = userRepository.findByUserName(username);
+
+        if (userOpt.isEmpty()) {
+            return "redirect:/login";
+        }
+
+        User user = userOpt.get();
+
+        model.addAttribute("id", user.getId());
+        model.addAttribute("userName", user.getUserName());
+        model.addAttribute("lastName", user.getLastName());
+        model.addAttribute("email", user.getEmail());
+
+        return "user_db/edit_own_user_page";
+    }
+
+    @PostMapping("/profile/edit")
+    public String editOwnProfileProcess(
+            org.springframework.security.core.Authentication authentication,
+            HttpSession session,
+            User editedUser) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        String username = authentication.getName();
+        Optional<User> userOpt = userRepository.findByUserName(username);
+
+        if (userOpt.isEmpty()) {
+            session.invalidate();
+            return "redirect:/login";
+        }
+
+        User existingUser = userOpt.get();
+
+        existingUser.setUserName(editedUser.getUserName());
+        existingUser.setLastName(editedUser.getLastName());
+        existingUser.setEmail(editedUser.getEmail());
+
+        if (editedUser.getPassword() != null && !editedUser.getPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
+        }
+
+        userRepository.save(existingUser);
+
+        session.invalidate();
+        return "redirect:/login";
+    }
+
+    @GetMapping("/admin/users")
     public String showAdminUsers(Model model) {
 
         List<User> users = userService.getUsers();
@@ -146,7 +205,7 @@ public class UserController {
         }).toList();
 
         model.addAttribute("users", adminUsers);
-        return "admin_users";
+        return "admin/admin_users";
     }
 
     @GetMapping("/admin/user/{id}")
@@ -191,7 +250,7 @@ public class UserController {
         return "user_db/deleted_user";
     }
 
-    @GetMapping("/admin/user/edit/{id}")
+    @GetMapping("/admin/user/{id}/edit")
     public String editUser(Model model, @PathVariable Long id) {
 
         Optional<User> userOpt = userRepository.findById(id);
@@ -211,7 +270,7 @@ public class UserController {
         return "user_db/user_not_found";
     }
 
-    @PostMapping("/admin/user/edited/{id}")
+    @PostMapping("/admin/user/{id}/edit")
     public String editUserProcess(Model model, @PathVariable Long id, User editedUser) {
 
         Optional<User> userOpt = userRepository.findById(id);
@@ -220,18 +279,24 @@ public class UserController {
 
             User existingUser = userOpt.get();
 
-            editedUser.setId(id);
-            editedUser.setCart(existingUser.getCart());
-            editedUser.setPurchasedCourses(existingUser.getPurchasedCourses());
+            existingUser.setUserName(editedUser.getUserName());
+            existingUser.setLastName(editedUser.getLastName());
+            existingUser.setEmail(editedUser.getEmail());
 
-            userRepository.save(editedUser);
-            model.addAttribute("userName", editedUser.getUserName());
-            model.addAttribute("lastName", editedUser.getLastName());
-            model.addAttribute("email", editedUser.getEmail());
+            if (editedUser.getPassword() != null && !editedUser.getPassword().isBlank()) {
+                existingUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
+            }
+
+            userRepository.save(existingUser);
+
+            model.addAttribute("userName", existingUser.getUserName());
+            model.addAttribute("lastName", existingUser.getLastName());
+            model.addAttribute("email", existingUser.getEmail());
 
             return "user_db/edited_user";
         }
 
         return "user_db/user_not_found";
     }
+
 }

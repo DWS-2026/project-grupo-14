@@ -35,35 +35,48 @@ public class SecurityConfiguration {
         http.authenticationProvider(authenticationProvider());
 
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/teachers", "/information", "/index",
-                                 "/courses", "/css/**", "/js/**", "/img/**", "/assets/**",
-                                 "/error/**", "/register", "/login", "/loginerror").permitAll()
-                .requestMatchers("/user", "/profile", "/complete-purchase", "/cart")
-                    .hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .failureUrl("/loginerror")
-                .successHandler((req, res, auth) -> {
-                    boolean isAdmin = auth.getAuthorities().stream()
-                            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-                    if (isAdmin) {
-                        res.sendRedirect("/admin");
-                    } else {
-                        res.sendRedirect("/profile");
-                    }
-                })
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .permitAll()
-            );
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                "/", "/teachers", "/information", "/index",
+                                "/courses", "/course/*", "/course/*/image",
+                                "/css/**", "/js/**", "/img/**", "/assets/**",
+                                "/error/**", "/register", "/login", "/loginerror",
+                                "/403", "/404", "/500")
+                        .permitAll()
+
+                        .requestMatchers(
+                                "/profile", "/cart",
+                                "/course/*/add-cart",
+                                "/cart/remove/*",
+                                "/complete-purchase",
+                                "/course/*/comment", 
+                                "/profile/comments/*/edit",
+                                "/profile/comments/*/delete")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .failureUrl("/loginerror")
+                        .successHandler((req, res, auth) -> {
+                            boolean isAdmin = auth.getAuthorities().stream()
+                                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                            if (isAdmin) {
+                                res.sendRedirect("/admin");
+                            } else {
+                                res.sendRedirect("/profile");
+                            }
+                        })
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .permitAll())
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/403"));
 
         return http.build();
     }

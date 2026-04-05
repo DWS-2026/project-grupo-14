@@ -7,7 +7,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Ver cursos - Academia El Soto</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
@@ -39,8 +39,8 @@
                 <br><br>
 
                 <div class="d-flex justify-content-between mt-3">
-                    <a class="btn btn-secondary" href="/edit-course/{{course.id}}">Editar Curso</a>
-                    <form action="/course/{{course.id}}/delete" method="post">
+                    <a class="btn btn-secondary" href="/admin/courses/{{course.id}}/edit">Editar Curso</a>
+                    <form action="/admin/courses/{{course.id}}/delete" method="post">
                         <button class="btn btn-danger" type="submit">Eliminar Curso</button>
                     </form>
                 </div>

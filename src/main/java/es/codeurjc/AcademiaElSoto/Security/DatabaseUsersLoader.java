@@ -1,7 +1,5 @@
 package es.codeurjc.AcademiaElSoto.Security;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -15,22 +13,23 @@ public class DatabaseUsersLoader {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
-	private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @PostConstruct
     private void initDatabase() {
-    	
-    	userRepository.save(
-            new User("user", "UserApellido", "user@email.com",
-                    passwordEncoder.encode("pass"), "USER")
-        );
 
-        userRepository.save(
-            new User("admin", "AdminApellido", "admin@email.com",
-                    passwordEncoder.encode("adminpass"), "USER", "ADMIN")
-        );
+        if (userRepository.findByUserName("user").isEmpty()) {
+            userRepository.save(
+                    new User("user", "UserApellido", "user@email.com",
+                            passwordEncoder.encode("pass"), "USER"));
+        }
+
+        if (userRepository.findByUserName("admin").isEmpty()) {
+            userRepository.save(
+                    new User("admin", "AdminApellido", "admin@email.com",
+                            passwordEncoder.encode("adminpass"), "USER", "ADMIN"));
+        }
     }
 }
-

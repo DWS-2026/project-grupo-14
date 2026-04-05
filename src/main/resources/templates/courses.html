@@ -7,11 +7,11 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Academia El Soto</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
 </head>
 
 <body id="page-top">
@@ -101,10 +101,7 @@
                                     </div>
 
                                     <form action="/course/{{id}}/comment" method="post">
-                                        <div class="mb-3">
-                                            <input type="text" name="user" class="form-control" placeholder="Tu nombre"
-                                                required>
-                                        </div>
+                                        <input type="hidden" name="_csrf" value="{{token}}" />
 
                                         <div class="mb-3">
                                             <textarea class="form-control comment-textarea" name="description" rows="4"
@@ -150,7 +147,7 @@
     </div>
     {{/courses}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/scripts.js"></script>
+    <script src="/js/scripts.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 
