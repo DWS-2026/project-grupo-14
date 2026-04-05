@@ -242,17 +242,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ### **Participación de Miembros en la Práctica 2**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - [Mario Jándara Alcón]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Principalmente: Entidad Curso , Seguridad]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [https avance]([URL_commit_1](https://github.com/DWS-2026/project-grupo-14/commit/2dd09cca08a89d35aaa16a1034b80ca69c2fecc7))  | [SecurityConfiguration](practicaDWS/SecurityConfiguration.java)   |
+|2| [Avance CSRF, etc]([URL_commit_2](https://github.com/DWS-2026/project-grupo-14/commit/d37e9a2b576e254dd3a60d22c9e6c0ef10921976))  | [CSRFHandlerConfiguration](practicaDWS/CSRFHandlerConfiguration.java)   |
+|3| [Entidad curso]([URL_commit_3](https://github.com/DWS-2026/project-grupo-14/commit/4dd56715589eb7fff4fc42a0a36c39bf20bf7890))  | [CourseController]([URL_archivo_3](practicaDWS/CourseController.java))   |
+|4| [Cargar y Editar imagenes]([URL_commit_4](https://github.com/DWS-2026/project-grupo-14/commit/4a9215db89aa3136d477456e9189e8a0d01fec8b))  | [CourseController](practicaDWS/CourseController.java)   |
+|5| [Ayuda en User]([URL_commit_5](https://github.com/DWS-2026/project-grupo-14/commit/aa0f955a6bfcf018fc7e219cd9923eca7316dcc6))  | [UserController](practicaDWS/UserController.java)   |
 
 ---
 
