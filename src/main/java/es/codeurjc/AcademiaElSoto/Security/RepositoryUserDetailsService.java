@@ -1,7 +1,5 @@
 package es.codeurjc.AcademiaElSoto.Security;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class RepositoryUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		User user = userRepository.findByUserName(username)
+		User user = userRepository.findByUserNameOrEmail(username, username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
 		List<GrantedAuthority> roles = new ArrayList<>();
@@ -33,9 +31,8 @@ public class RepositoryUserDetailsService implements UserDetailsService {
 			roles.add(new SimpleGrantedAuthority("ROLE_" + role));
 		}
 
-		return new org.springframework.security.core.userdetails.User(user.getUserName(), 
+		return new org.springframework.security.core.userdetails.User(user.getUserName(),
 				user.getPassword(), roles);
 
 	}
 }
-

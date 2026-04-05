@@ -1,0 +1,104 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand" href="/index">
+            <img src="/assets/img/ELSOTO.png" alt="Academia El Soto" class="logo-elsoto" />
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars ms-1"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0 align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="/information">Información</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/courses">Cursos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/teachers">Profesores</a>
+                </li>
+
+                {{#notLogged}}
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-outline-light px-4" href="/login">
+                        Login
+                    </a>
+                </li>
+                {{/notLogged}}
+
+                {{#logged}}
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-primary px-4 shadow-sm" href="/profile">
+                        Mi Perfil
+                    </a>
+                </li>
+                {{/logged}}
+
+                {{#logged}}
+                <form action="/logout" method="post" style="display:inline;">
+                    <input type="hidden" name="_csrf" value="{{token}}" />
+                    <button type="submit" class="btn btn-danger px-4 shadow-sm">
+                        <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+                    </button>
+                </form>
+                {{/logged}}
+
+                {{#isAdmin}}
+                <li class="nav-item dropdown ms-lg-3">
+                    <a class="nav-link dropdown-toggle btn btn-outline-light px-4" href="#" id="adminDropdown"
+                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Admin
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+
+                        <li>
+                            <a class="dropdown-item" href="/admin">
+                                Panel Admin
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="/admin/users">
+                                Usuarios
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="/admin/create_course">
+                                Crear curso
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="/admin/statistics">
+                                Estadísticas
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                Cerrar sesión
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                {{/isAdmin}}
+
+                <li class="nav-item ms-lg-3" id="cart_purchase">
+                    <a class="nav-link" href="/cart">
+                        <i class="fa-solid fa-cart-shopping fa-xl"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

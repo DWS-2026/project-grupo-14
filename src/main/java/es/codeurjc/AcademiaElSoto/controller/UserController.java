@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import es.codeurjc.AcademiaElSoto.model.Cart;
@@ -22,7 +21,6 @@ import es.codeurjc.AcademiaElSoto.repository.UserRepository;
 import es.codeurjc.AcademiaElSoto.dto.AdminUserView;
 import org.springframework.security.web.csrf.CsrfToken;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -66,7 +64,6 @@ public class UserController {
 
         // Codificamos la contraseña con BCrypt
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        
 
         // Le creamos un carrito vacío y se lo damos al usuario
         Cart newCart = new Cart("Carrito de " + user.getUserName(), 0);
@@ -81,60 +78,23 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @PostMapping("/login")
-    public String loginUser(Model model,
-            @RequestParam String usernameOrEmail,
-            @RequestParam String password,
-            HttpSession session,
-            HttpServletRequest request) {
-
-        Optional<User> userOpt = userRepository.findByUserNameOrEmail(usernameOrEmail, usernameOrEmail);
-
-        CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
-        model.addAttribute("token", token.getToken());
-
-        // Si el usuario existe y la contraseña es correcta:
-        if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getPassword())) {
-
-            User loggedUser = userOpt.get();
-
-            // Guardamos al usuario en la sesión
-            session.setAttribute("loggedUser", loggedUser);
-
-            // Buscamos el ID de su carrito en la base de datos y lo metemos en la sesión.
-            if (loggedUser.getCart() != null) {
-                session.setAttribute("cartId", loggedUser.getCart().getId());
-            }
-
-            return "redirect:/profile";
-        } else {
-            model.addAttribute("error", "Usuario, correo o contraseña incorrectos.");
-            return "auth/login";
-        }
-    }
-
     @GetMapping("/loginerror")
     public String loginError() {
         return "auth/loginerror";
     }
 
-    // Ruta extra para cerrar sesión
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate(); // Destruye la sesión (incluido el carrito)
-        return "redirect:/index";
-    }
-
     @GetMapping("/profile")
-    public String showProfile(Model model, HttpSession session) {
+    public String showProfile(Model model,
+            org.springframework.security.core.Authentication authentication,
+            HttpSession session) {
 
-        User loggedUser = (User) session.getAttribute("loggedUser");
-
-        if (loggedUser == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
 
-        Optional<User> userOpt = userRepository.findById(loggedUser.getId());
+        String username = authentication.getName();
+
+        Optional<User> userOpt = userRepository.findByUserName(username);
 
         if (userOpt.isEmpty()) {
             session.invalidate();
@@ -143,6 +103,11 @@ public class UserController {
 
         User userFromDb = userOpt.get();
 
+        if (userFromDb.getCart() != null) {
+            session.setAttribute("cartId", userFromDb.getCart().getId());
+        }
+
+        model.addAttribute("id", userFromDb.getId());
         model.addAttribute("userName", userFromDb.getUserName());
         model.addAttribute("lastName", userFromDb.getLastName());
         model.addAttribute("email", userFromDb.getEmail());
@@ -150,7 +115,8 @@ public class UserController {
         List<Comment> misComentarios = commentRepository.findByUser(userFromDb.getUserName());
         model.addAttribute("userComments", misComentarios);
 
-        model.addAttribute("purchasedCourses", userFromDb.getPurchasedCourses());
+        List<Course> purchasedCourses = new java.util.ArrayList<>(userFromDb.getPurchasedCourses());
+        model.addAttribute("purchasedCourses", purchasedCourses);
 
         return "user";
     }
