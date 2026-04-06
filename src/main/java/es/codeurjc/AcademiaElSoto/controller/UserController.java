@@ -3,7 +3,13 @@ package es.codeurjc.AcademiaElSoto.controller;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.sql.rowset.serial.SerialBlob;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -124,6 +130,7 @@ public class UserController {
         model.addAttribute("userName", userFromDb.getUserName());
         model.addAttribute("lastName", userFromDb.getLastName());
         model.addAttribute("email", userFromDb.getEmail());
+        model.addAttribute("hasProfileImage", userFromDb.getProfileImage() != null);
 
         List<Comment> misComentarios = commentRepository.findByUser(userFromDb.getUserName());
         model.addAttribute("userComments", misComentarios);
@@ -132,6 +139,20 @@ public class UserController {
         model.addAttribute("purchasedCourses", purchasedCourses);
 
         return "user";
+    }
+
+    @GetMapping("/user/{id}/image")
+    public ResponseEntity<Object> getUserImage(@PathVariable long id) throws Exception {
+        User user = userRepository.findById(id).orElseThrow();
+
+        if (user.getProfileImage() != null) {
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(new InputStreamResource(user.getProfileImage().getBinaryStream()));
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -165,13 +186,15 @@ public class UserController {
     /**
      * Processes the update of the authenticated user's own profile.
      * If a new password is provided, it is encoded before saving.
-     * After updating the data, the session is invalidated and the user must log in again.
+     * After updating the data, the session is invalidated and the user must log in
+     * again.
      */
     @PostMapping("/profile/edit")
     public String editOwnProfileProcess(
             org.springframework.security.core.Authentication authentication,
             HttpSession session,
-            User editedUser) {
+            User editedUser,
+            @RequestParam(required = false) MultipartFile image) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
@@ -193,6 +216,17 @@ public class UserController {
 
         if (editedUser.getPassword() != null && !editedUser.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
+        }
+        try {
+            if (image != null && !image.isEmpty()) {
+                String contentType = image.getContentType();
+
+                if (contentType != null && contentType.startsWith("image/")) {
+                    existingUser.setProfileImage(new SerialBlob(image.getBytes()));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         userRepository.save(existingUser);
@@ -312,7 +346,8 @@ public class UserController {
      * If a new password is provided, it is encoded before saving.
      */
     @PostMapping("/admin/user/{id}/edit")
-    public String editUserProcess(Model model, @PathVariable Long id, User editedUser) {
+    public String editUserProcess(Model model, @PathVariable Long id, User editedUser,
+            @RequestParam(required = false) MultipartFile image) {
 
         Optional<User> userOpt = userRepository.findById(id);
 
@@ -327,7 +362,17 @@ public class UserController {
             if (editedUser.getPassword() != null && !editedUser.getPassword().isBlank()) {
                 existingUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
             }
+            try {
+                if (image != null && !image.isEmpty()) {
+                    String contentType = image.getContentType();
 
+                    if (contentType != null && contentType.startsWith("image/")) {
+                        existingUser.setProfileImage(new SerialBlob(image.getBytes()));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             userRepository.save(existingUser);
 
             model.addAttribute("userName", existingUser.getUserName());

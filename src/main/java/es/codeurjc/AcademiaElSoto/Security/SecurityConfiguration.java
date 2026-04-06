@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/", "/teachers", "/information", "/index",
-                                "/courses", "/course/*", "/course/*/image",
+                                "/courses", "/course/*", "/course/*/image", "/user/*/image",
                                 "/css/**", "/js/**", "/img/**", "/assets/**",
                                 "/error/**", "/register", "/login", "/loginerror",
                                 "/403", "/404", "/500")
@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                                 "/course/*/add-cart",
                                 "/cart/remove/*",
                                 "/complete-purchase",
-                                "/course/*/comment", 
+                                "/course/*/comment",
                                 "/profile/comments/*/edit",
                                 "/profile/comments/*/delete")
                         .hasAnyRole("USER", "ADMIN")

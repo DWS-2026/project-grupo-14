@@ -26,9 +26,15 @@
                     <h3 class="mb-4 text-center">Editar Usuario</h3>
 
 
-                    <form action="/admin/user/{{id}}/edit" method="post">
+                    <form action="/admin/user/{{id}}/edit" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_csrf" value="{{token}}" />
                         <input type="hidden" name="id" value="{{id}}" />
+
+                        <!-- Profile Picture-->
+                        <div class="mb-3">
+                            <label class="form-label">Foto de perfil</label>
+                            <input type="file" class="form-control" name="image" accept="image/*">
+                        </div>
 
                         <!-- Username -->
                         <div class="mb-3">

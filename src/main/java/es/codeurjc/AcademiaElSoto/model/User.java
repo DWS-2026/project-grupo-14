@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.sql.Blob;
+import jakarta.persistence.Lob;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -30,6 +32,8 @@ public class User {
     private String email;
     private String password;
     private String lastName;
+    @Lob
+    private Blob profileImage;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
@@ -40,20 +44,19 @@ public class User {
     private String encodedPassword;
 
     @ElementCollection(fetch = FetchType.EAGER)
-	private List<String> roles;
+    private List<String> roles;
 
     public User() {
     }
 
     public User(String userName, String lastName, String email, String password,
-             String... roles) {
+            String... roles) {
 
         this.userName = userName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
 
-        
         this.roles = List.of(roles);
     }
 
@@ -69,29 +72,37 @@ public class User {
         this.info = info;
     }
 
+    public Blob getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(Blob profileImage) {
+        this.profileImage = profileImage;
+    }
+
     public String getUserName() {
         return userName;
     }
 
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
 
     public String getEncodedPassword() {
-		return encodedPassword;
-	}
+        return encodedPassword;
+    }
 
-	public void setEncodedPassword(String encodedPassword) {
-		this.encodedPassword = encodedPassword;
-	}
+    public void setEncodedPassword(String encodedPassword) {
+        this.encodedPassword = encodedPassword;
+    }
 
-	public List<String> getRoles() {
-		return roles;
-	}
+    public List<String> getRoles() {
+        return roles;
+    }
 
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
 
     public void setUserName(String userName) {
         this.userName = userName;
