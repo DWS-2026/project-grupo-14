@@ -270,31 +270,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - [Max Albert Vintila Popescu]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
-
-| Nº    | Commits      | Files      |
-|:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
-
----
-
-#### **Alumno 4 - [Nombre Completo]**
-
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Princupalmente entidad comentario y partes de user y carrito. Algunas partes de seguridad y navegación]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Add comment for each course](https://github.com/DWS-2026/dws-2026-project-base/commit/fe86482f19deca9cdfd5bf4ff7c8e2ed45f2ae11)  | [CommentController](src/main/java/es/codeurjc/AcademiaElSoto/controller/CommentController.java)   |
+|2| [Added users list for admin and working shopping cart](https://github.com/DWS-2026/dws-2026-project-base/commit/d0f0d1aba3cf07312e518de87ccb656aca0bb7f7)  | [CartController](src/main/java/es/codeurjc/AcademiaElSoto/controller/CartController.java)   |
+|3| [Fixed cart and added header and footer partials that change with sessions](https://github.com/DWS-2026/dws-2026-project-base/commit/f4d1182ec2964be05abb62061a12a16ce43bc94f)  | [header.html](src/main/resources/templates/partials/header.html)   |
+|4| [added pages for 403, 500 and generic errors](https://github.com/DWS-2026/dws-2026-project-base/commit/14c3035d78a0861249d8403383cf3b6a7b626dca)  | [error.html](src/main/resources/templates/error.html)   |
+|5| [Fixed broken links and entity management](https://github.com/DWS-2026/dws-2026-project-base/commit/6c114519f76d0f95630fdb70eb8972b5faa93bac)  | [SecurityConfiguration.java](src/main/java/es/codeurjc/AcademiaElSoto/Security/SecurityConfiguration.java)   |
 
 ---
 
