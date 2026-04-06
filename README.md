@@ -217,12 +217,40 @@ Solo si han cambiado.
    git clone https://github.com/[usuario]/[nombre-repositorio].git
    cd [nombre-repositorio]
    ```
+   
+2. **Comprobar los requisitos previos**  
+  Es necesario tener instalado Java 21, Maven y MySQL 8 (o superior).
 
-2. **AQUÍ INDICAR LO SIGUIENTES PASOS**
+3. **Crear la base de datos en MySQL**
+  El proyecto utiliza una base de datos llamada academia_elsoto, por lo que debes crearla antes de ejecutar la aplicación:
+  ```bash
+  CREATE DATABASE academia_elsoto;
+  ```
+   
+4. **Configurar la conexión a la base de datos**
+  En el archivo src/main/resources/application.properties se encuentra la configuración de la base de datos. Por defecto es:
+  spring.datasource.url=jdbc:mysql://localhost:3306/academia_elsoto?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+  spring.datasource.username=root
+  spring.datasource.password=MIM_DATABASE
+  Si tu usuario o contraseña de MySQL son diferentes, debes modificarlos en este archivo.
+
+5. **Instalar dependencias y compilar el proyecto**
+  Desde la raíz del proyecto, ejecutar:
+  ```bash
+  mvn clean install
+  ```
+
+6. **Ejecutar la aplicación**
+  Puedes ejecutarlo desde tu IDE lanzando la clase principal AcademiaElSotoApplication.java.
+
+7. **Acceder a la aplicación**
+  La aplicación funciona con HTTPS en el puerto 8443, por lo que debes abrir en el navegador:
+  https://localhost:8443
+  Es posible que el navegador muestre una advertencia de seguridad. En ese caso, acepta continuar.
 
 #### **Credenciales de prueba**
-- **Usuario Admin**: usuario: `admin`, contraseña: `admin`
-- **Usuario Registrado**: usuario: `user`, contraseña: `user`
+- **Usuario Admin**: usuario: `admin`, contraseña: `adminpass`
+- **Usuario Registrado**: usuario: `user`, contraseña: `pass`
 
 ### **Diagrama de Entidades de Base de Datos**
 
