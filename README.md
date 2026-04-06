@@ -290,11 +290,11 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Cursos y avance en boton para añadir a carrito]([URL_commit_1](https://github.com/DWS-2026/project-grupo-14/commit/fec1d3540458143fb0d6f1f9a53335b1c8d1bd72))  | [CourseController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/CourseController.java)   |
+|1| [Cursos y avance en boton para añadir a carrito]([URL_commit_1](https://github.com/DWS-2026/project-grupo-14/commit/fec1d3540458143fb0d6f1f9a53335b1c8d1bd72) | [CourseController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/CourseController.java)   |
 |2| [carrito y cursos](https://github.com/DWS-2026/project-grupo-14/commit/d0f93696ec405e51b6700acf6584a0bc4a616304#diff-60911d0c65668087943f99bccd81c3d3009a157539f3a77fa4a593357cbbe087)  | [CommentController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/CommentController.java)   |
-|3| [Admin editar cursos tabla]([URL_commit_3](https://github.com/DWS-2026/project-grupo-14/commit/6b837de87332a982ce8e6d50d9318481b1c171c3))  | [admin_estadisticas.html](src/main/resources/templates/admin_estadisticas.html)   |
-|4| [Registro de usuario]([URL_commit_4](https://github.com/DWS-2026/project-grupo-14/commit/f4bbd75cebc862351cdae4c5af1e29d21a36ce19))  | [UserController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/UserController.java)   |
-|5| [Perfil de usuario]([URL_commit_5](https://github.com/DWS-2026/project-grupo-14/commit/e0347a11a686a7f408384a52366e2b0fa67986df))  | [UserController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/UserController.java)   |
+|3| [Admin editar cursos tabla]([URL_commit_3](https://github.com/DWS-2026/project-grupo-14/commit/6b837de87332a982ce8e6d50d9318481b1c171c3) | [admin_estadisticas.html](src/main/resources/templates/admin_estadisticas.html)   |
+|4| [Registro de usuario]([URL_commit_4](https://github.com/DWS-2026/project-grupo-14/commit/f4bbd75cebc862351cdae4c5af1e29d21a36ce19) | [UserController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/UserController.java)   |
+|5| [Perfil de usuario]([URL_commit_5](https://github.com/DWS-2026/project-grupo-14/commit/e0347a11a686a7f408384a52366e2b0fa67986df)  | [UserController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/UserController.java)   |
 
 ---
 
