@@ -31,6 +31,7 @@
                 <div class="d-flex justify-content-between mt-3">
                     <a class="btn btn-secondary" href="/admin/comments/{{comment.id}}/edit">Editar Comentario</a>
                     <form action="/admin/comments/{{comment.id}}/delete" method="post">
+                        <input type="hidden" name="_csrf" value="{{token}}" />
                         <button class="btn btn-danger" type="submit">Eliminar Comentario</button>
                     </form>
                 </div>

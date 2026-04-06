@@ -41,6 +41,7 @@
                 <div class="d-flex justify-content-between mt-3">
                     <a class="btn btn-secondary" href="/admin/courses/{{course.id}}/edit">Editar Curso</a>
                     <form action="/admin/courses/{{course.id}}/delete" method="post">
+                        <input type="hidden" name="_csrf" value="{{token}}" />
                         <button class="btn btn-danger" type="submit">Eliminar Curso</button>
                     </form>
                 </div>
