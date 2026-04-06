@@ -1,23 +1,22 @@
 package es.codeurjc.AcademiaElSoto.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import java.util.List;
-import org.springframework.ui.Model;
 
 import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.model.User;
-import es.codeurjc.AcademiaElSoto.repository.UserRepository;
 import es.codeurjc.AcademiaElSoto.repository.CartRepository;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
+import es.codeurjc.AcademiaElSoto.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -32,6 +31,11 @@ public class CartController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Displays the current authenticated user's cart.
+     * It loads the courses stored in the cart, calculates the total number
+     * of courses and the total price, and sends all that information to the view.
+     */
     @GetMapping("/cart")
     public String viewCart(HttpSession session, Model model,
             org.springframework.security.core.Authentication authentication) {
@@ -68,8 +72,11 @@ public class CartController {
         return "cart";
     }
 
-    // Le ponemos EXACTAMENTE la misma ruta que tiene el action de tu formulario
-    // HTML
+    /**
+     * Adds a course to the authenticated user's cart.
+     * If the user does not have a cart yet, a new one is created.
+     * If the course is already inside the cart, it is not added again.
+     */
     @PostMapping("/course/{id}/add-cart")
     public String addToCart(@PathVariable long id,
             org.springframework.security.core.Authentication authentication,
@@ -108,6 +115,10 @@ public class CartController {
         return "redirect:/courses";
     }
 
+    /**
+     * Removes a course from the authenticated user's cart
+     * and recalculates the cart total price.
+     */
     @PostMapping("/cart/remove/{id}")
     public String removeCourse(@PathVariable long id,
             org.springframework.security.core.Authentication authentication) {
@@ -142,6 +153,11 @@ public class CartController {
         return "redirect:/cart";
     }
 
+    /**
+     * Completes the purchase of all courses currently stored in the cart.
+     * The purchased courses are added to the user's purchased courses list,
+     * and the cart is emptied afterwards.
+     */
     @PostMapping("/complete-purchase")
     public String completePurchase(HttpSession session, Model model,
             org.springframework.security.core.Authentication authentication) {

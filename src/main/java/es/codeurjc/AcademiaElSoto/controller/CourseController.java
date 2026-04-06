@@ -17,14 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.Course;
-import es.codeurjc.AcademiaElSoto.model.User;
-import es.codeurjc.AcademiaElSoto.repository.CartRepository;
 import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
-import es.codeurjc.AcademiaElSoto.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 
 @Controller
 public class CourseController {
@@ -33,22 +28,21 @@ public class CourseController {
     private CourseRepository courseRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
     private CommentRepository commentRepository;
 
-    // Temporary data to verify that everything works.
-
+    /**
+     * Displays all available courses.
+     */
     @GetMapping("/courses")
     public String showCourses(Model model) {
         model.addAttribute("courses", courseRepository.findAll());
         return "courses";
     }
 
+    /**
+     * Displays the details of a single course.
+     * It also loads the course comments ordered by publication date.
+     */
     @GetMapping("/course/{id}")
     public String showCourse(Model model, @PathVariable long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
@@ -64,6 +58,10 @@ public class CourseController {
         return "course_db/course_not_found";
     }
 
+    /**
+     * Creates a new course from the admin panel.
+     * If an image is uploaded, it is stored in the database as a blob.
+     */
     @PostMapping("/admin/courses/new")
     public String newCourse(Model model, Course course, @RequestParam MultipartFile image) {
         try {
@@ -78,14 +76,20 @@ public class CourseController {
         return "course_db/saved_course";
     }
 
+    /**
+     * Displays course statistics in the admin panel.
+     */
     @GetMapping("/admin/statistics")
     public String showAdminStatistics(Model model) {
-        // Retrieve all courses from the database.
         List<Course> courses = courseRepository.findAll();
         model.addAttribute("courses", courses);
         return "admin/admin_statistics";
     }
 
+    /**
+     * Returns the image associated with a course.
+     * If the course has no image, a 404 response is returned.
+     */
     @GetMapping("/course/{id}/image")
     public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
         Course course = courseRepository.findById(id).orElseThrow();
@@ -100,6 +104,9 @@ public class CourseController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Shows the admin edit page for a specific course.
+     */
     @GetMapping("/admin/courses/{id}/edit")
     public String editCourse(Model model, @PathVariable long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
@@ -112,6 +119,10 @@ public class CourseController {
         return "course_db/course_not_found";
     }
 
+    /**
+     * Processes the admin update of a course.
+     * If a new image is uploaded, the old one is replaced.
+     */
     @PostMapping("/admin/courses/{id}/edit")
     public String editCourseProcess(Model model,
             @PathVariable long id,
@@ -145,6 +156,9 @@ public class CourseController {
         return "course_db/course_not_found";
     }
 
+    /**
+     * Deletes a course from the admin panel.
+     */
     @PostMapping("/admin/courses/{id}/delete")
     public String deleteCourse(Model model, @PathVariable long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
@@ -158,29 +172,30 @@ public class CourseController {
     }
 
     /*
-     * Ya lo tenemos en el cart controller
-     * 
+     * Old add-to-cart implementation kept as a comment.
+     * This logic is currently handled inside CartController.
+     *
      * @PostMapping("/course/{id}/add-cart")
      * public String addToCart(Model model, @PathVariable long id) {
      * Optional<Course> courseOptional = courseRepository.findById(id);
      * List<User> users = userRepository.findAll();
-     * 
+     *
      * if (courseOptional.isPresent() && !users.isEmpty()) {
      * Course course = courseOptional.get();
      * User user = users.get(0);
-     * 
+     *
      * Cart cart = user.getCart();
      * if (cart == null) {
      * cart = new Cart("Cart of " + user.getUserName(), 0);
      * cart.setUser(user);
      * user.setCart(cart);
      * }
-     * 
+     *
      * cart.addCourse(course);
      * userRepository.save(user);
      * return "redirect:/courses";
      * }
-     * 
+     *
      * return "course_db/course_not_found";
      * }
      */

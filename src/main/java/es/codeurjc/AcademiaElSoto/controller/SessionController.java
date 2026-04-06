@@ -1,4 +1,5 @@
 package es.codeurjc.AcademiaElSoto.controller;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,11 @@ public class SessionController {
 
     private String sharedInfo;
 
+    /**
+     * Stores user form data inside the HTTP session.
+     * This does not persist the user in the database; it only keeps
+     * the submitted data temporarily in the session.
+     */
     @PostMapping("/user")
     public String user(Model model, HttpSession session,
             @RequestParam String userName,
@@ -34,6 +40,10 @@ public class SessionController {
         return "auth/form_result";
     }
 
+    /**
+     * Reads the temporary user object from the session
+     * and sends its data to the view.
+     */
     @GetMapping("/showResults")
     public String showResults(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");

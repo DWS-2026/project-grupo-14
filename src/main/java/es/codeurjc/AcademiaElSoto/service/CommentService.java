@@ -12,6 +12,11 @@ import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
 
+/**
+ * Service layer for comment-related operations.
+ * This class handles creation, retrieval, update,
+ * and deletion of comments.
+ */
 @Service
 public class CommentService {
 
@@ -21,7 +26,14 @@ public class CommentService {
     @Autowired
     private CourseRepository courseRepository;
 
-    // Guardar un comentario nuevo asociado a un curso
+    /**
+     * Saves a new comment associated with a specific course.
+     * The method validates the user name and description before saving.
+     *
+     * @param courseId the id of the course the comment belongs to
+     * @param user the username of the comment author
+     * @param description the comment text
+     */
     public void saveComment(Long courseId, String user, String description) {
         Optional<Course> courseOpt = courseRepository.findById(courseId);
 
@@ -41,17 +53,31 @@ public class CommentService {
         }
     }
 
-    // Obtener todos los comentarios
+    /**
+     * Retrieves all comments from the database.
+     *
+     * @return a list of all comments
+     */
     public List<Comment> findAllComments() {
         return commentRepository.findAll();
     }
 
-    // Buscar comentario por ID
+    /**
+     * Finds a comment by its id.
+     *
+     * @param id comment identifier
+     * @return an Optional containing the comment if found
+     */
     public Optional<Comment> findById(Long id) {
         return commentRepository.findById(id);
     }
 
-    // Eliminar comentario por ID
+    /**
+     * Deletes a comment by its id if it exists.
+     *
+     * @param id comment identifier
+     * @return true if the comment was deleted, false otherwise
+     */
     public boolean deleteById(Long id) {
         Optional<Comment> commentOpt = commentRepository.findById(id);
         if (commentOpt.isPresent()) {
@@ -61,7 +87,13 @@ public class CommentService {
         return false;
     }
 
-    // Editar comentario existente
+    /**
+     * Updates an existing comment if it exists and the new values are valid.
+     *
+     * @param id comment identifier
+     * @param editedComment object containing the new comment data
+     * @return true if the comment was updated successfully, false otherwise
+     */
     public boolean editComment(Long id, Comment editedComment) {
         Optional<Comment> commentOpt = commentRepository.findById(id);
         if (commentOpt.isPresent()) {
@@ -76,7 +108,6 @@ public class CommentService {
 
             originalComment.setUser(cleanUser);
             originalComment.setDescription(cleanDescription);
-            
 
             commentRepository.save(originalComment);
             return true;

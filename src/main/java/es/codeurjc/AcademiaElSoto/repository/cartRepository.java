@@ -5,5 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import es.codeurjc.AcademiaElSoto.model.Cart;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    // No code is needed here; JpaRepository already includes .save().
 }

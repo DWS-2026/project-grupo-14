@@ -31,6 +31,11 @@ public class CommentController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Creates a new comment for a course.
+     * Only authenticated users can post comments.
+     * The comment is linked to both the course and the logged-in user.
+     */
     @PostMapping("/course/{id}/comment")
     public String createComment(@PathVariable long id,
             @RequestParam String description,
@@ -71,6 +76,10 @@ public class CommentController {
         return "redirect:/courses";
     }
 
+    /**
+     * Shows the edit page for one of the authenticated user's own comments.
+     * Access is denied if the comment does not belong to the logged-in user.
+     */
     @GetMapping("/profile/comments/{id}/edit")
     public String editOwnComment(Model model,
             @PathVariable long id,
@@ -97,6 +106,10 @@ public class CommentController {
         return "comment_db/edit_own_comment_page";
     }
 
+    /**
+     * Processes the update of one of the authenticated user's own comments.
+     * The new description is validated before saving.
+     */
     @PostMapping("/profile/comments/{id}/edit")
     public String editOwnCommentProcess(Model model,
             @PathVariable long id,
@@ -133,6 +146,10 @@ public class CommentController {
         return "redirect:/profile";
     }
 
+    /**
+     * Deletes one of the authenticated user's own comments.
+     * Access is denied if the comment does not belong to the logged-in user.
+     */
     @PostMapping("/profile/comments/{id}/delete")
     public String deleteOwnComment(@PathVariable long id,
             Authentication authentication) {
@@ -158,12 +175,18 @@ public class CommentController {
         return "redirect:/profile";
     }
 
+    /**
+     * Displays all comments in the admin panel.
+     */
     @GetMapping("/admin/comments")
     public String showComments(Model model) {
         model.addAttribute("comments", commentRepository.findAll());
         return "admin/admin_comment";
     }
 
+    /**
+     * Displays the details of a single comment.
+     */
     @GetMapping("/comment/{id}")
     public String showComment(Model model, @PathVariable long id) {
         Optional<Comment> commentOptional = commentRepository.findById(id);
@@ -176,6 +199,9 @@ public class CommentController {
         return "comment_db/comment_not_found";
     }
 
+    /**
+     * Shows the admin edit page for a specific comment.
+     */
     @GetMapping("/admin/comments/{id}/edit")
     public String editComment(Model model, @PathVariable long id) {
         Optional<Comment> commentOptional = commentRepository.findById(id);
@@ -188,6 +214,9 @@ public class CommentController {
         return "comment_db/comment_not_found";
     }
 
+    /**
+     * Deletes a comment from the admin panel.
+     */
     @PostMapping("/admin/comments/{id}/delete")
     public String deleteComment(@PathVariable long id) {
         Optional<Comment> commentOptional = commentRepository.findById(id);
@@ -200,6 +229,10 @@ public class CommentController {
         return "comment_db/comment_not_found";
     }
 
+    /**
+     * Processes the admin update of a comment.
+     * It validates the author name and description before saving.
+     */
     @PostMapping("/admin/comments/{id}/edit")
     public String editCommentProcess(Model model,
             @PathVariable long id,

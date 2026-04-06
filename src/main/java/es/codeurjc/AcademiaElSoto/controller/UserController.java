@@ -1,28 +1,26 @@
 package es.codeurjc.AcademiaElSoto.controller;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import es.codeurjc.AcademiaElSoto.dto.AdminUserView;
 import es.codeurjc.AcademiaElSoto.model.Cart;
-import es.codeurjc.AcademiaElSoto.model.User;
 import es.codeurjc.AcademiaElSoto.model.Comment;
 import es.codeurjc.AcademiaElSoto.model.Course;
-import es.codeurjc.AcademiaElSoto.service.UserService;
+import es.codeurjc.AcademiaElSoto.model.User;
 import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
 import es.codeurjc.AcademiaElSoto.repository.UserRepository;
-import es.codeurjc.AcademiaElSoto.dto.AdminUserView;
-import org.springframework.security.web.csrf.CsrfToken;
-
+import es.codeurjc.AcademiaElSoto.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Controller
 public class UserController {
@@ -39,20 +37,27 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // --- RUTAS PARA MOSTRAR LOS FORMULARIOS (GET) ---
-
+    /**
+     * Displays the registration form.
+     */
     @GetMapping("/register")
     public String showRegisterForm() {
         return "auth/register";
     }
 
+    /**
+     * Displays the login form.
+     */
     @GetMapping("/login")
     public String showLoginuserForm() {
         return "auth/login";
     }
 
-    // --- RUTAS PARA PROCESAR LOS DATOS (POST) ---
-
+    /**
+     * Registers a new user.
+     * It checks that username and email are unique, encodes the password,
+     * creates an empty cart, assigns the default USER role, and saves the user.
+     */
     @PostMapping("/register")
     public String registerUser(Model model, User user) {
 
@@ -62,27 +67,35 @@ public class UserController {
             return "auth/register";
         }
 
-        // Codificamos la contraseña con BCrypt
+        // Encode the password before saving it in the database.
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Le creamos un carrito vacío y se lo damos al usuario
+        // Create an empty cart and assign it to the new user.
         Cart newCart = new Cart("Carrito de " + user.getUserName(), 0);
         user.setCart(newCart);
 
-        // Le damos un rol por defecto
-        user.setRoles(List.of("USER")); // <-- Importante para Spring Security
+        // Assign the default role required by Spring Security.
+        user.setRoles(List.of("USER"));
 
-        // Guardamos el usuario
+        // Save the new user in the database.
         userRepository.save(user);
 
         return "redirect:/login";
     }
 
+    /**
+     * Displays the login error page.
+     */
     @GetMapping("/loginerror")
     public String loginError() {
         return "auth/loginerror";
     }
 
+    /**
+     * Displays the authenticated user's profile.
+     * It loads personal data, comments, purchased courses,
+     * and stores the cart id in the session if available.
+     */
     @GetMapping("/profile")
     public String showProfile(Model model,
             org.springframework.security.core.Authentication authentication,
@@ -121,6 +134,9 @@ public class UserController {
         return "user";
     }
 
+    /**
+     * Displays the edit page for the authenticated user's own profile.
+     */
     @GetMapping("/profile/edit")
     public String editOwnProfile(Model model,
             org.springframework.security.core.Authentication authentication) {
@@ -146,6 +162,11 @@ public class UserController {
         return "user_db/edit_own_user_page";
     }
 
+    /**
+     * Processes the update of the authenticated user's own profile.
+     * If a new password is provided, it is encoded before saving.
+     * After updating the data, the session is invalidated and the user must log in again.
+     */
     @PostMapping("/profile/edit")
     public String editOwnProfileProcess(
             org.springframework.security.core.Authentication authentication,
@@ -180,6 +201,10 @@ public class UserController {
         return "redirect:/login";
     }
 
+    /**
+     * Displays the admin list of users.
+     * It builds a custom view object with summarized information for each user.
+     */
     @GetMapping("/admin/users")
     public String showAdminUsers(Model model) {
 
@@ -208,6 +233,10 @@ public class UserController {
         return "admin/admin_users";
     }
 
+    /**
+     * Displays the profile of a specific user from the admin panel.
+     * It includes personal data, purchased courses, and comments.
+     */
     @GetMapping("/admin/user/{id}")
     public String showAdminUserProfile(@PathVariable Long id, Model model) {
 
@@ -230,6 +259,11 @@ public class UserController {
         return "user";
     }
 
+    /**
+     * Deletes a user from the admin panel.
+     * Before deleting the user, their comments are removed and
+     * the purchased courses relationship is cleared.
+     */
     @PostMapping("/admin/user/{id}/delete")
     public String deleteUser(@PathVariable Long id) {
 
@@ -250,6 +284,9 @@ public class UserController {
         return "user_db/deleted_user";
     }
 
+    /**
+     * Displays the admin edit page for a specific user.
+     */
     @GetMapping("/admin/user/{id}/edit")
     public String editUser(Model model, @PathVariable Long id) {
 
@@ -270,6 +307,10 @@ public class UserController {
         return "user_db/user_not_found";
     }
 
+    /**
+     * Processes the admin update of a user.
+     * If a new password is provided, it is encoded before saving.
+     */
     @PostMapping("/admin/user/{id}/edit")
     public String editUserProcess(Model model, @PathVariable Long id, User editedUser) {
 
@@ -298,5 +339,4 @@ public class UserController {
 
         return "user_db/user_not_found";
     }
-
 }
