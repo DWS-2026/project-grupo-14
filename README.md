@@ -284,17 +284,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - [Ignacio Enfedaque Cordero]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Principalmente entidad carrito, https de curso y demas entidades para enseñar lo que existe en la base de datos]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Cursos y avance en boton para añadir a carrito]([URL_commit_1](https://github.com/DWS-2026/project-grupo-14/commit/fec1d3540458143fb0d6f1f9a53335b1c8d1bd72))  | [CourseController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/CourseController.java)   |
+|2| [carrito y cursos](https://github.com/DWS-2026/project-grupo-14/commit/d0f93696ec405e51b6700acf6584a0bc4a616304#diff-60911d0c65668087943f99bccd81c3d3009a157539f3a77fa4a593357cbbe087)  | [CommentController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/CommentController.java)   |
+|3| [Admin editar cursos tabla]([URL_commit_3](https://github.com/DWS-2026/project-grupo-14/commit/6b837de87332a982ce8e6d50d9318481b1c171c3))  | [admin_estadisticas.html](src/main/resources/templates/admin_estadisticas.html)   |
+|4| [Registro de usuario]([URL_commit_4](https://github.com/DWS-2026/project-grupo-14/commit/f4bbd75cebc862351cdae4c5af1e29d21a36ce19))  | [UserController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/UserController.java)   |
+|5| [Perfil de usuario]([URL_commit_5](https://github.com/DWS-2026/project-grupo-14/commit/e0347a11a686a7f408384a52366e2b0fa67986df))  | [UserController.java](src/main/java/es/codeurjc/AcademiaElSoto/controller/UserController.java)   |
 
 ---
 
