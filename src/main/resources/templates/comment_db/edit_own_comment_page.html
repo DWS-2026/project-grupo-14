@@ -8,6 +8,11 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="/css/styles.css" rel="stylesheet" />
+    
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet" />
+    <style>
+        .ql-container { height: 200px; background: white; font-size: 16px; }
+    </style>
 </head>
 <body id="page-top">
 
@@ -30,11 +35,13 @@
 
                         <div class="mb-3">
                             <label class="form-label">Comentario</label>
-                            <textarea class="form-control"
-                                      name="description"
-                                      rows="5"
-                                      maxlength="500"
-                                      required>{{comment.description}}</textarea>
+                            
+                            <input type="hidden" name="description" id="description-input">
+                            
+                            <div id="editor">
+                                {{{comment.description}}}
+                            </div>
+                            
                             <small class="text-muted">Máximo 500 caracteres</small>
                         </div>
 
@@ -54,5 +61,27 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/scripts.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const quill = new Quill('#editor', {
+                theme: 'snow',
+                placeholder: 'Edita tu comentario...'
+            });
+
+            const input = document.getElementById('description-input');
+
+            // Cargamos el contenido inicial en el input oculto por si el usuario no toca nada y guarda
+            input.value = quill.root.innerHTML;
+
+            // Actualizamos el input cada vez que el usuario escriba
+            quill.on('text-change', function() {
+                const html = quill.root.innerHTML;
+                input.value = (html === '<p><br></p>') ? '' : html;
+            });
+        });
+    </script>
 </body>
 </html>
