@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 /**
  * Service layer for course-related operations.
  * This class provides methods for saving, retrieving,
@@ -38,7 +41,7 @@ public class CourseService {
      * Saves or updates a course including an uploaded image.
      * If the image exists, it is converted into a Blob and stored in the course.
      *
-     * @param course the course to save
+     * @param course    the course to save
      * @param imageFile the uploaded image file
      * @throws IOException if an error occurs while creating the image Blob
      */
@@ -91,6 +94,10 @@ public class CourseService {
      */
     public List<Course> findByCourseName(String courseName) {
         return courseRepository.findByCourseName(courseName);
+    }
+
+    public Page<Course> findAll(Pageable pageable) {
+        return courseRepository.findAll(pageable);
     }
 
     /**

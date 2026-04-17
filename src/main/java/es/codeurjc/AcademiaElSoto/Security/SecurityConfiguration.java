@@ -30,19 +30,20 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    
+
     public SecurityFilterChain WebfilterChain(HttpSecurity http) throws Exception {
 
         http.authenticationProvider(authenticationProvider());
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                         .requestMatchers(
+                        .requestMatchers(
                                 "/", "/teachers", "/information", "/index",
                                 "/courses", "/course/*", "/course/*/image", "/user/*/image",
                                 "/css/**", "/js/**", "/img/**", "/assets/**",
                                 "/error/**", "/register", "/login", "/loginerror",
-                                "/403", "/404", "/500")
+                                "/403", "/404", "/500",
+                                "/api/v1/**")
                         .permitAll()
 
                         .requestMatchers(
@@ -56,7 +57,7 @@ public class SecurityConfiguration {
                         .hasAnyRole("USER", "ADMIN")
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        
+
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
