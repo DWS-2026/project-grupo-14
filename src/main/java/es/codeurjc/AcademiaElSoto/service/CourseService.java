@@ -8,14 +8,13 @@ import java.util.Optional;
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * Service layer for course-related operations.
@@ -32,9 +31,10 @@ public class CourseService {
      * Saves or updates a course without modifying its image.
      *
      * @param course the course to save
+     * @return the saved course
      */
-    public void save(Course course) {
-        courseRepository.save(course);
+    public Course save(Course course) {
+        return courseRepository.save(course);
     }
 
     /**
@@ -43,9 +43,10 @@ public class CourseService {
      *
      * @param course    the course to save
      * @param imageFile the uploaded image file
+     * @return the saved course
      * @throws IOException if an error occurs while creating the image Blob
      */
-    public void save(Course course, MultipartFile imageFile) throws IOException {
+    public Course save(Course course, MultipartFile imageFile) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 Blob blob = new SerialBlob(imageFile.getBytes());
@@ -54,7 +55,7 @@ public class CourseService {
                 throw new IOException("Error creating the image Blob", e);
             }
         }
-        this.save(course);
+        return this.save(course);
     }
 
     /**
@@ -64,6 +65,16 @@ public class CourseService {
      */
     public List<Course> findAll() {
         return courseRepository.findAll();
+    }
+
+    /**
+     * Retrieves all courses from the database using pagination.
+     *
+     * @param pageable pagination information
+     * @return a paginated list of courses
+     */
+    public Page<Course> findAll(Pageable pageable) {
+        return courseRepository.findAll(pageable);
     }
 
     /**
@@ -94,10 +105,6 @@ public class CourseService {
      */
     public List<Course> findByCourseName(String courseName) {
         return courseRepository.findByCourseName(courseName);
-    }
-
-    public Page<Course> findAll(Pageable pageable) {
-        return courseRepository.findAll(pageable);
     }
 
     /**

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,20 +31,23 @@ public class SecurityConfiguration {
     }
 
     @Bean
-
     public SecurityFilterChain WebfilterChain(HttpSecurity http) throws Exception {
 
         http.authenticationProvider(authenticationProvider());
 
         http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/", "/teachers", "/information", "/index",
                                 "/courses", "/course/*", "/course/*/image", "/user/*/image",
                                 "/css/**", "/js/**", "/img/**", "/assets/**",
                                 "/error/**", "/register", "/login", "/loginerror",
-                                "/403", "/404", "/500",
-                                "/api/v1/**")
+                                "/403", "/404", "/500")
+                        .permitAll()
+
+                        .requestMatchers("/api/v1/courses", "/api/v1/courses/*", "/api/v1/courses/*/image")
                         .permitAll()
 
                         .requestMatchers(
@@ -73,6 +77,7 @@ public class SecurityConfiguration {
                             }
                         })
                         .permitAll())
+                .httpBasic(Customizer.withDefaults())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
