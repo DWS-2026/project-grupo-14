@@ -36,4 +36,20 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
+    public java.util.Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public boolean existsByUserName(String userName) {
+        return userRepository.findByUserName(userName).isPresent();
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
 }

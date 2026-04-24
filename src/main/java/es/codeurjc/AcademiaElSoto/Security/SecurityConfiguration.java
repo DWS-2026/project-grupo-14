@@ -15,76 +15,82 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Autowired
-    public RepositoryUserDetailsService userDetailService;
+        @Autowired
+        public RepositoryUserDetailsService userDetailService;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+        @Bean
+        public DaoAuthenticationProvider authenticationProvider() {
+                DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailService);
+                authProvider.setPasswordEncoder(passwordEncoder());
+                return authProvider;
+        }
 
-    @Bean
-    public SecurityFilterChain WebfilterChain(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain WebfilterChain(HttpSecurity http) throws Exception {
 
-        http.authenticationProvider(authenticationProvider());
+                http.authenticationProvider(authenticationProvider());
 
-        http
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**"))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(
-                                "/", "/teachers", "/information", "/index",
-                                "/courses", "/course/*", "/course/*/image", "/user/*/image",
-                                "/css/**", "/js/**", "/img/**", "/assets/**",
-                                "/error/**", "/register", "/login", "/loginerror",
-                                "/403", "/404", "/500")
-                        .permitAll()
+                http
+                                .csrf(csrf -> csrf
+                                                .ignoringRequestMatchers("/api/**"))
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .requestMatchers(
+                                                                "/", "/teachers", "/information", "/index",
+                                                                "/courses", "/course/*", "/course/*/image",
+                                                                "/user/*/image",
+                                                                "/css/**", "/js/**", "/img/**", "/assets/**",
+                                                                "/error/**", "/register", "/login", "/loginerror",
+                                                                "/403", "/404", "/500")
+                                                .permitAll()
 
-                        .requestMatchers("/api/v1/courses", "/api/v1/courses/*", "/api/v1/courses/*/image")
-                        .permitAll()
+                                                .requestMatchers(
+                                                                "/api/v1/courses", "/api/v1/courses/*",
+                                                                "/api/v1/courses/*/image",
+                                                                "/api/v1/users", "/api/v1/users/*",
+                                                                "/api/v1/users/*/image")
+                                                .permitAll()
 
-                        .requestMatchers(
-                                "/profile", "/cart",
-                                "/course/*/add-cart",
-                                "/cart/remove/*",
-                                "/complete-purchase",
-                                "/course/*/comment",
-                                "/profile/comments/*/edit",
-                                "/profile/comments/*/delete")
-                        .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(
+                                                                "/profile", "/cart",
+                                                                "/course/*/add-cart",
+                                                                "/cart/remove/*",
+                                                                "/complete-purchase",
+                                                                "/course/*/comment",
+                                                                "/profile/comments/*/edit",
+                                                                "/profile/comments/*/delete")
+                                                .hasAnyRole("USER", "ADMIN")
 
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .failureUrl("/loginerror")
-                        .successHandler((req, res, auth) -> {
-                            boolean isAdmin = auth.getAuthorities().stream()
-                                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-                            if (isAdmin) {
-                                res.sendRedirect("/admin");
-                            } else {
-                                res.sendRedirect("/profile");
-                            }
-                        })
-                        .permitAll())
-                .httpBasic(Customizer.withDefaults())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
-                        .permitAll())
-                .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/403"));
+                                                .anyRequest().authenticated())
+                                .formLogin(form -> form
+                                                .loginPage("/login")
+                                                .loginProcessingUrl("/login")
+                                                .failureUrl("/loginerror")
+                                                .successHandler((req, res, auth) -> {
+                                                        boolean isAdmin = auth.getAuthorities().stream()
+                                                                        .anyMatch(a -> a.getAuthority()
+                                                                                        .equals("ROLE_ADMIN"));
+                                                        if (isAdmin) {
+                                                                res.sendRedirect("/admin");
+                                                        } else {
+                                                                res.sendRedirect("/profile");
+                                                        }
+                                                })
+                                                .permitAll())
+                                .httpBasic(Customizer.withDefaults())
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/")
+                                                .permitAll())
+                                .exceptionHandling(exception -> exception
+                                                .accessDeniedPage("/403"));
 
-        return http.build();
-    }
+                return http.build();
+        }
 }
