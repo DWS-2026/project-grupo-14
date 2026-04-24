@@ -30,8 +30,8 @@ public class CommentService {
      * Saves a new comment associated with a specific course.
      * The method validates the user name and description before saving.
      *
-     * @param courseId the id of the course the comment belongs to
-     * @param user the username of the comment author
+     * @param courseId    the id of the course the comment belongs to
+     * @param user        the username of the comment author
      * @param description the comment text
      */
     public void saveComment(Long courseId, String user, String description) {
@@ -90,7 +90,7 @@ public class CommentService {
     /**
      * Updates an existing comment if it exists and the new values are valid.
      *
-     * @param id comment identifier
+     * @param id            comment identifier
      * @param editedComment object containing the new comment data
      * @return true if the comment was updated successfully, false otherwise
      */
@@ -100,7 +100,8 @@ public class CommentService {
             Comment originalComment = commentOpt.get();
 
             String cleanUser = editedComment.getUser() == null ? "" : editedComment.getUser().trim();
-            String cleanDescription = editedComment.getDescription() == null ? "" : editedComment.getDescription().trim();
+            String cleanDescription = editedComment.getDescription() == null ? ""
+                    : editedComment.getDescription().trim();
 
             if (cleanUser.isEmpty() || cleanDescription.isEmpty() || cleanDescription.length() > 500) {
                 return false;
@@ -113,5 +114,13 @@ public class CommentService {
             return true;
         }
         return false;
+    }
+
+    public Comment save(Comment comment) {
+        return commentRepository.save(comment);
+    }
+
+    public List<Comment> findByCourseId(Long courseId) {
+        return commentRepository.findByCourseIdOrderByPublicationDateDesc(courseId);
     }
 }

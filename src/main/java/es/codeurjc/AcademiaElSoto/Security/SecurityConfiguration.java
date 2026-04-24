@@ -52,7 +52,9 @@ public class SecurityConfiguration {
                                                                 "/api/v1/courses", "/api/v1/courses/*",
                                                                 "/api/v1/courses/*/image",
                                                                 "/api/v1/users", "/api/v1/users/*",
-                                                                "/api/v1/users/*/image")
+                                                                "/api/v1/users/*/image",
+                                                                "/api/v1/comments", "/api/v1/comments/*",
+                                                                "/api/v1/comments/course/*")
                                                 .permitAll()
 
                                                 .requestMatchers(
