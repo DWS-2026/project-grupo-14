@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.NoSuchElementException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,8 +43,8 @@ public class CourseRestController {
 
     @GetMapping("/{id}")
     public CourseResponseDto getCourseById(@PathVariable Long id) {
-        Course course = courseService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+        
+        Course course = courseService.findById(id).orElseThrow();
 
         return toDto(course);
     }
@@ -75,8 +76,7 @@ public class CourseRestController {
     public CourseResponseDto updateCourse(@PathVariable Long id,
             @Valid @RequestBody CourseRequestDto courseRequestDto) {
 
-        Course existingCourse = courseService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+        Course existingCourse = courseService.findById(id).orElseThrow();
 
         existingCourse.setCourseName(courseRequestDto.getCourseName());
         existingCourse.setTeacher(courseRequestDto.getTeacher());
@@ -91,8 +91,7 @@ public class CourseRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
 
-        Course existingCourse = courseService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+        Course existingCourse = courseService.findById(id).orElseThrow();
 
         courseService.deleteById(existingCourse.getId());
         return ResponseEntity.noContent().build();
@@ -100,13 +99,13 @@ public class CourseRestController {
 
     @GetMapping("/{id}/image")
     public ResponseEntity<Object> getCourseImage(@PathVariable Long id) throws Exception {
-        Course course = courseService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+        Course course = courseService.findById(id).orElseThrow();
 
         Blob image = course.getImageFile();
 
         if (image == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course image not found");
+            
+            throw new NoSuchElementException();
         }
 
         return ResponseEntity
