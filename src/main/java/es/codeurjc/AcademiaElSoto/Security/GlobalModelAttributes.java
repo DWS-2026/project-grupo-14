@@ -1,4 +1,4 @@
-package es.codeurjc.AcademiaElSoto.security;
+package es.codeurjc.AcademiaElSoto.Security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;

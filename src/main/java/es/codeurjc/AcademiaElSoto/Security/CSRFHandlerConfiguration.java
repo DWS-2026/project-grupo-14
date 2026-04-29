@@ -1,4 +1,4 @@
-package es.codeurjc.AcademiaElSoto.security;
+package es.codeurjc.AcademiaElSoto.Security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.csrf.CsrfToken;

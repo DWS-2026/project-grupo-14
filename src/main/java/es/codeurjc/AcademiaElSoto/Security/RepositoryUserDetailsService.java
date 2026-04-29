@@ -1,4 +1,4 @@
-package es.codeurjc.AcademiaElSoto.security;
+package es.codeurjc.AcademiaElSoto.Security;
 
 import java.util.ArrayList;
 import java.util.List;

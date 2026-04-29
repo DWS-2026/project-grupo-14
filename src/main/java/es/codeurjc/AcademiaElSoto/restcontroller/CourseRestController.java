@@ -25,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import es.codeurjc.AcademiaElSoto.dto.CourseRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
+import es.codeurjc.AcademiaElSoto.mapper.CourseMapper;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
 import jakarta.validation.Valid;
@@ -36,28 +37,26 @@ public class CourseRestController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private CourseMapper mapper;
+
     @GetMapping
     public Page<CourseResponseDto> getCourses(Pageable pageable) {
-        return courseService.findAll(pageable).map(this::toDto);
+        
+        return courseService.findAll(pageable).map(mapper::toDTO);
     }
 
     @GetMapping("/{id}")
     public CourseResponseDto getCourseById(@PathVariable Long id) {
-        
         Course course = courseService.findById(id).orElseThrow();
-
-        return toDto(course);
+        return mapper.toDTO(course); 
     }
 
     @PostMapping
     public ResponseEntity<CourseResponseDto> createCourse(@Valid @RequestBody CourseRequestDto courseRequestDto) {
 
-        Course course = new Course();
-        course.setCourseName(courseRequestDto.getCourseName());
-        course.setTeacher(courseRequestDto.getTeacher());
-        course.setPrice(courseRequestDto.getPrice());
-        course.setDescription(courseRequestDto.getDescription());
-        course.setStudents(courseRequestDto.getStudents());
+        
+        Course course = mapper.toEntity(courseRequestDto);
 
         Course savedCourse = courseService.save(course);
 
@@ -67,32 +66,24 @@ public class CourseRestController {
                 .buildAndExpand(savedCourse.getId())
                 .toUri();
 
-        return ResponseEntity
-                .created(location)
-                .body(toDto(savedCourse));
+        return ResponseEntity.created(location).body(mapper.toDTO(savedCourse));
     }
 
     @PutMapping("/{id}")
-    public CourseResponseDto updateCourse(@PathVariable Long id,
-            @Valid @RequestBody CourseRequestDto courseRequestDto) {
+    public CourseResponseDto updateCourse(@PathVariable Long id, @Valid @RequestBody CourseRequestDto courseRequestDto) {
 
         Course existingCourse = courseService.findById(id).orElseThrow();
 
-        existingCourse.setCourseName(courseRequestDto.getCourseName());
-        existingCourse.setTeacher(courseRequestDto.getTeacher());
-        existingCourse.setPrice(courseRequestDto.getPrice());
-        existingCourse.setDescription(courseRequestDto.getDescription());
-        existingCourse.setStudents(courseRequestDto.getStudents());
+        
+        mapper.updateEntity(courseRequestDto, existingCourse);
 
         Course updatedCourse = courseService.save(existingCourse);
-        return toDto(updatedCourse);
+        return mapper.toDTO(updatedCourse);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-
         Course existingCourse = courseService.findById(id).orElseThrow();
-
         courseService.deleteById(existingCourse.getId());
         return ResponseEntity.noContent().build();
     }
@@ -100,11 +91,9 @@ public class CourseRestController {
     @GetMapping("/{id}/image")
     public ResponseEntity<Object> getCourseImage(@PathVariable Long id) throws Exception {
         Course course = courseService.findById(id).orElseThrow();
-
         Blob image = course.getImageFile();
 
         if (image == null) {
-            
             throw new NoSuchElementException();
         }
 
@@ -114,13 +103,5 @@ public class CourseRestController {
                 .body(new InputStreamResource(image.getBinaryStream()));
     }
 
-    private CourseResponseDto toDto(Course course) {
-        return new CourseResponseDto(
-                course.getId(),
-                course.getCourseName(),
-                course.getTeacher(),
-                course.getPrice(),
-                course.getDescription(),
-                course.getStudents());
-    }
+    // EL MÉTODO PRIVADO toDto() YA NO ES NECESARIO, LO HACE EL MAPPER
 }

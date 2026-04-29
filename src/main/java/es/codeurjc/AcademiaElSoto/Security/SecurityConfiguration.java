@@ -1,4 +1,4 @@
-package es.codeurjc.AcademiaElSoto.security;
+package es.codeurjc.AcademiaElSoto.Security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
