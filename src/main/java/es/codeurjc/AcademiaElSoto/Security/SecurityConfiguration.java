@@ -1,8 +1,11 @@
-package es.codeurjc.AcademiaElSoto.Security;
+package es.codeurjc.AcademiaElSoto.security;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
         @Autowired
-        public RepositoryUserDetailsService userDetailService;
+        private RepositoryUserDetailsService userDetailService;
 
         @Bean
         public PasswordEncoder passwordEncoder() {
@@ -31,32 +34,66 @@ public class SecurityConfiguration {
         }
 
         @Bean
-        public SecurityFilterChain WebfilterChain(HttpSecurity http) throws Exception {
+        public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
 
                 http.authenticationProvider(authenticationProvider());
 
                 http
                                 .csrf(csrf -> csrf
                                                 .ignoringRequestMatchers("/api/**"))
+
                                 .authorizeHttpRequests(authorize -> authorize
+
+                                                // Public web pages
                                                 .requestMatchers(
-                                                                "/", "/teachers", "/information", "/index",
+                                                                "/", "/index", "/teachers", "/information",
                                                                 "/courses", "/course/*", "/course/*/image",
                                                                 "/user/*/image",
+                                                                "/register", "/login", "/loginerror",
+                                                                "/403", "/404", "/500",
                                                                 "/css/**", "/js/**", "/img/**", "/assets/**",
-                                                                "/error/**", "/register", "/login", "/loginerror",
-                                                                "/403", "/404", "/500")
+                                                                "/error/**")
                                                 .permitAll()
 
-                                                .requestMatchers(
-                                                                "/api/v1/courses", "/api/v1/courses/*",
+                                                // Public REST authentication endpoints
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/signup").permitAll()
+
+                                                // Public REST GET endpoints
+                                                .requestMatchers(HttpMethod.GET,
+                                                                "/api/v1/courses",
+                                                                "/api/v1/courses/*",
                                                                 "/api/v1/courses/*/image",
-                                                                "/api/v1/users", "/api/v1/users/*",
-                                                                "/api/v1/users/*/image",
-                                                                "/api/v1/comments", "/api/v1/comments/*",
-                                                                "/api/v1/comments/course/*")
+                                                                "/api/v1/comments",
+                                                                "/api/v1/comments/*",
+                                                                "/api/v1/comments/course/*",
+                                                                "/api/v1/users/*/image")
                                                 .permitAll()
 
+                                                // Admin-only REST endpoints
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
+
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/courses").hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.PUT, "/api/v1/courses/*").hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/*")
+                                                .hasRole("ADMIN")
+
+                                                // Logged users REST endpoints
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/users/*")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.PUT, "/api/v1/users/*")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*")
+                                                .hasAnyRole("USER", "ADMIN")
+
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/comments/**")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.PUT, "/api/v1/comments/**")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/**")
+                                                .hasAnyRole("USER", "ADMIN")
+
+                                                // Private web pages
                                                 .requestMatchers(
                                                                 "/profile", "/cart",
                                                                 "/course/*/add-cart",
@@ -67,31 +104,68 @@ public class SecurityConfiguration {
                                                                 "/profile/comments/*/delete")
                                                 .hasAnyRole("USER", "ADMIN")
 
+                                                // Admin web pages
                                                 .requestMatchers("/admin/**").hasRole("ADMIN")
 
                                                 .anyRequest().authenticated())
+
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
                                                 .failureUrl("/loginerror")
-                                                .successHandler((req, res, auth) -> {
-                                                        boolean isAdmin = auth.getAuthorities().stream()
-                                                                        .anyMatch(a -> a.getAuthority()
+                                                .successHandler((request, response, authentication) -> {
+                                                        boolean isAdmin = authentication.getAuthorities().stream()
+                                                                        .anyMatch(authority -> authority.getAuthority()
                                                                                         .equals("ROLE_ADMIN"));
+
                                                         if (isAdmin) {
-                                                                res.sendRedirect("/admin");
+                                                                response.sendRedirect("/admin");
                                                         } else {
-                                                                res.sendRedirect("/profile");
+                                                                response.sendRedirect("/profile");
                                                         }
                                                 })
                                                 .permitAll())
+
                                 .httpBasic(Customizer.withDefaults())
+
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
                                                 .logoutSuccessUrl("/")
                                                 .permitAll())
+
                                 .exceptionHandling(exception -> exception
-                                                .accessDeniedPage("/403"));
+                                                .authenticationEntryPoint((request, response, authException) -> {
+                                                        if (request.getRequestURI().startsWith("/api/")) {
+                                                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                                                response.setContentType("application/json");
+                                                                response.getWriter()
+                                                                                .write("""
+                                                                                                {
+                                                                                                  "status": 401,
+                                                                                                  "error": "Unauthorized",
+                                                                                                  "message": "Authentication is required"
+                                                                                                }
+                                                                                                """);
+                                                        } else {
+                                                                response.sendRedirect("/login");
+                                                        }
+                                                })
+
+                                                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                                                        if (request.getRequestURI().startsWith("/api/")) {
+                                                                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                                                                response.setContentType("application/json");
+                                                                response.getWriter().write("""
+                                                                                {
+                                                                                  "status": 403,
+                                                                                  "error": "Forbidden",
+                                                                                  "message": "Access denied"
+                                                                                }
+                                                                                """);
+                                                        } else {
+                                                                response.sendRedirect("/403");
+                                                        }
+                                                }));
 
                 return http.build();
         }
