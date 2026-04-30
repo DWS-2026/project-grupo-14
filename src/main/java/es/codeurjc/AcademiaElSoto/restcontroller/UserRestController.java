@@ -3,6 +3,7 @@ package es.codeurjc.AcademiaElSoto.restcontroller;
 import java.net.URI;
 import java.sql.Blob;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -49,8 +50,8 @@ public class UserRestController {
 
     @GetMapping("/{id}")
     public UserResponseDto getUserById(@PathVariable Long id) {
-        User user = userService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        
+        User user = userService.findById(id).orElseThrow();
 
         return toDto(user);
     }
@@ -58,12 +59,13 @@ public class UserRestController {
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
 
+        
         if (userService.existsByUserName(userRequestDto.getUserName())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
+             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
         }
 
         if (userService.existsByEmail(userRequestDto.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
 
         User user = new User();
@@ -91,8 +93,7 @@ public class UserRestController {
     public UserResponseDto updateUser(@PathVariable Long id,
             @Valid @RequestBody UserRequestDto userRequestDto) {
 
-        User existingUser = userService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        User existingUser = userService.findById(id).orElseThrow();
 
         existingUser.setUserName(userRequestDto.getUserName());
         existingUser.setLastName(userRequestDto.getLastName());
@@ -110,8 +111,7 @@ public class UserRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 
-        User existingUser = userService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        User existingUser = userService.findById(id).orElseThrow();
 
         userService.deleteById(existingUser.getId());
 
@@ -120,13 +120,13 @@ public class UserRestController {
 
     @GetMapping("/{id}/image")
     public ResponseEntity<Object> getUserImage(@PathVariable Long id) throws Exception {
-        User user = userService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        User user = userService.findById(id).orElseThrow();
 
         Blob image = user.getProfileImage();
 
         if (image == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User image not found");
+            
+            throw new NoSuchElementException();
         }
 
         return ResponseEntity

@@ -120,4 +120,8 @@ public class CartService {
         }
         return 0;
     }
+
+    public void save(Cart cart) {
+        cartRepository.save(cart);
+    }
 }
