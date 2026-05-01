@@ -1,5 +1,6 @@
 package es.codeurjc.AcademiaElSoto.mapper;
 
+import es.codeurjc.AcademiaElSoto.dto.CourseBasicDto;
 import es.codeurjc.AcademiaElSoto.dto.CourseRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
 import es.codeurjc.AcademiaElSoto.model.Course;
@@ -18,7 +19,8 @@ public interface CourseMapper {
    
     Course toEntity(CourseRequestDto dto);
 
-    
+    CourseBasicDto toBasicDTO(Course course);
+
     List<CourseResponseDto> toDTOs(Collection<Course> courses);
 
     

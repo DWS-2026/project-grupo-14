@@ -1,5 +1,7 @@
 package es.codeurjc.AcademiaElSoto.dto;
 
+import java.util.List;
+
 public class CourseResponseDto {
 
     private Long id;
@@ -7,12 +9,12 @@ public class CourseResponseDto {
     private String teacher;
     private int price;
     private String description;
-    private int students;
+    private List<UserBasicDto> students; 
 
     public CourseResponseDto() {
     }
 
-    public CourseResponseDto(Long id, String courseName, String teacher, int price, String description, int students) {
+    public CourseResponseDto(Long id, String courseName, String teacher, int price, String description, List<UserBasicDto> students) {
         this.id = id;
         this.courseName = courseName;
         this.teacher = teacher;
@@ -61,11 +63,11 @@ public class CourseResponseDto {
         this.description = description;
     }
 
-    public int getStudents() {
+    public List<UserBasicDto> getStudents() {
         return students;
     }
 
-    public void setStudents(int students) {
+    public void setStudents(List<UserBasicDto> students) {
         this.students = students;
     }
 }

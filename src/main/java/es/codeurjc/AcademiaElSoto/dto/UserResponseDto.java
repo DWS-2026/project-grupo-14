@@ -9,13 +9,13 @@ public class UserResponseDto {
     private String lastName;
     private String email;
     private List<String> roles;
-    private int purchasedCourses;
+    private List<CourseBasicDto> purchasedCourses; 
 
     public UserResponseDto() {
     }
 
-    public UserResponseDto(Long id, String userName, String lastName, String email, List<String> roles,
-            int purchasedCourses) {
+    public UserResponseDto(Long id, String userName, String lastName, String email, 
+                           List<String> roles, List<CourseBasicDto> purchasedCourses) {
         this.id = id;
         this.userName = userName;
         this.lastName = lastName;
@@ -44,7 +44,7 @@ public class UserResponseDto {
         return roles;
     }
 
-    public int getPurchasedCourses() {
+    public List<CourseBasicDto> getPurchasedCourses() {
         return purchasedCourses;
     }
 }

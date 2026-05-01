@@ -6,6 +6,7 @@ import org.mapstruct.MappingTarget;
 import java.util.Collection;
 import java.util.List;
 
+import es.codeurjc.AcademiaElSoto.dto.UserBasicDto;
 import es.codeurjc.AcademiaElSoto.dto.UserRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.UserResponseDto;
 import es.codeurjc.AcademiaElSoto.model.User;
@@ -18,6 +19,8 @@ public interface UserMapper {
 
     
     List<UserResponseDto> toDTOs(Collection<User> users);
+    
+    UserBasicDto toBasicDTO(User user);
 
     
     User toEntity(UserRequestDto dto);
