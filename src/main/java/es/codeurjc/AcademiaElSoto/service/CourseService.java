@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.util.List;
 import java.util.Optional;
-
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.AcademiaElSoto.model.Course;
+import es.codeurjc.AcademiaElSoto.model.Image;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
 
 /**
@@ -114,5 +114,39 @@ public class CourseService {
      */
     public void deleteById(Long id) {
         courseRepository.deleteById(id);
+    }
+
+    public Course addImageToCourse(long id, Image image) {
+		Course course = courseRepository.findById(id).orElseThrow();
+		course.getImages().add(image);
+		courseRepository.save(course);
+
+		return course;
+	}
+
+	public Course removeImageCourse(long postId, Image image) {
+		Course course = courseRepository.findById(postId).orElseThrow();
+		course.getImages().remove(image);
+		courseRepository.save(course);
+
+		return course;
+	}
+
+    public Course replaceCourse(long id, Course updatedCourse) {
+        // 1. Buscamos el curso original (o lanzamos excepción si no existe)
+        Course course = courseRepository.findById(id).orElseThrow();
+
+        // 2. Aseguramos que el nuevo objeto tenga el ID correcto
+        updatedCourse.setId(id);
+
+        // 3. Mantenemos las imágenes que ya tenía el curso original
+        // Importante: Usamos getImages() si tienes la lista como en Post
+        updatedCourse.setImages(course.getImages());
+
+        // 4. Si también quieres mantener los comentarios, podrías añadir:
+        // updatedCourse.setComments(course.getComments());
+
+        // 5. Guardamos y retornamos
+        return courseRepository.save(updatedCourse);
     }
 }

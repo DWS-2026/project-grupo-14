@@ -32,6 +32,13 @@ import es.codeurjc.AcademiaElSoto.mapper.CourseMapper;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import es.codeurjc.AcademiaElSoto.model.Image; // Tu modelo Image
+import es.codeurjc.AcademiaElSoto.dto.ImageDTO; // Tu DTO
+import es.codeurjc.AcademiaElSoto.mapper.ImageMapper; // Tu Mapper de Image
+import es.codeurjc.AcademiaElSoto.service.ImageService; // Tu Servicio de Image
 
 @RestController // <-- La etiqueta mágica
 @RequestMapping("/api/courses") // <-- Todas las rutas empezarán por /api/courses
@@ -42,6 +49,12 @@ public class CourseRestController {
 
     @Autowired
     private CourseMapper mapper;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private ImageMapper imageMapper;
 
     @GetMapping
     public Page<CourseResponseDto> getCourses(Pageable pageable) {
@@ -140,6 +153,46 @@ public class CourseRestController {
         }
 
         return titles;
+    }
+
+    @PostMapping("/{id}/images/")
+    public ResponseEntity<ImageDTO> addImageToCourse(@PathVariable Long id, @RequestParam MultipartFile imageFile) 
+            throws IOException {
+
+        if (imageFile.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // 1. Creamos la entidad Image a partir del archivo
+        // Nota: Asegúrate de que imageService tenga el método createImage que acepte InputStream
+        Image image = imageService.createImage(imageFile.getInputStream());
+
+        // 2. Asociamos la imagen al curso
+        courseService.addImageToCourse(id, image);
+
+        // 3. Generamos la URI de la nueva imagen (apuntando al endpoint de descarga)
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/courses/{id}/image")
+                .buildAndExpand(id)
+                .toUri();
+
+        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
+    }
+
+    @DeleteMapping("/{courseId}/images/{imageId}")
+    public ResponseEntity<ImageDTO> deleteCourseImage(@PathVariable Long courseId, @PathVariable Long imageId) 
+            throws IOException {
+
+        // 1. Obtenemos la imagen para poder devolver el DTO al final
+        Image image = imageService.getImage(imageId); // Asegúrate de que este método exista en su service
+        
+        // 2. La desvinculamos del curso (lógica del CourseService)
+        courseService.removeImageCourse(courseId, image);
+        
+        // 3. La eliminamos físicamente/BD
+        imageService.deleteImage(imageId);
+
+        return ResponseEntity.ok(imageMapper.toDTO(image));
     }
     
 }

@@ -28,6 +28,9 @@ public class Course {
     @Lob
     private Blob imageFile;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
+
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
@@ -98,6 +101,13 @@ public class Course {
     public void setImageFile(Blob imageFile) {
         this.imageFile = imageFile;
     }
+    public List<Image> getImages() {
+		return images;
+	}
+
+    public void setImages(List<Image> images) {
+		this.images = images;
+	}
 
     public List<Comment> getComments() {
         return comments;

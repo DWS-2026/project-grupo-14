@@ -9,7 +9,8 @@ public class CourseResponseDto {
     private String teacher;
     private int price;
     private String description;
-    private List<UserBasicDto> students; 
+    private List<UserBasicDto> students;
+    private List<Long> imageIds; 
 
     public CourseResponseDto() {
     }
@@ -22,6 +23,9 @@ public class CourseResponseDto {
         this.description = description;
         this.students = students;
     }
+
+    public List<Long> getImageIds() { return imageIds; }
+    public void setImageIds(List<Long> imageIds) { this.imageIds = imageIds; }
 
     public Long getId() {
         return id;
