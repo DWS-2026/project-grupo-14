@@ -2,6 +2,7 @@ package es.codeurjc.AcademiaElSoto.restcontroller;
 
 import java.net.URI;
 import java.sql.Blob;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import java.sql.Blob;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import java.util.NoSuchElementException;
 
 import es.codeurjc.AcademiaElSoto.dto.CourseRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
@@ -107,5 +103,5 @@ public class CourseRestController {
                 .body(new InputStreamResource(image.getBinaryStream()));
     }
 
-    // EL MÉTODO PRIVADO toDto() YA NO ES NECESARIO, LO HACE EL MAPPER
+    
 }

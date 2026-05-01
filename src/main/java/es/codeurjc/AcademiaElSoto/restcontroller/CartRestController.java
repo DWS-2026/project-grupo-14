@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
+import es.codeurjc.AcademiaElSoto.dto.CartResponseDto;
+import es.codeurjc.AcademiaElSoto.mapper.CartMapper;
 import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.service.CartService;
@@ -22,21 +24,24 @@ public class CartRestController {
     @Autowired
     private CourseService courseService;
 
-    // 1. GET THE CART: GET /api/carts/{id}
+    @Autowired
+    private CartMapper mapper;
+
+    // 1. GET THE CART
     @GetMapping("/{id}")
-    public ResponseEntity<Cart> getCart(@PathVariable Long id) {
+    public ResponseEntity<CartResponseDto> getCart(@PathVariable Long id) {
         Optional<Cart> cartOpt = cartService.findById(id);
         
         if (cartOpt.isPresent()) {
-            return ResponseEntity.ok(cartOpt.get()); // 200 OK with the cart JSON
+            return ResponseEntity.ok(toDTO(cartOpt.get()));
         } else {
-            return ResponseEntity.notFound().build(); // 404 Error if the cart does not exist
+            return ResponseEntity.notFound().build();
         }
     }
 
-    // 2. ADD A COURSE TO THE CART: POST /api/carts/{cartId}/courses/{courseId}
+    // 2. ADD A COURSE TO THE CART
     @PostMapping("/{cartId}/courses/{courseId}")
-    public ResponseEntity<Cart> addCourseToCart(@PathVariable Long cartId, @PathVariable Long courseId) {
+    public ResponseEntity<CartResponseDto> addCourseToCart(@PathVariable Long cartId, @PathVariable Long courseId) {
         
         Optional<Cart> cartOpt = cartService.findById(cartId);
         Optional<Course> courseOpt = courseService.findById(courseId);
@@ -46,18 +51,17 @@ public class CartRestController {
             Course course = courseOpt.get();
 
             cart.getCourses().add(course);
-            cartService.save(cart); // Save the update to the DB
+            cartService.save(cart);
 
-            return ResponseEntity.ok(cart);
+            return ResponseEntity.ok(toDTO(cart));
         }
 
-        // If the cart or course does not exist, return 404 Not Found
         return ResponseEntity.notFound().build(); 
     }
 
-    // 3. REMOVE A COURSE FROM THE CART: DELETE /api/carts/{cartId}/courses/{courseId}
+    // 3. REMOVE A COURSE FROM THE CART
     @DeleteMapping("/{cartId}/courses/{courseId}")
-    public ResponseEntity<Cart> removeCourseFromCart(@PathVariable Long cartId, @PathVariable Long courseId) {
+    public ResponseEntity<CartResponseDto> removeCourseFromCart(@PathVariable Long cartId, @PathVariable Long courseId) {
         
         Optional<Cart> cartOpt = cartService.findById(cartId);
         Optional<Course> courseOpt = courseService.findById(courseId);
@@ -66,32 +70,38 @@ public class CartRestController {
             Cart cart = cartOpt.get();
             Course course = courseOpt.get();
 
-            // Remove the course from the cart's list
             cart.getCourses().remove(course);
-            cartService.save(cart); // Save the changes to the DB
+            cartService.save(cart);
 
-            return ResponseEntity.ok(cart);
+            return ResponseEntity.ok(toDTO(cart));
         }
 
         return ResponseEntity.notFound().build();
     }
     
-    // 4. CLEAR THE CART COMPLETELY: DELETE /api/carts/{cartId}/clear
+    // 4. CLEAR THE CART COMPLETELY
     @DeleteMapping("/{cartId}/clear")
-    public ResponseEntity<Cart> clearCart(@PathVariable Long cartId) {
+    public ResponseEntity<CartResponseDto> clearCart(@PathVariable Long cartId) {
         
         Optional<Cart> cartOpt = cartService.findById(cartId);
 
         if (cartOpt.isPresent()) {
             Cart cart = cartOpt.get();
             
-            // Empty the course list
             cart.getCourses().clear();
             cartService.save(cart);
             
-            return ResponseEntity.ok(cart);
+            return ResponseEntity.ok(toDTO(cart));
         }
 
         return ResponseEntity.notFound().build();
     }
+
+    
+
+    private CartResponseDto toDTO(Cart cart) {
+        return mapper.toDTO(cart);
+    }
+
+    
 }
