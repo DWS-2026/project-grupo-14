@@ -8,8 +8,9 @@ import es.codeurjc.AcademiaElSoto.dto.CartRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CartResponseDto;
 import es.codeurjc.AcademiaElSoto.model.Cart;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CourseMapper.class})
 public interface CartMapper {
+
 
     CartResponseDto toDTO(Cart cart);
 

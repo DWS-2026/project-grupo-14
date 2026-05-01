@@ -3,13 +3,13 @@ package es.codeurjc.AcademiaElSoto.restcontroller;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import es.codeurjc.AcademiaElSoto.dto.CommentRequestDto;

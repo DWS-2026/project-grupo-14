@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.Optional;
 
+import java.util.List;
+
 import es.codeurjc.AcademiaElSoto.dto.CartResponseDto;
-import es.codeurjc.AcademiaElSoto.mapper.CartMapper;
+import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
 import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.service.CartService;
@@ -23,9 +24,6 @@ public class CartRestController {
 
     @Autowired
     private CourseService courseService;
-
-    @Autowired
-    private CartMapper mapper;
 
     // 1. GET THE CART
     @GetMapping("/{id}")
@@ -97,11 +95,39 @@ public class CartRestController {
         return ResponseEntity.notFound().build();
     }
 
+    // MAPEO MANUAL: Sustituimos el Mapper por esta lógica simple
+   private CartResponseDto toDTO(Cart cart) {
+    CartResponseDto dto = new CartResponseDto();
     
-
-    private CartResponseDto toDTO(Cart cart) {
-        return mapper.toDTO(cart);
+    // 1. Datos básicos del carrito
+    dto.setId(cart.getId());
+    dto.setProduct("Carrito de compra"); // O el nombre que quieras darle
+    
+    // 2. Nombre del usuario (asumiendo que Cart tiene relación con User)
+    if (cart.getUser() != null) {
+        dto.setUserName(cart.getUser().getUserName());
     }
 
+    // 3. Convertir la lista de Course a List<CourseResponseDto>
+    if (cart.getCourses() != null) {
+        List<CourseResponseDto> courseDtos = cart.getCourses().stream()
+            .map(course -> {
+                // Creamos el DTO de cada curso a mano
+                CourseResponseDto cDto = new CourseResponseDto();
+                cDto.setId(course.getId());
+                cDto.setCourseName(course.getCourseName());
+                cDto.setPrice(course.getPrice()); // Asegúrate de que estos métodos existan en Course
+                return cDto;
+            })
+            .toList();
+            
+        dto.setCourses(courseDtos);
+
+        // 4. Calcular el precio total sumando los precios de los cursos
+        int total = courseDtos.stream().mapToInt(c -> c.getPrice()).sum();
+        dto.setPrice(total);
+    }
     
+    return dto;
+}
 }

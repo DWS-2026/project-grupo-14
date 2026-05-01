@@ -2,6 +2,7 @@ package es.codeurjc.AcademiaElSoto.restcontroller;
 
 import java.net.URI;
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
@@ -20,7 +21,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.List;
 
 import es.codeurjc.AcademiaElSoto.dto.CourseRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
@@ -103,5 +107,39 @@ public class CourseRestController {
                 .body(new InputStreamResource(image.getBinaryStream()));
     }
 
+    record BooksResponse(List<Book> items) {
+	}
+
+	record Book(VolumeInfo volumeInfo) {
+	}
+
+	record VolumeInfo(String title) {
+	}
+
+    @GetMapping("/{id}/recommended-books")
+    public List<String> getRecommendedBooks(@PathVariable Long id) {
+        // 1. Buscamos el curso en nuestra base de datos para saber su nombre
+        Course course = courseService.findById(id).orElseThrow();
+        String courseName = course.getCourseName(); 
+
+        // 2. Consultamos a Google Books usando el nombre del curso como filtro
+        RestClient restClient = RestClient.create();
+        
+        // Usamos el record o clase BooksResponse que ya tienes definida
+        BooksResponse data = restClient.get()
+                .uri("https://www.googleapis.com/books/v1/volumes?q=intitle:" + courseName)
+                .retrieve()
+                .body(BooksResponse.class);
+
+        // 3. Extraemos solo los títulos para no complicar el JSON de respuesta
+        List<String> titles = new ArrayList<>();
+        if (data != null && data.items() != null) {
+            for (Book book : data.items()) {
+                titles.add(book.volumeInfo().title());
+            }
+        }
+
+        return titles;
+    }
     
 }
