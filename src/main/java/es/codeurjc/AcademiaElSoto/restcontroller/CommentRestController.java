@@ -41,8 +41,8 @@ public class CommentRestController {
 
     @GetMapping("/{id}")
     public CommentResponseDto getCommentById(@PathVariable Long id) {
-        Comment comment = commentService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
+        // Usamos orElseThrow() sin parámetros para lanzar NoSuchElementException
+        Comment comment = commentService.findById(id).orElseThrow();
 
         return toDTO(comment);
     }
@@ -55,8 +55,8 @@ public class CommentRestController {
     @PostMapping
     public ResponseEntity<CommentResponseDto> createComment(@Valid @RequestBody CommentRequestDto commentRequestDto) {
 
-        Course course = courseService.findById(commentRequestDto.getCourseId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+        
+        Course course = courseService.findById(commentRequestDto.getCourseId()).orElseThrow();
 
         Comment comment = toEntity(commentRequestDto);
         comment.setPublicationDate(LocalDateTime.now());
@@ -76,13 +76,10 @@ public class CommentRestController {
     @PutMapping("/{id}")
     public CommentResponseDto updateComment(@PathVariable Long id, @Valid @RequestBody CommentRequestDto commentRequestDto) {
 
-        Comment existingComment = commentService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
-
-        Course course = courseService.findById(commentRequestDto.getCourseId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
-
         
+        Comment existingComment = commentService.findById(id).orElseThrow();
+        Course course = courseService.findById(commentRequestDto.getCourseId()).orElseThrow();
+
         mapper.updateEntity(commentRequestDto, existingComment);
         existingComment.setCourse(course);
 
@@ -93,8 +90,8 @@ public class CommentRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
-        Comment existingComment = commentService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
+        
+        Comment existingComment = commentService.findById(id).orElseThrow();
 
         commentService.deleteById(existingComment.getId());
         return ResponseEntity.noContent().build();

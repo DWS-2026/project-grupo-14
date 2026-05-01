@@ -52,6 +52,7 @@ public class UserRestController {
 
     @GetMapping("/{id}")
     public UserResponseDto getUserById(@PathVariable Long id) {
+        // Lanza NoSuchElementException si el id no existe
         User user = userService.findById(id).orElseThrow();
         return toDto(user);
     }
@@ -59,6 +60,7 @@ public class UserRestController {
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
 
+        
         if (userService.existsByUserName(userRequestDto.getUserName())) {
              throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
         }
@@ -67,9 +69,7 @@ public class UserRestController {
              throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
 
-        
         User user = toEntity(userRequestDto);
-        
         
         user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         user.setRoles(List.of("USER"));
@@ -89,15 +89,13 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}")
-    public UserResponseDto updateUser(@PathVariable Long id,
-            @Valid @RequestBody UserRequestDto userRequestDto) {
+    public UserResponseDto updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto userRequestDto) {
 
+        
         User existingUser = userService.findById(id).orElseThrow();
 
-        
         mapper.updateEntity(userRequestDto, existingUser);
 
-        
         if (userRequestDto.getPassword() != null && !userRequestDto.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         }
@@ -109,6 +107,7 @@ public class UserRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        
         User existingUser = userService.findById(id).orElseThrow();
         userService.deleteById(existingUser.getId());
         return ResponseEntity.noContent().build();
@@ -116,6 +115,7 @@ public class UserRestController {
 
     @GetMapping("/{id}/image")
     public ResponseEntity<Object> getUserImage(@PathVariable Long id) throws Exception {
+        
         User user = userService.findById(id).orElseThrow();
         Blob image = user.getProfileImage();
 
@@ -129,6 +129,7 @@ public class UserRestController {
                 .body(new InputStreamResource(image.getBinaryStream()));
     }
 
+    
 
     private UserResponseDto toDto(User user) {
         return mapper.toDTO(user);
