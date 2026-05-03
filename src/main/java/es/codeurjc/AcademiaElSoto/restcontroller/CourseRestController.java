@@ -40,6 +40,7 @@ import es.codeurjc.AcademiaElSoto.dto.ImageDTO; // Tu DTO
 import es.codeurjc.AcademiaElSoto.mapper.ImageMapper; // Tu Mapper de Image
 import es.codeurjc.AcademiaElSoto.service.ImageService; // Tu Servicio de Image
 
+
 @RestController // <-- La etiqueta mágica
 @RequestMapping("/api/courses") // <-- Todas las rutas empezarán por /api/courses
 public class CourseRestController {

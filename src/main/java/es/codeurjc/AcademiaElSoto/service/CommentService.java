@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import es.codeurjc.AcademiaElSoto.model.Comment;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
@@ -60,6 +63,10 @@ public class CommentService {
      */
     public List<Comment> findAllComments() {
         return commentRepository.findAll();
+    }
+
+    public Page<Comment> findAllComments(Pageable pageable) {
+        return commentRepository.findAll(pageable);
     }
 
     /**

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +37,10 @@ public class CartService {
      */
     public Optional<Cart> findById(Long id) {
         return cartRepository.findById(id);
+    }
+
+    public Page<Cart> findAll(Pageable pageable) {
+        return cartRepository.findAll(pageable);
     }
 
     /**

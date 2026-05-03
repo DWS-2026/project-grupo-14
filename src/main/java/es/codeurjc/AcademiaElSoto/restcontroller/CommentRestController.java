@@ -21,6 +21,10 @@ import es.codeurjc.AcademiaElSoto.service.CommentService;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+
 @RestController
 @RequestMapping("/api/v1/comments")
 public class CommentRestController {
@@ -35,8 +39,8 @@ public class CommentRestController {
     private CommentMapper mapper;
 
     @GetMapping
-    public Collection<CommentResponseDto> getComments() {
-        return toDTOs(commentService.findAllComments());
+    public Page<CommentResponseDto> getComments(Pageable pageable) {
+        return commentService.findAllComments(pageable).map(this::toDTO);
     }
 
     @GetMapping("/{id}")

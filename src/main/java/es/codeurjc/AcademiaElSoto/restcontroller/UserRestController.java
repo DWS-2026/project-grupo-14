@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -46,8 +49,9 @@ public class UserRestController {
     private UserMapper mapper;
 
     @GetMapping
-    public Collection<UserResponseDto> getUsers() {
-        return toDTOs(userService.getUsers());
+    public Page<UserResponseDto> getUsers(Pageable pageable) {
+        // Usamos el .map() de la página para convertir cada User en UserResponseDto
+        return userService.getUsers(pageable).map(this::toDto);
     }
 
     @GetMapping("/{id}")
