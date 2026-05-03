@@ -1,7 +1,7 @@
 package es.codeurjc.AcademiaElSoto.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+
 import org.mapstruct.MappingTarget;
 import java.util.Collection;
 import java.util.List;

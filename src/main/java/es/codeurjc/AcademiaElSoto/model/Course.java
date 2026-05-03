@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -23,10 +24,14 @@ public class Course {
     private String courseName;
     private int price;
     private String description;
-    private int students;
+ 
 
     @Lob
     private Blob imageFile;
+
+
+    @ManyToMany
+    private List<User> students;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
@@ -38,7 +43,7 @@ public class Course {
     public Course() {
     }
 
-    public Course(String teacher, String courseName, int price, String description, int students) {
+    public Course(String teacher, String courseName, int price, String description, List<User> students) {
         this.teacher = teacher;
         this.courseName = courseName;
         this.price = price;
@@ -86,11 +91,11 @@ public class Course {
         this.description = description;
     }
 
-    public int getStudents() {
+    public List<User> getStudents() {
         return students;
     }
 
-    public void setStudents(int students) {
+    public void setStudents(List<User> students) {
         this.students = students;
     }
 
