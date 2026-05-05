@@ -30,7 +30,7 @@ public class User {
     private String email;
     private String password;
     private String lastName;
-    
+
     // GOODBYE BLOB! Replaced with a OneToOne relationship to the Image entity
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Image profileImage;
@@ -141,6 +141,9 @@ public class User {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+        if (cart != null) {
+            cart.setUser(this);
+        }
     }
 
     public List<Course> getPurchasedCourses() {

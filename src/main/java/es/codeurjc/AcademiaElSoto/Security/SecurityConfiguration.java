@@ -74,9 +74,10 @@ public class SecurityConfiguration {
                                 .authorizeHttpRequests(authorize -> authorize
 
                                                 // Auth endpoints
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/signup").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/refresh").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/logout").permitAll()
 
                                                 // Public GET endpoints
                                                 .requestMatchers(HttpMethod.GET,
