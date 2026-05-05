@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -125,7 +126,7 @@ public class UserRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id, Authentication authentication) {
         checkPermissions(id, authentication); // <-- Security wall
         
         User existingUser = userService.findById(id).orElseThrow();
@@ -135,7 +136,11 @@ public class UserRestController {
         }
         
         userService.deleteById(existingUser.getId());
-        return ResponseEntity.noContent().build();
+        
+        // Create the response with the success message
+        Map<String, String> response = Map.of("message", "User deleted successfully"); 
+        
+        return ResponseEntity.ok(response);
     }
 
 
