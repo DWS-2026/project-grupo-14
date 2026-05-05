@@ -55,6 +55,22 @@ public class SecurityConfiguration {
         }
 
         @Bean
+        @Order(0)
+        public SecurityFilterChain apiDocsFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .securityMatcher(
+                                                "/v3/api-docs/**",
+                                                "/v3/api-docs.yaml",
+                                                "/swagger-ui/**",
+                                                "/swagger-ui.html")
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .anyRequest().permitAll())
+                                .csrf(csrf -> csrf.disable());
+
+                return http.build();
+        }
+
+        @Bean
         @Order(1)
         public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 
@@ -165,7 +181,11 @@ public class SecurityConfiguration {
                                                                 "/register", "/login", "/loginerror",
                                                                 "/403", "/404", "/500",
                                                                 "/css/**", "/js/**", "/img/**", "/assets/**",
-                                                                "/error/**")
+                                                                "/error/**", "/v3/api-docs/**",
+                                                                "/swagger-ui/**",
+                                                                "/swagger-ui.html",
+                                                                "/v3/api-docs/**",
+                                                                "/v3/api-docs.yaml")
                                                 .permitAll()
 
                                                 // Private web pages
