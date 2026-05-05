@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,14 +19,10 @@ import es.codeurjc.AcademiaElSoto.security.jwt.JwtTokenProvider;
 import es.codeurjc.AcademiaElSoto.security.jwt.UnauthorizedHandlerJwt;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import es.codeurjc.AcademiaElSoto.security.jwt.JwtRequestFilter;
-import es.codeurjc.AcademiaElSoto.security.jwt.JwtTokenProvider;
-import es.codeurjc.AcademiaElSoto.security.jwt.UnauthorizedHandlerJwt;
 
 @Configuration
 @EnableWebSecurity
@@ -84,9 +79,10 @@ public class SecurityConfiguration {
                                                                 "/api/v1/courses",
                                                                 "/api/v1/courses/*",
                                                                 "/api/v1/courses/*/image",
+                                                                "/api/v1/courses/*/comments",
+                                                                "/api/v1/courses/*/books",
                                                                 "/api/v1/comments",
                                                                 "/api/v1/comments/*",
-                                                                "/api/v1/comments/course/*",
                                                                 "/api/v1/users/*/image")
                                                 .permitAll()
 
@@ -96,6 +92,7 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.PUT, "/api/v1/courses/*").hasRole("ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/*")
                                                 .hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/users").hasRole("ADMIN")
 
                                                 // Logged users
                                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/*")
@@ -119,13 +116,15 @@ public class SecurityConfiguration {
                                                 .hasRole("ADMIN")
 
                                                 // Carts: authenticated users; ownership checked in controller/service
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/carts").hasRole("ADMIN")
                                                 .requestMatchers(HttpMethod.GET, "/api/v1/carts/**")
                                                 .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/carts/**")
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/carts")
                                                 .hasAnyRole("USER", "ADMIN")
                                                 .requestMatchers(HttpMethod.PUT, "/api/v1/carts/**")
                                                 .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/**")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/*").hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/*/courses/**")
                                                 .hasAnyRole("USER", "ADMIN")
 
                                                 // User image changes
@@ -168,44 +167,6 @@ public class SecurityConfiguration {
                                                                 "/css/**", "/js/**", "/img/**", "/assets/**",
                                                                 "/error/**")
                                                 .permitAll()
-
-                                                // Public REST authentication endpoints
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/signup").permitAll()
-
-                                                // Public REST GET endpoints
-                                                .requestMatchers(HttpMethod.GET,
-                                                                "/api/v1/courses",
-                                                                "/api/v1/courses/*",
-                                                                "/api/v1/courses/*/image",
-                                                                "/api/v1/comments",
-                                                                "/api/v1/comments/*",
-                                                                "/api/v1/comments/course/*",
-                                                                "/api/v1/users/*/image")
-                                                .permitAll()
-
-                                                // Admin-only REST endpoints
-                                                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
-
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/courses").hasRole("ADMIN")
-                                                .requestMatchers(HttpMethod.PUT, "/api/v1/courses/*").hasRole("ADMIN")
-                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/*")
-                                                .hasRole("ADMIN")
-
-                                                // Logged users REST endpoints
-                                                .requestMatchers(HttpMethod.GET, "/api/v1/users/*")
-                                                .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.PUT, "/api/v1/users/*")
-                                                .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*")
-                                                .hasAnyRole("USER", "ADMIN")
-
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/comments/**")
-                                                .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.PUT, "/api/v1/comments/**")
-                                                .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/**")
-                                                .hasAnyRole("USER", "ADMIN")
 
                                                 // Private web pages
                                                 .requestMatchers(
