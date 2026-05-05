@@ -131,17 +131,19 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/*/image")
                                                 .hasRole("ADMIN")
 
-                                                // Carts: authenticated users; ownership checked in controller/service
+                                                // Carts
                                                 .requestMatchers(HttpMethod.GET, "/api/v1/carts").hasRole("ADMIN")
-                                                .requestMatchers(HttpMethod.GET, "/api/v1/carts/**")
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/carts/me")
                                                 .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/carts")
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/carts/*")
                                                 .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.PUT, "/api/v1/carts/**")
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/carts/me/courses/*")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/me/courses")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/me/courses/*")
                                                 .hasAnyRole("USER", "ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/*").hasRole("ADMIN")
-                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/*/courses/**")
-                                                .hasAnyRole("USER", "ADMIN")
 
                                                 // User image changes
                                                 .requestMatchers(HttpMethod.POST, "/api/v1/users/*/image")
