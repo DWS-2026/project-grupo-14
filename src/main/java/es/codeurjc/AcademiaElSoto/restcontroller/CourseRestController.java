@@ -34,7 +34,7 @@ import es.codeurjc.AcademiaElSoto.service.ImageService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/courses")
+@RequestMapping("/api/v1/courses")
 public class CourseRestController {
 
     @Autowired
@@ -110,7 +110,7 @@ public class CourseRestController {
         }
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/courses/{id}/image")
+                .path("/api/v1/courses/{id}/image")
                 .buildAndExpand(id)
                 .toUri();
 

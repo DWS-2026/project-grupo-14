@@ -19,7 +19,7 @@ import es.codeurjc.AcademiaElSoto.service.CartService;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
 
 @RestController
-@RequestMapping("/api/carts")
+@RequestMapping("/api/v1/carts")
 public class CartRestController {
 
     @Autowired

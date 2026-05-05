@@ -74,9 +74,9 @@ public class SecurityConfiguration {
                                 .authorizeHttpRequests(authorize -> authorize
 
                                                 // Auth endpoints
-                                                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").permitAll()
 
                                                 // Public GET endpoints
                                                 .requestMatchers(HttpMethod.GET,
@@ -111,7 +111,29 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/**")
                                                 .hasAnyRole("USER", "ADMIN")
 
-                                                .anyRequest().permitAll());
+                                                // Course image management: admin only
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/courses/*/image")
+                                                .hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/*/image")
+                                                .hasRole("ADMIN")
+
+                                                // Carts: authenticated users; ownership checked in controller/service
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/carts/**")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/carts/**")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.PUT, "/api/v1/carts/**")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/**")
+                                                .hasAnyRole("USER", "ADMIN")
+
+                                                // User image changes
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/users/*/image")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*/image")
+                                                .hasAnyRole("USER", "ADMIN")
+
+                                                .anyRequest().authenticated());
 
                 http.formLogin(formLogin -> formLogin.disable());
                 http.csrf(csrf -> csrf.disable());
