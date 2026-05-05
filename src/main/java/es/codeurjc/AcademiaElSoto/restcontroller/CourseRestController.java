@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.util.List;
 
@@ -56,6 +59,8 @@ public class CourseRestController {
 
     @Autowired
     private ImageMapper imageMapper;
+
+    private final Path root = Paths.get("uploads");
 
     @GetMapping
     public Page<CourseResponseDto> getCourses(Pageable pageable) {
@@ -194,6 +199,14 @@ public class CourseRestController {
         imageService.deleteImage(imageId);
 
         return ResponseEntity.ok(imageMapper.toDTO(image));
+    }
+
+    public void saveFile(MultipartFile file) throws IOException {
+        if (!Files.exists(root)) {
+            Files.createDirectory(root);
+        }
+        
+        Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
     }
     
 }
