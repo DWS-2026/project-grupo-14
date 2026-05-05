@@ -58,11 +58,6 @@ public class CommentRestController {
         return toDTO(comment);
     }
 
-    @GetMapping("/course/{courseId}")
-    public Collection<CommentResponseDto> getCommentsByCourse(@PathVariable Long courseId) {
-        return toDTOs(commentService.findByCourseId(courseId));
-    }
-
     @PostMapping
     public ResponseEntity<CommentResponseDto> createComment(@Valid @RequestBody CommentRequestDto commentRequestDto,
             Authentication authentication) {
