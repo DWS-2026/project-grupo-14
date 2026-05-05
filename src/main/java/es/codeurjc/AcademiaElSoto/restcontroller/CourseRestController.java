@@ -1,17 +1,16 @@
 package es.codeurjc.AcademiaElSoto.restcontroller;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
-import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.NoSuchElementException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,32 +19,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import java.util.List;
 
 import es.codeurjc.AcademiaElSoto.dto.CourseRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
 import es.codeurjc.AcademiaElSoto.mapper.CourseMapper;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
+import es.codeurjc.AcademiaElSoto.service.ImageService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import es.codeurjc.AcademiaElSoto.model.Image; // Tu modelo Image
-import es.codeurjc.AcademiaElSoto.dto.ImageDTO; // Tu DTO
-import es.codeurjc.AcademiaElSoto.mapper.ImageMapper; // Tu Mapper de Image
-import es.codeurjc.AcademiaElSoto.service.ImageService; // Tu Servicio de Image
 
-
-@RestController // <-- La etiqueta mágica
-@RequestMapping("/api/courses") // <-- Todas las rutas empezarán por /api/courses
+@RestController
+@RequestMapping("/api/courses")
 public class CourseRestController {
 
     @Autowired
@@ -57,30 +46,22 @@ public class CourseRestController {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private ImageMapper imageMapper;
-
-    private final Path root = Paths.get("uploads");
+    // --- BASIC CRUD METHODS ---
 
     @GetMapping
     public Page<CourseResponseDto> getCourses(Pageable pageable) {
-        
         return courseService.findAll(pageable).map(mapper::toDTO);
     }
 
-    // Cuando alguien busque un curso específico: /api/courses/1
     @GetMapping("/{id}")
     public CourseResponseDto getCourseById(@PathVariable Long id) {
         Course course = courseService.findById(id).orElseThrow();
-        return mapper.toDTO(course); 
+        return mapper.toDTO(course);
     }
 
     @PostMapping
     public ResponseEntity<CourseResponseDto> createCourse(@Valid @RequestBody CourseRequestDto courseRequestDto) {
-
-        
         Course course = mapper.toEntity(courseRequestDto);
-
         Course savedCourse = courseService.save(course);
 
         URI location = ServletUriComponentsBuilder
@@ -94,12 +75,8 @@ public class CourseRestController {
 
     @PutMapping("/{id}")
     public CourseResponseDto updateCourse(@PathVariable Long id, @Valid @RequestBody CourseRequestDto courseRequestDto) {
-
         Course existingCourse = courseService.findById(id).orElseThrow();
-
-        
         mapper.updateEntity(courseRequestDto, existingCourse);
-
         Course updatedCourse = courseService.save(existingCourse);
         return mapper.toDTO(updatedCourse);
     }
@@ -111,46 +88,87 @@ public class CourseRestController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/image")
-    public ResponseEntity<Object> getCourseImage(@PathVariable Long id) throws Exception {
-        Course course = courseService.findById(id).orElseThrow();
-        Blob image = course.getImageFile();
+    // --- NEW DISK IMAGE SYSTEM (ITEM 15) ---
 
-        if (image == null) {
-            throw new NoSuchElementException();
+    // 1. Upload/Add image to course
+    @PostMapping("/{id}/image")
+    public ResponseEntity<Object> uploadCourseImage(@PathVariable Long id, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+        
+        if (imageFile.isEmpty()) {
+            return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
-                .body(new InputStreamResource(image.getBinaryStream()));
+        Course course = courseService.findById(id).orElseThrow();
+
+        // If it already has an image, replace it. Otherwise, create a new one.
+        if (course.getImage() != null) {
+            imageService.replaceImageFile(course.getImage().getId(), imageFile);
+        } else {
+            // Create image in disk and DB, then link to course
+            es.codeurjc.AcademiaElSoto.model.Image newImage = imageService.createImage(imageFile);
+            courseService.addImageToCourse(id, newImage);
+        }
+
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/courses/{id}/image")
+                .buildAndExpand(id)
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
-    record BooksResponse(List<Book> items) {
-	}
+    // 2. Download/View the image
+    @GetMapping("/{id}/image")
+    public ResponseEntity<Resource> downloadCourseImage(@PathVariable Long id) throws MalformedURLException {
+        Course course = courseService.findById(id).orElseThrow();
 
-	record Book(VolumeInfo volumeInfo) {
-	}
+        if (course.getImage() != null) {
+            // Fetch the physical file using the image ID
+            Resource file = imageService.getImageFile(course.getImage().getId());
 
-	record VolumeInfo(String title) {
-	}
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg") 
+                    .body(file);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // 3. Delete the image
+    @DeleteMapping("/{courseId}/image")
+    public ResponseEntity<Void> deleteCourseImage(@PathVariable Long courseId) {
+        Course course = courseService.findById(courseId).orElseThrow();
+
+        if (course.getImage() != null) {
+            Long imageId = course.getImage().getId();
+            // Unlink from the course first
+            courseService.removeImageCourse(courseId, course.getImage());
+            // Delete image from disk and DB
+            imageService.deleteImage(imageId);
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+
+    // --- EXTERNAL API (GOOGLE BOOKS) ---
+
+    record BooksResponse(List<Book> items) {}
+    record Book(VolumeInfo volumeInfo) {}
+    record VolumeInfo(String title) {}
 
     @GetMapping("/{id}/recommended-books")
     public List<String> getRecommendedBooks(@PathVariable Long id) {
-        // 1. Buscamos el curso en nuestra base de datos para saber su nombre
         Course course = courseService.findById(id).orElseThrow();
-        String courseName = course.getCourseName(); 
+        String courseName = course.getCourseName();
 
-        // 2. Consultamos a Google Books usando el nombre del curso como filtro
         RestClient restClient = RestClient.create();
-        
-        // Usamos el record o clase BooksResponse que ya tienes definida
+
         BooksResponse data = restClient.get()
                 .uri("https://www.googleapis.com/books/v1/volumes?q=intitle:" + courseName)
                 .retrieve()
                 .body(BooksResponse.class);
 
-        // 3. Extraemos solo los títulos para no complicar el JSON de respuesta
         List<String> titles = new ArrayList<>();
         if (data != null && data.items() != null) {
             for (Book book : data.items()) {
@@ -160,53 +178,4 @@ public class CourseRestController {
 
         return titles;
     }
-
-    @PostMapping("/{id}/images/")
-    public ResponseEntity<ImageDTO> addImageToCourse(@PathVariable Long id, @RequestParam MultipartFile imageFile) 
-            throws IOException {
-
-        if (imageFile.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        // 1. Creamos la entidad Image a partir del archivo
-        // Nota: Asegúrate de que imageService tenga el método createImage que acepte InputStream
-        Image image = imageService.createImage(imageFile.getInputStream());
-
-        // 2. Asociamos la imagen al curso
-        courseService.addImageToCourse(id, image);
-
-        // 3. Generamos la URI de la nueva imagen (apuntando al endpoint de descarga)
-        URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/courses/{id}/image")
-                .buildAndExpand(id)
-                .toUri();
-
-        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
-    }
-
-    @DeleteMapping("/{courseId}/images/{imageId}")
-    public ResponseEntity<ImageDTO> deleteCourseImage(@PathVariable Long courseId, @PathVariable Long imageId) 
-            throws IOException {
-
-        // 1. Obtenemos la imagen para poder devolver el DTO al final
-        Image image = imageService.getImage(imageId); // Asegúrate de que este método exista en su service
-        
-        // 2. La desvinculamos del curso (lógica del CourseService)
-        courseService.removeImageCourse(courseId, image);
-        
-        // 3. La eliminamos físicamente/BD
-        imageService.deleteImage(imageId);
-
-        return ResponseEntity.ok(imageMapper.toDTO(image));
-    }
-
-    public void saveFile(MultipartFile file) throws IOException {
-        if (!Files.exists(root)) {
-            Files.createDirectory(root);
-        }
-        
-        Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
-    }
-    
 }

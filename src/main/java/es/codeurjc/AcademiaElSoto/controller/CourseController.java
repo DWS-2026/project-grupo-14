@@ -3,11 +3,9 @@ package es.codeurjc.AcademiaElSoto.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.sql.rowset.serial.SerialBlob;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.AcademiaElSoto.model.Course;
+import es.codeurjc.AcademiaElSoto.model.Image;
 import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
 import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
+import es.codeurjc.AcademiaElSoto.service.ImageService; // Imported the new service
 
 @Controller
 public class CourseController {
@@ -29,6 +29,9 @@ public class CourseController {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private ImageService imageService; // Injected the image service
 
     /**
      * Displays all available courses.
@@ -50,7 +53,8 @@ public class CourseController {
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
             model.addAttribute("course", course);
-            model.addAttribute("hasImage", course.getImageFile() != null);
+            // Updated to check the new Image relationship
+            model.addAttribute("hasImage", course.getImage() != null);
             model.addAttribute("comments", commentRepository.findByCourseIdOrderByPublicationDateDesc(id));
             return "course_db/show_course";
         }
@@ -60,13 +64,15 @@ public class CourseController {
 
     /**
      * Creates a new course from the admin panel.
-     * If an image is uploaded, it is stored in the database as a blob.
+     * If an image is uploaded, it is stored physically on disk.
      */
     @PostMapping("/admin/courses/new")
-    public String newCourse(Model model, Course course, @RequestParam MultipartFile image) {
+    public String newCourse(Model model, Course course, @RequestParam("image") MultipartFile imageFile) {
         try {
-            if (!image.isEmpty()) {
-                course.setImageFile(new SerialBlob(image.getBytes()));
+            if (!imageFile.isEmpty()) {
+                // Save image to disk and DB, then link to course
+                Image newImage = imageService.createImage(imageFile);
+                course.setImage(newImage);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -88,19 +94,23 @@ public class CourseController {
 
     /**
      * Returns the image associated with a course.
-     * If the course has no image, a 404 response is returned.
+     * Fetches it from the disk using the ImageService.
      */
     @GetMapping("/course/{id}/image")
-    public ResponseEntity<Object> getImage(@PathVariable long id) throws Exception {
-        Course course = courseRepository.findById(id).orElseThrow();
+    public ResponseEntity<Resource> getImage(@PathVariable long id) {
+        try {
+            Course course = courseRepository.findById(id).orElseThrow();
 
-        if (course.getImageFile() != null) {
-            return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(new InputStreamResource(course.getImageFile().getBinaryStream()));
+            if (course.getImage() != null) {
+                Resource file = imageService.getImageFile(course.getImage().getId());
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                        .body(file);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
+        
         return ResponseEntity.notFound().build();
     }
 
@@ -121,13 +131,13 @@ public class CourseController {
 
     /**
      * Processes the admin update of a course.
-     * If a new image is uploaded, the old one is replaced.
+     * If a new image is uploaded, the old one on disk is replaced.
      */
     @PostMapping("/admin/courses/{id}/edit")
     public String editCourseProcess(Model model,
             @PathVariable long id,
             Course editedCourse,
-            @RequestParam(required = false) MultipartFile image) {
+            @RequestParam(name = "image", required = false) MultipartFile imageFile) {
 
         Optional<Course> courseOptional = courseRepository.findById(id);
 
@@ -141,8 +151,15 @@ public class CourseController {
             existingCourse.setStudents(editedCourse.getStudents());
 
             try {
-                if (image != null && !image.isEmpty()) {
-                    existingCourse.setImageFile(new SerialBlob(image.getBytes()));
+                if (imageFile != null && !imageFile.isEmpty()) {
+                    if (existingCourse.getImage() != null) {
+                        // Replace existing image physically and in DB
+                        imageService.replaceImageFile(existingCourse.getImage().getId(), imageFile);
+                    } else {
+                        // Create a new image if it didn't have one
+                        Image newImage = imageService.createImage(imageFile);
+                        existingCourse.setImage(newImage);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -164,6 +181,13 @@ public class CourseController {
         Optional<Course> courseOptional = courseRepository.findById(id);
 
         if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            
+            // Delete associated image from disk before deleting the course
+            if (course.getImage() != null) {
+                imageService.deleteImage(course.getImage().getId());
+            }
+            
             courseRepository.deleteById(id);
             return "course_db/deleted_course";
         }

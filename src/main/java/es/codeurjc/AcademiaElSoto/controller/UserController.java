@@ -3,28 +3,29 @@ package es.codeurjc.AcademiaElSoto.controller;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.sql.rowset.serial.SerialBlob;
 
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.AcademiaElSoto.dto.AdminUserView;
 import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.Comment;
 import es.codeurjc.AcademiaElSoto.model.Course;
+import es.codeurjc.AcademiaElSoto.model.Image;
 import es.codeurjc.AcademiaElSoto.model.User;
 import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
 import es.codeurjc.AcademiaElSoto.repository.UserRepository;
+import es.codeurjc.AcademiaElSoto.service.ImageService;
 import es.codeurjc.AcademiaElSoto.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
@@ -42,6 +43,9 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ImageService imageService; // Injected our new ImageService
 
     /**
      * Displays the registration form.
@@ -130,6 +134,7 @@ public class UserController {
         model.addAttribute("userName", userFromDb.getUserName());
         model.addAttribute("lastName", userFromDb.getLastName());
         model.addAttribute("email", userFromDb.getEmail());
+        // Check if the user has an image relationship
         model.addAttribute("hasProfileImage", userFromDb.getProfileImage() != null);
 
         List<Comment> misComentarios = commentRepository.findByUser(userFromDb.getUserName());
@@ -141,15 +146,23 @@ public class UserController {
         return "user";
     }
 
+    /**
+     * Returns the user's profile image.
+     * Fetches it from the disk using the ImageService.
+     */
     @GetMapping("/user/{id}/image")
-    public ResponseEntity<Object> getUserImage(@PathVariable long id) throws Exception {
-        User user = userRepository.findById(id).orElseThrow();
+    public ResponseEntity<Resource> getUserImage(@PathVariable long id) {
+        try {
+            User user = userRepository.findById(id).orElseThrow();
 
-        if (user.getProfileImage() != null) {
-            return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(new InputStreamResource(user.getProfileImage().getBinaryStream()));
+            if (user.getProfileImage() != null) {
+                Resource file = imageService.getImageFile(user.getProfileImage().getId());
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                        .body(file);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return ResponseEntity.notFound().build();
@@ -185,9 +198,7 @@ public class UserController {
 
     /**
      * Processes the update of the authenticated user's own profile.
-     * If a new password is provided, it is encoded before saving.
-     * After updating the data, the session is invalidated and the user must log in
-     * again.
+     * If a new profile image is uploaded, it is physically saved to the disk.
      */
     @PostMapping("/profile/edit")
     public String editOwnProfileProcess(
@@ -217,12 +228,16 @@ public class UserController {
         if (editedUser.getPassword() != null && !editedUser.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
         }
+        
         try {
             if (image != null && !image.isEmpty()) {
-                String contentType = image.getContentType();
-
-                if (contentType != null && contentType.startsWith("image/")) {
-                    existingUser.setProfileImage(new SerialBlob(image.getBytes()));
+                if (existingUser.getProfileImage() != null) {
+                    // Replace existing image in disk and DB
+                    imageService.replaceImageFile(existingUser.getProfileImage().getId(), image);
+                } else {
+                    // Create new image in disk and DB
+                    Image newImage = imageService.createImage(image);
+                    existingUser.setProfileImage(newImage);
                 }
             }
         } catch (Exception e) {
@@ -237,7 +252,6 @@ public class UserController {
 
     /**
      * Displays the admin list of users.
-     * It builds a custom view object with summarized information for each user.
      */
     @GetMapping("/admin/users")
     public String showAdminUsers(Model model) {
@@ -251,8 +265,8 @@ public class UserController {
 
             String purchasedCourseNames = user.getPurchasedCourses() != null && !user.getPurchasedCourses().isEmpty()
                     ? user.getPurchasedCourses().stream()
-                            .map(Course::getCourseName)
-                            .collect(Collectors.joining(", "))
+                    .map(Course::getCourseName)
+                    .collect(Collectors.joining(", "))
                     : "Sin cursos";
 
             return new AdminUserView(
@@ -269,7 +283,6 @@ public class UserController {
 
     /**
      * Displays the profile of a specific user from the admin panel.
-     * It includes personal data, purchased courses, and comments.
      */
     @GetMapping("/admin/user/{id}")
     public String showAdminUserProfile(@PathVariable Long id, Model model) {
@@ -295,8 +308,7 @@ public class UserController {
 
     /**
      * Deletes a user from the admin panel.
-     * Before deleting the user, their comments are removed and
-     * the purchased courses relationship is cleared.
+     * Before deleting the user, their comments and profile image are removed.
      */
     @PostMapping("/admin/user/{id}/delete")
     public String deleteUser(@PathVariable Long id) {
@@ -310,8 +322,13 @@ public class UserController {
             commentRepository.deleteAll(userComments);
 
             user.getPurchasedCourses().clear();
-            userRepository.save(user);
+            
+            // Delete profile image from disk
+            if (user.getProfileImage() != null) {
+                imageService.deleteImage(user.getProfileImage().getId());
+            }
 
+            userRepository.save(user);
             userRepository.delete(user);
         }
 
@@ -343,7 +360,7 @@ public class UserController {
 
     /**
      * Processes the admin update of a user.
-     * If a new password is provided, it is encoded before saving.
+     * If a new profile image is uploaded, it is physically saved to the disk.
      */
     @PostMapping("/admin/user/{id}/edit")
     public String editUserProcess(Model model, @PathVariable Long id, User editedUser,
@@ -362,17 +379,20 @@ public class UserController {
             if (editedUser.getPassword() != null && !editedUser.getPassword().isBlank()) {
                 existingUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
             }
+            
             try {
                 if (image != null && !image.isEmpty()) {
-                    String contentType = image.getContentType();
-
-                    if (contentType != null && contentType.startsWith("image/")) {
-                        existingUser.setProfileImage(new SerialBlob(image.getBytes()));
+                    if (existingUser.getProfileImage() != null) {
+                        imageService.replaceImageFile(existingUser.getProfileImage().getId(), image);
+                    } else {
+                        Image newImage = imageService.createImage(image);
+                        existingUser.setProfileImage(newImage);
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            
             userRepository.save(existingUser);
 
             model.addAttribute("userName", existingUser.getUserName());

@@ -1,6 +1,5 @@
 package es.codeurjc.AcademiaElSoto.model;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne; // Add this import
 
 @Entity
 public class Course {
@@ -24,22 +23,22 @@ public class Course {
     private String courseName;
     private int price;
     private String description;
- 
 
-    @Lob
-    private Blob imageFile;
-
+    // 1. GOODBYE BLOB! We replace it with a OneToOne relationship to our new Image entity
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Image image;
 
     @ManyToMany
     private List<User> students;
 
+    // We keep this in case you are using a gallery of multiple images elsewhere
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    // It is important to include the default constructor.
+    // Default constructor is mandatory for JPA
     public Course() {
     }
 
@@ -50,6 +49,8 @@ public class Course {
         this.description = description;
         this.students = students;
     }
+
+    // --- GETTERS & SETTERS ---
 
     public Long getId() {
         return id;
@@ -99,20 +100,22 @@ public class Course {
         this.students = students;
     }
 
-    public Blob getImageFile() {
-        return imageFile;
+    // 2. NEW GETTERS AND SETTERS FOR THE IMAGE
+    public Image getImage() {
+        return image;
     }
 
-    public void setImageFile(Blob imageFile) {
-        this.imageFile = imageFile;
+    public void setImage(Image image) {
+        this.image = image;
     }
+
     public List<Image> getImages() {
-		return images;
-	}
+        return images;
+    }
 
     public void setImages(List<Image> images) {
-		this.images = images;
-	}
+        this.images = images;
+    }
 
     public List<Comment> getComments() {
         return comments;
@@ -127,4 +130,3 @@ public class Course {
         comment.setCourse(this);
     }
 }
-

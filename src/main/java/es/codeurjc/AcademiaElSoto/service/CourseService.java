@@ -1,18 +1,12 @@
 package es.codeurjc.AcademiaElSoto.service;
 
-import java.io.IOException;
-import java.sql.Blob;
 import java.util.List;
 import java.util.Optional;
-import javax.sql.rowset.serial.SerialBlob;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.model.Image;
@@ -30,34 +24,15 @@ public class CourseService {
     private CourseRepository courseRepository;
 
     /**
-     * Saves or updates a course without modifying its image.
+     * Saves or updates a course.
+     * (The overloaded method with MultipartFile was removed because 
+     * ImageService now handles disk storage directly).
      *
      * @param course the course to save
      * @return the saved course
      */
     public Course save(Course course) {
         return courseRepository.save(course);
-    }
-
-    /**
-     * Saves or updates a course including an uploaded image.
-     * If the image exists, it is converted into a Blob and stored in the course.
-     *
-     * @param course    the course to save
-     * @param imageFile the uploaded image file
-     * @return the saved course
-     * @throws IOException if an error occurs while creating the image Blob
-     */
-    public Course save(Course course, MultipartFile imageFile) throws IOException {
-        if (imageFile != null && !imageFile.isEmpty()) {
-            try {
-                Blob blob = new SerialBlob(imageFile.getBytes());
-                course.setImageFile(blob);
-            } catch (Exception e) {
-                throw new IOException("Error creating the image Blob", e);
-            }
-        }
-        return this.save(course);
     }
 
     /**
@@ -118,37 +93,55 @@ public class CourseService {
         courseRepository.deleteById(id);
     }
 
+    /**
+     * Links a main image to a course.
+     *
+     * @param id course identifier
+     * @param image the image entity to link
+     * @return the updated course
+     */
     public Course addImageToCourse(long id, Image image) {
-		Course course = courseRepository.findById(id).orElseThrow();
-		course.getImages().add(image);
-		courseRepository.save(course);
+        Course course = courseRepository.findById(id).orElseThrow();
+        course.setImage(image); // Set the main one-to-one image
+        return courseRepository.save(course);
+    }
 
-		return course;
-	}
+    /**
+     * Unlinks the main image from a course.
+     *
+     * @param courseId course identifier
+     * @param image the image entity to unlink
+     * @return the updated course
+     */
+    public Course removeImageCourse(long courseId, Image image) {
+        Course course = courseRepository.findById(courseId).orElseThrow();
+        course.setImage(null); // Unlink the main image
+        return courseRepository.save(course);
+    }
 
-	public Course removeImageCourse(long postId, Image image) {
-		Course course = courseRepository.findById(postId).orElseThrow();
-		course.getImages().remove(image);
-		courseRepository.save(course);
-
-		return course;
-	}
-
+    /**
+     * Replaces a course entity with a new one while preserving existing 
+     * relationships like images or comments.
+     * 
+     * @param id course identifier
+     * @param updatedCourse the new course data
+     * @return the updated course saved in the database
+     */
     public Course replaceCourse(long id, Course updatedCourse) {
-        // 1. Buscamos el curso original (o lanzamos excepción si no existe)
+        // 1. Find the original course (or throw an exception if it doesn't exist)
         Course course = courseRepository.findById(id).orElseThrow();
 
-        // 2. Aseguramos que el nuevo objeto tenga el ID correcto
+        // 2. Ensure the new object has the correct ID
         updatedCourse.setId(id);
 
-        // 3. Mantenemos las imágenes que ya tenía el curso original
-        // Importante: Usamos getImages() si tienes la lista como en Post
+        // 3. Keep the existing images (Main image and gallery)
+        updatedCourse.setImage(course.getImage());
         updatedCourse.setImages(course.getImages());
 
-        // 4. Si también quieres mantener los comentarios, podrías añadir:
+        // 4. (Optional) Keep the comments if you don't want to lose them on edit:
         // updatedCourse.setComments(course.getComments());
 
-        // 5. Guardamos y retornamos
+        // 5. Save and return
         return courseRepository.save(updatedCourse);
     }
 }

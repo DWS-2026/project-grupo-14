@@ -1,51 +1,45 @@
 package es.codeurjc.AcademiaElSoto.model;
 
-
-
-import java.sql.Blob;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 
 @Entity
 public class Image {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@Lob
-	private Blob imageFile;
+    // We replace Blob with a String to store the file name on disk
+    private String fileName;
 
-	public Image() {
-	}
+    public Image() {
+    }
 
-	public Image(Blob imageFile) {
-		this.imageFile = imageFile;
-	}
+    public Image(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Blob getImageFile() {
-		return imageFile;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public void setImageFile(Blob imageFile) {
-		this.imageFile = imageFile;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	@Override
-	public String toString() {
-		return "Image [id=" + id + "]";
-	}
+    @Override
+    public String toString() {
+        return "Image [id=" + id + ", fileName=" + fileName + "]";
+    }
 }
-

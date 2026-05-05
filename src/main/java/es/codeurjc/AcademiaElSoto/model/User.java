@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.sql.Blob;
-import jakarta.persistence.Lob;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -32,8 +30,10 @@ public class User {
     private String email;
     private String password;
     private String lastName;
-    @Lob
-    private Blob profileImage;
+    
+    // GOODBYE BLOB! Replaced with a OneToOne relationship to the Image entity
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Image profileImage;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
@@ -60,8 +60,14 @@ public class User {
         this.roles = List.of(roles);
     }
 
+    // --- GETTERS & SETTERS ---
+
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getInfo() {
@@ -72,11 +78,12 @@ public class User {
         this.info = info;
     }
 
-    public Blob getProfileImage() {
+    // New Image getters and setters
+    public Image getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(Blob profileImage) {
+    public void setProfileImage(Image profileImage) {
         this.profileImage = profileImage;
     }
 
@@ -84,8 +91,8 @@ public class User {
         return userName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEncodedPassword() {
@@ -102,10 +109,6 @@ public class User {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getEmail() {
