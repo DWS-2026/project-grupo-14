@@ -24,6 +24,8 @@ public class UserResponseDto {
         this.purchasedCourses = purchasedCourses;
     }
 
+    // --- GETTERS ---
+
     public Long getId() {
         return id;
     }
@@ -46,5 +48,31 @@ public class UserResponseDto {
 
     public List<CourseBasicDto> getPurchasedCourses() {
         return purchasedCourses;
+    }
+
+    // --- SETTERS (¡La pieza que faltaba!) ---
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public void setPurchasedCourses(List<CourseBasicDto> purchasedCourses) {
+        this.purchasedCourses = purchasedCourses;
     }
 }
