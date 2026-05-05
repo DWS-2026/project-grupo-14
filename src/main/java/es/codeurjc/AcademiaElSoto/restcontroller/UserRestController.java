@@ -37,6 +37,7 @@ import es.codeurjc.AcademiaElSoto.model.Image;
 import es.codeurjc.AcademiaElSoto.model.User;
 import es.codeurjc.AcademiaElSoto.service.ImageService;
 import es.codeurjc.AcademiaElSoto.service.UserService;
+import es.codeurjc.AcademiaElSoto.service.AuthorizationService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -53,17 +54,17 @@ public class UserRestController {
     private UserMapper mapper;
 
     @Autowired
-    private ImageService imageService; 
+    private ImageService imageService;
+
+    @Autowired
+    private AuthorizationService authorizationService;
 
     // --- BASIC CRUD METHODS (SECURED) ---
 
     @GetMapping
     public Page<UserResponseDto> getUsers(Pageable pageable, Authentication authentication) {
         // Check if user has ADMIN role
-        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(role -> role.getAuthority().equals("ADMIN") || role.getAuthority().equals("ROLE_ADMIN"));
-        
-        if (!isAdmin) {
+        if (!authorizationService.isAdmin(authentication)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can list all users");
         }
 
@@ -72,8 +73,8 @@ public class UserRestController {
 
     @GetMapping("/{id}")
     public UserResponseDto getUserById(@PathVariable Long id, Authentication authentication) {
-        checkPermissions(id, authentication); // <-- Security wall
-        
+        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
+
         User user = userService.findById(id).orElseThrow();
         return toDto(user);
     }
@@ -90,7 +91,7 @@ public class UserRestController {
         }
 
         User user = toEntity(userRequestDto);
-        
+
         user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         user.setRoles(List.of("USER"));
         user.setCart(new Cart("Carrito de " + userRequestDto.getUserName(), 0));
@@ -109,8 +110,9 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}")
-    public UserResponseDto updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto userRequestDto, Authentication authentication) {
-        checkPermissions(id, authentication); // <-- Security wall
+    public UserResponseDto updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto userRequestDto,
+            Authentication authentication) {
+        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
 
         User existingUser = userService.findById(id).orElseThrow();
 
@@ -127,28 +129,28 @@ public class UserRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id, Authentication authentication) {
-        checkPermissions(id, authentication); // <-- Security wall
-        
+        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
+
         User existingUser = userService.findById(id).orElseThrow();
-        
+
         if (existingUser.getProfileImage() != null) {
             imageService.deleteImage(existingUser.getProfileImage().getId());
         }
-        
+
         userService.deleteById(existingUser.getId());
-        
+
         // Create the response with the success message
-        Map<String, String> response = Map.of("message", "User deleted successfully"); 
-        
+        Map<String, String> response = Map.of("message", "User deleted successfully");
+
         return ResponseEntity.ok(response);
     }
-
 
     // --- DISK IMAGE SYSTEM (SECURED) ---
 
     @PostMapping("/{id}/image")
-    public ResponseEntity<Object> uploadUserImage(@PathVariable Long id, @RequestParam("imageFile") MultipartFile imageFile, Authentication authentication) throws IOException {
-        checkPermissions(id, authentication); // <-- Security wall
+    public ResponseEntity<Object> uploadUserImage(@PathVariable Long id,
+            @RequestParam("imageFile") MultipartFile imageFile, Authentication authentication) throws IOException {
+        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
 
         if (imageFile.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -174,7 +176,8 @@ public class UserRestController {
 
     @GetMapping("/{id}/image")
     public ResponseEntity<Resource> getUserImage(@PathVariable Long id) throws MalformedURLException {
-        // Downloading the image is public, so everyone can see avatars. No security wall.
+        // Downloading the image is public, so everyone can see avatars. No security
+        // wall.
         User user = userService.findById(id).orElseThrow();
 
         if (user.getProfileImage() != null) {
@@ -190,47 +193,22 @@ public class UserRestController {
 
     @DeleteMapping("/{id}/image")
     public ResponseEntity<Void> deleteUserImage(@PathVariable Long id, Authentication authentication) {
-        checkPermissions(id, authentication); // <-- Security wall
+        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
 
         User user = userService.findById(id).orElseThrow();
 
         if (user.getProfileImage() != null) {
             Long imageId = user.getProfileImage().getId();
-            
+
             user.setProfileImage(null);
             userService.saveUser(user);
-            
+
             imageService.deleteImage(imageId);
         }
 
         return ResponseEntity.noContent().build();
     }
 
-
-    // --- SECURITY AND AUTHORIZATION HELPER ---
-
-    private void checkPermissions(Long targetId, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authenticated");
-        }
-
-        // 1. Check if the current user is an ADMIN
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(role -> role.getAuthority().equals("ADMIN") || role.getAuthority().equals("ROLE_ADMIN"));
-
-        if (isAdmin) {
-            return; // If it's an admin, we allow full access
-        }
-
-        // 2. If not an admin, check if the user is trying to modify themselves
-        String currentUsername = authentication.getName();
-        User targetUser = userService.findById(targetId).orElseThrow();
-
-        if (!targetUser.getUserName().equals(currentUsername)) {
-            // If they try to access someone else's ID, we throw a 403 Forbidden
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to view or modify another user");
-        }
-    }
 
     // --- MAPPERS ---
 
