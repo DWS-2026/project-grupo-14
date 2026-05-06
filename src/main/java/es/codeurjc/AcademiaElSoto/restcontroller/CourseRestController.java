@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.security.core.Authentication;
 
 import java.util.Collection;
 import es.codeurjc.AcademiaElSoto.dto.CommentResponseDto;
 import es.codeurjc.AcademiaElSoto.mapper.CommentMapper;
+import es.codeurjc.AcademiaElSoto.service.AuthorizationService;
 import es.codeurjc.AcademiaElSoto.service.CommentService;
 import es.codeurjc.AcademiaElSoto.dto.CourseRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
@@ -56,6 +60,9 @@ public class CourseRestController {
     @Autowired
     private CommentMapper commentMapper;
 
+    @Autowired
+    private AuthorizationService authorizationService;
+
     // --- BASIC CRUD METHODS ---
 
     @GetMapping
@@ -70,7 +77,14 @@ public class CourseRestController {
     }
 
     @PostMapping
-    public ResponseEntity<CourseResponseDto> createCourse(@Valid @RequestBody CourseRequestDto courseRequestDto) {
+    public ResponseEntity<CourseResponseDto> createCourse(
+            @Valid @RequestBody CourseRequestDto courseRequestDto,
+            Authentication authentication) {
+
+        if (!authorizationService.isAdmin(authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can create courses");
+        }
+
         Course course = mapper.toEntity(courseRequestDto);
         Course savedCourse = courseService.save(course);
 
@@ -84,18 +98,38 @@ public class CourseRestController {
     }
 
     @PutMapping("/{id}")
-    public CourseResponseDto updateCourse(@PathVariable Long id,
-            @Valid @RequestBody CourseRequestDto courseRequestDto) {
-        Course existingCourse = courseService.findById(id).orElseThrow();
+    public CourseResponseDto updateCourse(
+            @PathVariable Long id,
+            @Valid @RequestBody CourseRequestDto courseRequestDto,
+            Authentication authentication) {
+
+        if (!authorizationService.isAdmin(authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can update courses");
+        }
+
+        Course existingCourse = courseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+
         mapper.updateEntity(courseRequestDto, existingCourse);
         Course updatedCourse = courseService.save(existingCourse);
+
         return mapper.toDTO(updatedCourse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-        Course existingCourse = courseService.findById(id).orElseThrow();
+    public ResponseEntity<Void> deleteCourse(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        if (!authorizationService.isAdmin(authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete courses");
+        }
+
+        Course existingCourse = courseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+
         courseService.deleteById(existingCourse.getId());
+
         return ResponseEntity.noContent().build();
     }
 
@@ -109,20 +143,25 @@ public class CourseRestController {
 
     // 1. Upload/Add image to course
     @PostMapping("/{id}/image")
-    public ResponseEntity<Object> uploadCourseImage(@PathVariable Long id,
-            @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+    public ResponseEntity<Object> uploadCourseImage(
+            @PathVariable Long id,
+            @RequestParam("imageFile") MultipartFile imageFile,
+            Authentication authentication) throws IOException {
+
+        if (!authorizationService.isAdmin(authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can upload course images");
+        }
 
         if (imageFile.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Course course = courseService.findById(id).orElseThrow();
+        Course course = courseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
-        // If it already has an image, replace it. Otherwise, create a new one.
         if (course.getImage() != null) {
             imageService.replaceImageFile(course.getImage().getId(), imageFile);
         } else {
-            // Create image in disk and DB, then link to course
             es.codeurjc.AcademiaElSoto.model.Image newImage = imageService.createImage(imageFile);
             courseService.addImageToCourse(id, newImage);
         }
@@ -154,14 +193,20 @@ public class CourseRestController {
 
     // 3. Delete the image
     @DeleteMapping("/{courseId}/image")
-    public ResponseEntity<Void> deleteCourseImage(@PathVariable Long courseId) {
-        Course course = courseService.findById(courseId).orElseThrow();
+    public ResponseEntity<Void> deleteCourseImage(
+            @PathVariable Long courseId,
+            Authentication authentication) {
+
+        if (!authorizationService.isAdmin(authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete course images");
+        }
+
+        Course course = courseService.findById(courseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
         if (course.getImage() != null) {
             Long imageId = course.getImage().getId();
-            // Unlink from the course first
             courseService.removeImageCourse(courseId, course.getImage());
-            // Delete image from disk and DB
             imageService.deleteImage(imageId);
         }
 
