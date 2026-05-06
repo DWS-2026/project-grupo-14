@@ -32,6 +32,8 @@ import es.codeurjc.AcademiaElSoto.service.UserService;
 @RequestMapping("/api/v1/carts")
 public class CartRestController {
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CartRestController.class);
+
     @Autowired
     private CartService cartService;
 
@@ -51,6 +53,7 @@ public class CartRestController {
     @GetMapping
     public Page<CartResponseDto> getCarts(Pageable pageable, Authentication authentication) {
         if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("Access denied for user '{}' attempting to list all carts", authentication.getName());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can list all carts");
         }
 
@@ -140,7 +143,14 @@ public class CartRestController {
         Cart cart = cartService.findById(cartId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
 
-        checkCartAccess(cart, authentication);
+        try {
+            // Security: Check if user owns the cart or is admin
+            checkCartAccess(cart, authentication);
+        } catch (ResponseStatusException e) {
+            // Security Reporting
+            logger.warn("Access denied for user '{}' on cart ID: {}", authentication.getName(), cartId);
+            throw e;
+        }
 
         return toDTO(cart);
     }
@@ -151,6 +161,7 @@ public class CartRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("Access denied for user '{}' attempting to delete cart ID: {}", authentication.getName(), cartId);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete carts");
         }
 

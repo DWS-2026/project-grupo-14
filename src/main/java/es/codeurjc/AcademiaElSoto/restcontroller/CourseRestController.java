@@ -46,6 +46,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/courses")
 public class CourseRestController {
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CourseRestController.class);
+
     @Autowired
     private CourseService courseService;
 
@@ -86,6 +88,7 @@ public class CourseRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("Access denied for user '{}' attempting to create a course", authentication.getName());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can create courses");
         }
 
@@ -109,6 +112,7 @@ public class CourseRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("Access denied for user '{}' attempting to update course ID: {}", authentication.getName(), id);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can update courses");
         }
 
@@ -128,6 +132,7 @@ public class CourseRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("Access denied for user '{}' attempting to delete course ID: {}", authentication.getName(), id);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete courses");
         }
 
@@ -155,6 +160,7 @@ public class CourseRestController {
             Authentication authentication) throws IOException {
 
         if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("Access denied for user '{}' attempting to upload image for course ID: {}", authentication.getName(), id);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can upload course images");
         }
 
@@ -204,6 +210,7 @@ public class CourseRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("Access denied for user '{}' attempting to delete image for course ID: {}", authentication.getName(), courseId);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete course images");
         }
 
@@ -238,7 +245,12 @@ public class CourseRestController {
         RestClient restClient = RestClient.create();
 
         BooksResponse data = restClient.get()
-                .uri("https://www.googleapis.com/books/v1/volumes?q=intitle:" + courseName)
+                .uri(uriBuilder -> uriBuilder
+                    .scheme("https")
+                    .host("www.googleapis.com")
+                    .path("/books/v1/volumes")
+                    .queryParam("q", "intitle:" + courseName)
+                    .build())
                 .retrieve()
                 .body(BooksResponse.class);
 

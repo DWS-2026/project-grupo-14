@@ -34,6 +34,9 @@ import org.springframework.data.domain.Pageable;
 @RequestMapping("/api/v1/comments")
 public class CommentRestController {
 
+    
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CommentRestController.class);
+
     @Autowired
     private CommentService commentService;
 
@@ -93,7 +96,14 @@ public class CommentRestController {
             @Valid @RequestBody CommentRequestDto commentRequestDto,
             Authentication authentication) {
 
-        authorizationService.checkCommentAccess(id, authentication);
+        try {
+            // Security: Check if user owns the comment
+            authorizationService.checkCommentAccess(id, authentication);
+        } catch (ResponseStatusException e) {
+            // Security Reporting: Log unauthorized access attempt
+            logger.warn("Access denied for user '{}' on comment ID: {}", authentication.getName(), id);
+            throw e;
+        }
 
         Comment existingComment = commentService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
@@ -112,7 +122,14 @@ public class CommentRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id, Authentication authentication) {
 
-        authorizationService.checkCommentAccess(id, authentication);
+        try {
+            // Security: Check if user owns the comment
+            authorizationService.checkCommentAccess(id, authentication);
+        } catch (ResponseStatusException e) {
+            // Security Reporting: Log unauthorized access attempt
+            logger.warn("Access denied for user '{}' on comment ID: {}", authentication.getName(), id);
+            throw e;
+        }
 
         Comment existingComment = commentService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));

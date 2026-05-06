@@ -44,6 +44,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/users")
 public class UserRestController {
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(UserRestController.class);
+
     @Autowired
     private UserService userService;
 
@@ -65,6 +67,7 @@ public class UserRestController {
     public Page<UserResponseDto> getUsers(Pageable pageable, Authentication authentication) {
         // Check if user has ADMIN role
         if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("Access denied for user '{}' attempting to list all users", authentication.getName());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can list all users");
         }
 
@@ -73,7 +76,13 @@ public class UserRestController {
 
     @GetMapping("/{id}")
     public UserResponseDto getUserById(@PathVariable Long id, Authentication authentication) {
-        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
+        try {
+            // Security Wall: Check if user is accessing their own data or is ADMIN
+            authorizationService.checkUserAccess(id, authentication);
+        } catch (ResponseStatusException e) {
+            logger.warn("Access denied for user '{}' on user ID: {}", authentication.getName(), id);
+            throw e;
+        }
 
         User user = userService.findById(id).orElseThrow();
         return toDto(user);
@@ -112,7 +121,12 @@ public class UserRestController {
     @PutMapping("/{id}")
     public UserResponseDto updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto userRequestDto,
             Authentication authentication) {
-        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
+        try {
+            authorizationService.checkUserAccess(id, authentication);
+        } catch (ResponseStatusException e) {
+            logger.warn("Access denied for user '{}' attempting to update user ID: {}", authentication.getName(), id);
+            throw e;
+        }
 
         User existingUser = userService.findById(id).orElseThrow();
 
@@ -129,7 +143,12 @@ public class UserRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id, Authentication authentication) {
-        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
+        try {
+            authorizationService.checkUserAccess(id, authentication);
+        } catch (ResponseStatusException e) {
+            logger.warn("Access denied for user '{}' attempting to delete user ID: {}", authentication.getName(), id);
+            throw e;
+        }
 
         User existingUser = userService.findById(id).orElseThrow();
 
@@ -150,7 +169,12 @@ public class UserRestController {
     @PostMapping("/{id}/image")
     public ResponseEntity<Object> uploadUserImage(@PathVariable Long id,
             @RequestParam("imageFile") MultipartFile imageFile, Authentication authentication) throws IOException {
-        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
+        try {
+            authorizationService.checkUserAccess(id, authentication);
+        } catch (ResponseStatusException e) {
+            logger.warn("Access denied for user '{}' attempting to upload image for user ID: {}", authentication.getName(), id);
+            throw e;
+        }
 
         if (imageFile.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -193,7 +217,12 @@ public class UserRestController {
 
     @DeleteMapping("/{id}/image")
     public ResponseEntity<Void> deleteUserImage(@PathVariable Long id, Authentication authentication) {
-        authorizationService.checkUserAccess(id, authentication); // <-- Security wall
+        try {
+            authorizationService.checkUserAccess(id, authentication);
+        } catch (ResponseStatusException e) {
+            logger.warn("Access denied for user '{}' attempting to delete image for user ID: {}", authentication.getName(), id);
+            throw e;
+        }
 
         User user = userService.findById(id).orElseThrow();
 
