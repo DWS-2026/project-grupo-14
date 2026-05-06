@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import es.codeurjc.AcademiaElSoto.security.jwt.JwtTokenProvider;
 
@@ -223,6 +224,11 @@ public class SecurityConfiguration {
                                                 .requestMatchers("/admin/**").hasRole("ADMIN")
 
                                                 .anyRequest().authenticated())
+
+                                // --- A05:2025 INJECTION (XSRF) PROTECTION ---
+                                // Enabled CSRF protection for web sessions using the Synchronizer Token Pattern.
+                                // This prevents attackers from submitting unauthorized requests on behalf of the user.
+                                .csrf(withDefaults())
 
                                 .formLogin(form -> form
                                                 .loginPage("/login")
