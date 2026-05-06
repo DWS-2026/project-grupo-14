@@ -39,6 +39,7 @@ import es.codeurjc.AcademiaElSoto.mapper.CourseMapper;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
 import es.codeurjc.AcademiaElSoto.service.ImageService;
+import es.codeurjc.AcademiaElSoto.service.HtmlSanitizerService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -63,6 +64,9 @@ public class CourseRestController {
     @Autowired
     private AuthorizationService authorizationService;
 
+    @Autowired
+    private HtmlSanitizerService htmlSanitizerService;
+
     // --- BASIC CRUD METHODS ---
 
     @GetMapping
@@ -86,6 +90,7 @@ public class CourseRestController {
         }
 
         Course course = mapper.toEntity(courseRequestDto);
+        course.setDescription(htmlSanitizerService.sanitize(course.getDescription()));
         Course savedCourse = courseService.save(course);
 
         URI location = ServletUriComponentsBuilder
@@ -111,6 +116,7 @@ public class CourseRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
         mapper.updateEntity(courseRequestDto, existingCourse);
+        existingCourse.setDescription(htmlSanitizerService.sanitize(courseRequestDto.getDescription()));
         Course updatedCourse = courseService.save(existingCourse);
 
         return mapper.toDTO(updatedCourse);

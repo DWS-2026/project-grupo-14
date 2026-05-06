@@ -18,6 +18,7 @@ import es.codeurjc.AcademiaElSoto.model.Comment;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.service.CommentService;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
+import es.codeurjc.AcademiaElSoto.service.HtmlSanitizerService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,9 @@ public class CommentRestController {
     @Autowired
     private AuthorizationService authorizationService;
 
+    @Autowired
+    private HtmlSanitizerService htmlSanitizerService;
+
     @GetMapping
     public Page<CommentResponseDto> getComments(Pageable pageable) {
         return commentService.findAllComments(pageable).map(this::toDTO);
@@ -68,6 +72,7 @@ public class CommentRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
         Comment comment = toEntity(commentRequestDto);
+        comment.setDescription(htmlSanitizerService.sanitize(comment.getDescription()));
         comment.setUser(currentUser.getUserName());
         comment.setPublicationDate(LocalDateTime.now());
         comment.setCourse(course);
@@ -96,7 +101,7 @@ public class CommentRestController {
         Course course = courseService.findById(commentRequestDto.getCourseId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
-        existingComment.setDescription(commentRequestDto.getDescription());
+        existingComment.setDescription(htmlSanitizerService.sanitize(commentRequestDto.getDescription()));
         existingComment.setCourse(course);
 
         commentService.save(existingComment);

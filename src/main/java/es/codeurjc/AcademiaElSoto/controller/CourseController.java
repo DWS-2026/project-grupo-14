@@ -19,6 +19,7 @@ import es.codeurjc.AcademiaElSoto.model.Image;
 import es.codeurjc.AcademiaElSoto.service.CommentService;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
 import es.codeurjc.AcademiaElSoto.service.ImageService;
+import es.codeurjc.AcademiaElSoto.service.HtmlSanitizerService;
 
 @Controller
 public class CourseController {
@@ -26,11 +27,16 @@ public class CourseController {
     private final CourseService courseService;
     private final CommentService commentService;
     private final ImageService imageService;
+    private final HtmlSanitizerService htmlSanitizerService;
 
-    public CourseController(CourseService courseService, CommentService commentService, ImageService imageService) {
+    public CourseController(CourseService courseService,
+            CommentService commentService,
+            ImageService imageService,
+            HtmlSanitizerService htmlSanitizerService) {
         this.courseService = courseService;
         this.commentService = commentService;
         this.imageService = imageService;
+        this.htmlSanitizerService = htmlSanitizerService;
     }
 
     @GetMapping("/courses")
@@ -58,8 +64,8 @@ public class CourseController {
 
     @PostMapping("/admin/courses/new")
     public String newCourse(Model model,
-                            Course course,
-                            @RequestParam("image") MultipartFile imageFile) {
+            Course course,
+            @RequestParam("image") MultipartFile imageFile) {
 
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
@@ -70,6 +76,7 @@ public class CourseController {
             exception.printStackTrace();
         }
 
+        course.setDescription(htmlSanitizerService.sanitize(course.getDescription()));
         courseService.save(course);
 
         return "course_db/saved_course";
@@ -119,9 +126,9 @@ public class CourseController {
 
     @PostMapping("/admin/courses/{id}/edit")
     public String editCourseProcess(Model model,
-                                    @PathVariable long id,
-                                    Course editedCourse,
-                                    @RequestParam(name = "image", required = false) MultipartFile imageFile) {
+            @PathVariable long id,
+            Course editedCourse,
+            @RequestParam(name = "image", required = false) MultipartFile imageFile) {
 
         Optional<Course> courseOptional = courseService.findById(id);
 
@@ -134,7 +141,7 @@ public class CourseController {
         existingCourse.setCourseName(editedCourse.getCourseName());
         existingCourse.setTeacher(editedCourse.getTeacher());
         existingCourse.setPrice(editedCourse.getPrice());
-        existingCourse.setDescription(editedCourse.getDescription());
+        existingCourse.setDescription(htmlSanitizerService.sanitize(editedCourse.getDescription()));
         existingCourse.setStudents(editedCourse.getStudents());
 
         try {

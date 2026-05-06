@@ -10,10 +10,13 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
     <link href="/css/styles.css" rel="stylesheet" />
-    
+
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet" />
     <style>
-        .ql-container { height: 150px; background: white; }
+        .ql-container {
+            height: 150px;
+            background: white;
+        }
     </style>
 </head>
 
@@ -21,7 +24,7 @@
 
     {{>partials/header}}
     <div style="height:80px"></div>
-    
+
     <section class="page-section bg-light" id="portfolio">
         <div class="container">
             <div class="text-center">
@@ -35,7 +38,8 @@
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="/course/{{id}}/image" alt="..." onerror="this.src='assets/img/portfolio/1.jpg'" />
+                            <img class="img-fluid" src="/course/{{id}}/image" alt="..."
+                                onerror="this.src='assets/img/portfolio/1.jpg'" />
                         </a>
                         <div class="portfolio-caption">
                             <div class="portfolio-caption-heading">{{courseName}}</div>
@@ -52,15 +56,17 @@
     <div class="portfolio-modal modal fade" id="portfolioModal{{id}}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg" alt="Close modal" /></div>
+                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
+                        alt="Close modal" /></div>
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div class="modal-body">
                                 <h2 class="text-uppercase">{{courseName}}</h2>
                                 <p class="item-intro text-muted">{{description}}</p>
-                                
-                                <img class="img-fluid d-block mx-auto" src="/course/{{id}}/image" alt="..." onerror="this.src='assets/img/portfolio/1.jpg'" />
+
+                                <img class="img-fluid d-block mx-auto" src="/course/{{id}}/image" alt="..."
+                                    onerror="this.src='assets/img/portfolio/1.jpg'" />
 
                                 <ul class="list-inline">
                                     <li><strong>Profesor:</strong> {{teacher}}</li>
@@ -70,23 +76,25 @@
 
                                 <form action="/course/{{id}}/add-cart" method="post">
                                     <input type="hidden" name="_csrf" value="{{token}}" />
-                                    <button type="submit" class="btn btn-warning btn-xl text-uppercase shadow">AÑADIR AL CARRITO</button>
+                                    <button type="submit" class="btn btn-warning btn-xl text-uppercase shadow">AÑADIR AL
+                                        CARRITO</button>
                                 </form>
-                                
+
                                 <hr>
 
                                 <div class="mt-4">
                                     <h2 class="section-heading text-uppercase">Comentarios</h2>
-                                    
+
                                     <form action="/course/{{id}}/comment" method="post">
                                         <input type="hidden" name="_csrf" value="{{token}}" />
                                         <div class="mb-3 text-start">
                                             <label class="form-label">Escribe tu comentario:</label>
                                             <input type="hidden" name="description" id="input-{{id}}">
-                                            
+
                                             <div id="editor-{{id}}" class="editor-quill" data-id="{{id}}"></div>
                                         </div>
-                                        <button class="btn btn-primary btn-xl text-uppercase" type="submit">Enviar</button>
+                                        <button class="btn btn-primary btn-xl text-uppercase"
+                                            type="submit">Enviar</button>
                                     </form>
 
                                     <div class="mt-4">
@@ -112,9 +120,9 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const editors = document.querySelectorAll('.editor-quill');
-            
+
             editors.forEach(div => {
                 const courseId = div.getAttribute('data-id');
                 const quill = new Quill(div, {
@@ -122,10 +130,10 @@
                     placeholder: 'Escribe tu opinión...'
                 });
 
-                quill.on('text-change', function() {
-                    const html = quill.root.innerHTML;
+                quill.on('text-change', function () {
+                    const text = quill.getText().trim();
                     const input = document.getElementById('input-' + courseId);
-                    input.value = (html === '<p><br></p>') ? '' : html;
+                    input.value = text;
                 });
             });
         });
@@ -133,4 +141,5 @@
 
     {{>partials/footer}}
 </body>
+
 </html>

@@ -100,11 +100,11 @@
             const inputHidden = document.getElementById('admin-description-input');
 
             // Sincronización inicial para asegurar que el contenido se envíe si no hay cambios
-            inputHidden.value = quill.root.innerHTML;
+            inputHidden.value = quill.getText().trim();
 
             // Actualización en cada cambio
             quill.on('text-change', function() {
-                const html = quill.root.innerHTML;
+                const html = quill.getText().trim();
                 inputHidden.value = (html === '<p><br></p>') ? '' : html;
             });
         });

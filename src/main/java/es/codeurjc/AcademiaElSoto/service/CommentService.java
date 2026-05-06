@@ -23,11 +23,17 @@ import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
 @Service
 public class CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final CourseRepository courseRepository;
+    private final HtmlSanitizerService htmlSanitizerService;
 
-    @Autowired
-    private CourseRepository courseRepository;
+    public CommentService(CommentRepository commentRepository,
+            CourseRepository courseRepository,
+            HtmlSanitizerService htmlSanitizerService) {
+        this.commentRepository = commentRepository;
+        this.courseRepository = courseRepository;
+        this.htmlSanitizerService = htmlSanitizerService;
+    }
 
     /**
      * Saves a new comment associated with a specific course.
@@ -42,7 +48,7 @@ public class CommentService {
 
         if (courseOpt.isPresent()) {
             String cleanUser = user == null ? "" : user.trim();
-            String cleanDescription = description == null ? "" : description.trim();
+            String cleanDescription = htmlSanitizerService.sanitize(description);
 
             if (!cleanUser.isEmpty() && !cleanDescription.isEmpty() && cleanDescription.length() <= 500) {
                 Comment comment = new Comment();
@@ -107,8 +113,7 @@ public class CommentService {
             Comment originalComment = commentOpt.get();
 
             String cleanUser = editedComment.getUser() == null ? "" : editedComment.getUser().trim();
-            String cleanDescription = editedComment.getDescription() == null ? ""
-                    : editedComment.getDescription().trim();
+            String cleanDescription = htmlSanitizerService.sanitize(editedComment.getDescription());
 
             if (cleanUser.isEmpty() || cleanDescription.isEmpty() || cleanDescription.length() > 500) {
                 return false;
@@ -124,6 +129,14 @@ public class CommentService {
     }
 
     public Comment save(Comment comment) {
+        if (comment.getDescription() != null) {
+            comment.setDescription(htmlSanitizerService.sanitize(comment.getDescription()));
+        }
+
+        if (comment.getUser() != null) {
+            comment.setUser(comment.getUser().trim());
+        }
+
         return commentRepository.save(comment);
     }
 

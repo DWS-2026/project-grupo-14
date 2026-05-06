@@ -16,6 +16,7 @@ import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.model.User;
 import es.codeurjc.AcademiaElSoto.service.CommentService;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
+import es.codeurjc.AcademiaElSoto.service.HtmlSanitizerService;
 import es.codeurjc.AcademiaElSoto.service.UserService;
 
 @Controller
@@ -24,17 +25,22 @@ public class CommentController {
     private final CommentService commentService;
     private final CourseService courseService;
     private final UserService userService;
+    private final HtmlSanitizerService htmlSanitizerService;
 
-    public CommentController(CommentService commentService, CourseService courseService, UserService userService) {
+    public CommentController(CommentService commentService,
+            CourseService courseService,
+            UserService userService,
+            HtmlSanitizerService htmlSanitizerService) {
         this.commentService = commentService;
         this.courseService = courseService;
         this.userService = userService;
+        this.htmlSanitizerService = htmlSanitizerService;
     }
 
     @PostMapping("/course/{id}/comment")
     public String createComment(@PathVariable long id,
-                                @RequestParam String description,
-                                Authentication authentication) {
+            @RequestParam String description,
+            Authentication authentication) {
 
         Optional<Course> courseOpt = courseService.findById(id);
 
@@ -61,7 +67,13 @@ public class CommentController {
 
         Comment comment = new Comment();
         comment.setUser(user.getUserName());
-        comment.setDescription(description.trim());
+        String cleanDescription = htmlSanitizerService.sanitize(description);
+
+        if (cleanDescription.isBlank() || cleanDescription.length() > 500) {
+            return "redirect:/course/" + id;
+        }
+
+        comment.setDescription(cleanDescription);
         comment.setPublicationDate(LocalDateTime.now());
         comment.setCourse(course);
 
@@ -72,8 +84,8 @@ public class CommentController {
 
     @GetMapping("/profile/comments/{id}/edit")
     public String editOwnComment(Model model,
-                                 @PathVariable long id,
-                                 Authentication authentication) {
+            @PathVariable long id,
+            Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
@@ -97,9 +109,9 @@ public class CommentController {
 
     @PostMapping("/profile/comments/{id}/edit")
     public String editOwnCommentProcess(Model model,
-                                        @PathVariable long id,
-                                        @RequestParam String description,
-                                        Authentication authentication) {
+            @PathVariable long id,
+            @RequestParam String description,
+            Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
@@ -117,7 +129,14 @@ public class CommentController {
             return "error/403";
         }
 
-        String cleanDescription = description == null ? "" : description.trim();
+        String cleanDescription = htmlSanitizerService.sanitize(description);
+
+        if (cleanDescription.isBlank() || cleanDescription.length() > 500) {
+            model.addAttribute("comment", comment);
+            return "comment_db/edit_own_comment_page";
+        }
+
+        comment.setDescription(cleanDescription);
 
         if (cleanDescription.isEmpty() || cleanDescription.length() > 500) {
             model.addAttribute("comment", comment);
@@ -132,7 +151,7 @@ public class CommentController {
 
     @PostMapping("/profile/comments/{id}/delete")
     public String deleteOwnComment(@PathVariable long id,
-                                   Authentication authentication) {
+            Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
@@ -198,8 +217,8 @@ public class CommentController {
 
     @PostMapping("/admin/comments/{id}/edit")
     public String editCommentProcess(Model model,
-                                     @PathVariable long id,
-                                     Comment editedComment) {
+            @PathVariable long id,
+            Comment editedComment) {
 
         Optional<Comment> commentOptional = commentService.findById(id);
 
@@ -207,16 +226,13 @@ public class CommentController {
             return "comment_db/comment_not_found";
         }
 
-        boolean updated = commentService.editComment(id, editedComment);
+        Comment comment = commentOptional.get();
+        comment.setUser(editedComment.getUser());
+        comment.setDescription(editedComment.getDescription());
 
-        if (!updated) {
-            model.addAttribute("comment", commentOptional.get());
-            return "comment_db/edit_comment_page";
-        }
+        commentService.save(comment);
 
-        Optional<Comment> updatedComment = commentService.findById(id);
-        updatedComment.ifPresent(comment -> model.addAttribute("comment", comment));
-
+        model.addAttribute("comment", comment);
         return "comment_db/edited_comment";
     }
 }

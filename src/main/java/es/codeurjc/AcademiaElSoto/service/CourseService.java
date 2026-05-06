@@ -20,18 +20,36 @@ import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
 @Service
 public class CourseService {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
+    private final HtmlSanitizerService htmlSanitizerService;
+
+    public CourseService(CourseRepository courseRepository,
+            HtmlSanitizerService htmlSanitizerService) {
+        this.courseRepository = courseRepository;
+        this.htmlSanitizerService = htmlSanitizerService;
+    }
 
     /**
      * Saves or updates a course.
-     * (The overloaded method with MultipartFile was removed because 
+     * (The overloaded method with MultipartFile was removed because
      * ImageService now handles disk storage directly).
      *
      * @param course the course to save
      * @return the saved course
      */
     public Course save(Course course) {
+        if (course.getDescription() != null) {
+            course.setDescription(htmlSanitizerService.sanitize(course.getDescription()));
+        }
+
+        if (course.getCourseName() != null) {
+            course.setCourseName(course.getCourseName().trim());
+        }
+
+        if (course.getTeacher() != null) {
+            course.setTeacher(course.getTeacher().trim());
+        }
+
         return courseRepository.save(course);
     }
 
@@ -96,7 +114,7 @@ public class CourseService {
     /**
      * Links a main image to a course.
      *
-     * @param id course identifier
+     * @param id    course identifier
      * @param image the image entity to link
      * @return the updated course
      */
@@ -110,7 +128,7 @@ public class CourseService {
      * Unlinks the main image from a course.
      *
      * @param courseId course identifier
-     * @param image the image entity to unlink
+     * @param image    the image entity to unlink
      * @return the updated course
      */
     public Course removeImageCourse(long courseId, Image image) {
@@ -120,28 +138,32 @@ public class CourseService {
     }
 
     /**
-     * Replaces a course entity with a new one while preserving existing 
+     * Replaces a course entity with a new one while preserving existing
      * relationships like images or comments.
      * 
-     * @param id course identifier
+     * @param id            course identifier
      * @param updatedCourse the new course data
      * @return the updated course saved in the database
      */
     public Course replaceCourse(long id, Course updatedCourse) {
-        // 1. Find the original course (or throw an exception if it doesn't exist)
         Course course = courseRepository.findById(id).orElseThrow();
 
-        // 2. Ensure the new object has the correct ID
         updatedCourse.setId(id);
-
-        // 3. Keep the existing images (Main image and gallery)
         updatedCourse.setImage(course.getImage());
         updatedCourse.setImages(course.getImages());
 
-        // 4. (Optional) Keep the comments if you don't want to lose them on edit:
-        // updatedCourse.setComments(course.getComments());
+        if (updatedCourse.getDescription() != null) {
+            updatedCourse.setDescription(htmlSanitizerService.sanitize(updatedCourse.getDescription()));
+        }
 
-        // 5. Save and return
+        if (updatedCourse.getCourseName() != null) {
+            updatedCourse.setCourseName(updatedCourse.getCourseName().trim());
+        }
+
+        if (updatedCourse.getTeacher() != null) {
+            updatedCourse.setTeacher(updatedCourse.getTeacher().trim());
+        }
+
         return courseRepository.save(updatedCourse);
     }
 }
