@@ -3,7 +3,6 @@ package es.codeurjc.AcademiaElSoto.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -17,60 +16,53 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.model.Image;
-import es.codeurjc.AcademiaElSoto.repository.CommentRepository;
-import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
-import es.codeurjc.AcademiaElSoto.service.ImageService; // Imported the new service
+import es.codeurjc.AcademiaElSoto.service.CommentService;
+import es.codeurjc.AcademiaElSoto.service.CourseService;
+import es.codeurjc.AcademiaElSoto.service.ImageService;
 
 @Controller
 public class CourseController {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseService courseService;
+    private final CommentService commentService;
+    private final ImageService imageService;
 
-    @Autowired
-    private CommentRepository commentRepository;
+    public CourseController(CourseService courseService, CommentService commentService, ImageService imageService) {
+        this.courseService = courseService;
+        this.commentService = commentService;
+        this.imageService = imageService;
+    }
 
-    @Autowired
-    private ImageService imageService; // Injected the image service
-
-    /**
-     * Displays all available courses.
-     */
     @GetMapping("/courses")
     public String showCourses(Model model) {
-        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("courses", courseService.findAll());
         return "courses";
     }
 
-    /**
-     * Displays the details of a single course.
-     * It also loads the course comments ordered by publication date.
-     */
     @GetMapping("/course/{id}")
     public String showCourse(Model model, @PathVariable long id) {
-        Optional<Course> courseOptional = courseRepository.findById(id);
+        Optional<Course> courseOptional = courseService.findById(id);
 
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
+
             model.addAttribute("course", course);
-            // Updated to check the new Image relationship
             model.addAttribute("hasImage", course.getImage() != null);
-            model.addAttribute("comments", commentRepository.findByCourseIdOrderByPublicationDateDesc(id));
+            model.addAttribute("comments", commentService.findByCourseId(id));
+
             return "course_db/show_course";
         }
 
         return "course_db/course_not_found";
     }
 
-    /**
-     * Creates a new course from the admin panel.
-     * If an image is uploaded, it is stored physically on disk.
-     */
     @PostMapping("/admin/courses/new")
-    public String newCourse(Model model, Course course, @RequestParam("image") MultipartFile imageFile) {
+    public String newCourse(Model model,
+                            Course course,
+                            @RequestParam("image") MultipartFile imageFile) {
+
         try {
-            if (!imageFile.isEmpty()) {
-                // Save image to disk and DB, then link to course
+            if (imageFile != null && !imageFile.isEmpty()) {
                 Image newImage = imageService.createImage(imageFile);
                 course.setImage(newImage);
             }
@@ -78,48 +70,44 @@ public class CourseController {
             exception.printStackTrace();
         }
 
-        courseRepository.save(course);
+        courseService.save(course);
+
         return "course_db/saved_course";
     }
 
-    /**
-     * Displays course statistics in the admin panel.
-     */
     @GetMapping("/admin/statistics")
     public String showAdminStatistics(Model model) {
-        List<Course> courses = courseRepository.findAll();
+        List<Course> courses = courseService.findAll();
         model.addAttribute("courses", courses);
         return "admin/admin_statistics";
     }
 
-    /**
-     * Returns the image associated with a course.
-     * Fetches it from the disk using the ImageService.
-     */
     @GetMapping("/course/{id}/image")
     public ResponseEntity<Resource> getImage(@PathVariable long id) {
         try {
-            Course course = courseRepository.findById(id).orElseThrow();
+            Optional<Course> courseOptional = courseService.findById(id);
 
-            if (course.getImage() != null) {
-                Resource file = imageService.getImageFile(course.getImage().getId());
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                        .body(file);
+            if (courseOptional.isPresent()) {
+                Course course = courseOptional.get();
+
+                if (course.getImage() != null) {
+                    Resource file = imageService.getImageFile(course.getImage().getId());
+
+                    return ResponseEntity.ok()
+                            .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                            .body(file);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return ResponseEntity.notFound().build();
     }
 
-    /**
-     * Shows the admin edit page for a specific course.
-     */
     @GetMapping("/admin/courses/{id}/edit")
     public String editCourse(Model model, @PathVariable long id) {
-        Optional<Course> courseOptional = courseRepository.findById(id);
+        Optional<Course> courseOptional = courseService.findById(id);
 
         if (courseOptional.isPresent()) {
             model.addAttribute("course", courseOptional.get());
@@ -129,98 +117,61 @@ public class CourseController {
         return "course_db/course_not_found";
     }
 
-    /**
-     * Processes the admin update of a course.
-     * If a new image is uploaded, the old one on disk is replaced.
-     */
     @PostMapping("/admin/courses/{id}/edit")
     public String editCourseProcess(Model model,
-            @PathVariable long id,
-            Course editedCourse,
-            @RequestParam(name = "image", required = false) MultipartFile imageFile) {
+                                    @PathVariable long id,
+                                    Course editedCourse,
+                                    @RequestParam(name = "image", required = false) MultipartFile imageFile) {
 
-        Optional<Course> courseOptional = courseRepository.findById(id);
+        Optional<Course> courseOptional = courseService.findById(id);
 
-        if (courseOptional.isPresent()) {
-            Course existingCourse = courseOptional.get();
-
-            existingCourse.setCourseName(editedCourse.getCourseName());
-            existingCourse.setTeacher(editedCourse.getTeacher());
-            existingCourse.setPrice(editedCourse.getPrice());
-            existingCourse.setDescription(editedCourse.getDescription());
-            existingCourse.setStudents(editedCourse.getStudents());
-
-            try {
-                if (imageFile != null && !imageFile.isEmpty()) {
-                    if (existingCourse.getImage() != null) {
-                        // Replace existing image physically and in DB
-                        imageService.replaceImageFile(existingCourse.getImage().getId(), imageFile);
-                    } else {
-                        // Create a new image if it didn't have one
-                        Image newImage = imageService.createImage(imageFile);
-                        existingCourse.setImage(newImage);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            courseRepository.save(existingCourse);
-            model.addAttribute("course", existingCourse);
-            return "course_db/edited_course";
+        if (courseOptional.isEmpty()) {
+            return "course_db/course_not_found";
         }
 
-        return "course_db/course_not_found";
+        Course existingCourse = courseOptional.get();
+
+        existingCourse.setCourseName(editedCourse.getCourseName());
+        existingCourse.setTeacher(editedCourse.getTeacher());
+        existingCourse.setPrice(editedCourse.getPrice());
+        existingCourse.setDescription(editedCourse.getDescription());
+        existingCourse.setStudents(editedCourse.getStudents());
+
+        try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                if (existingCourse.getImage() != null) {
+                    imageService.replaceImageFile(existingCourse.getImage().getId(), imageFile);
+                } else {
+                    Image newImage = imageService.createImage(imageFile);
+                    existingCourse.setImage(newImage);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        courseService.save(existingCourse);
+
+        model.addAttribute("course", existingCourse);
+        return "course_db/edited_course";
     }
 
-    /**
-     * Deletes a course from the admin panel.
-     */
     @PostMapping("/admin/courses/{id}/delete")
     public String deleteCourse(Model model, @PathVariable long id) {
-        Optional<Course> courseOptional = courseRepository.findById(id);
+        Optional<Course> courseOptional = courseService.findById(id);
 
-        if (courseOptional.isPresent()) {
-            Course course = courseOptional.get();
-            
-            // Delete associated image from disk before deleting the course
-            if (course.getImage() != null) {
-                imageService.deleteImage(course.getImage().getId());
-            }
-            
-            courseRepository.deleteById(id);
-            return "course_db/deleted_course";
+        if (courseOptional.isEmpty()) {
+            return "course_db/course_not_found";
         }
 
-        return "course_db/course_not_found";
-    }
+        Course course = courseOptional.get();
 
-    /*
-     * Old add-to-cart implementation kept as a comment.
-     * This logic is currently handled inside CartController.
-     *
-     * @PostMapping("/course/{id}/add-cart")
-     * public String addToCart(Model model, @PathVariable long id) {
-     * Optional<Course> courseOptional = courseRepository.findById(id);
-     * List<User> users = userRepository.findAll();
-     *
-     * if (courseOptional.isPresent() && !users.isEmpty()) {
-     * Course course = courseOptional.get();
-     * User user = users.get(0);
-     *
-     * Cart cart = user.getCart();
-     * if (cart == null) {
-     * cart = new Cart("Cart of " + user.getUserName(), 0);
-     * cart.setUser(user);
-     * user.setCart(cart);
-     * }
-     *
-     * cart.addCourse(course);
-     * userRepository.save(user);
-     * return "redirect:/courses";
-     * }
-     *
-     * return "course_db/course_not_found";
-     * }
-     */
+        if (course.getImage() != null) {
+            imageService.deleteImage(course.getImage().getId());
+        }
+
+        courseService.deleteById(id);
+
+        return "course_db/deleted_course";
+    }
 }

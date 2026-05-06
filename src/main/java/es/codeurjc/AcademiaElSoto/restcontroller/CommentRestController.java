@@ -52,7 +52,7 @@ public class CommentRestController {
 
     @GetMapping("/{id}")
     public CommentResponseDto getCommentById(@PathVariable Long id) {
-        // Usamos orElseThrow() sin parámetros para lanzar NoSuchElementException
+        // We use orElseThrow() without parameters to launch NoSuchElementException
         Comment comment = commentService.findById(id).orElseThrow();
 
         return toDTO(comment);

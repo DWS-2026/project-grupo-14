@@ -1,61 +1,56 @@
 package es.codeurjc.AcademiaElSoto.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
-import org.springframework.ui.Model;
-
 import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.Course;
 import es.codeurjc.AcademiaElSoto.model.User;
-import es.codeurjc.AcademiaElSoto.repository.UserRepository;
-import es.codeurjc.AcademiaElSoto.repository.CartRepository;
-import es.codeurjc.AcademiaElSoto.repository.CourseRepository;
+import es.codeurjc.AcademiaElSoto.service.CartService;
+import es.codeurjc.AcademiaElSoto.service.CourseService;
+import es.codeurjc.AcademiaElSoto.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CartController {
 
-    @Autowired
-    private CartRepository cartRepository;
+    private final CartService cartService;
+    private final CourseService courseService;
+    private final UserService userService;
 
-    @Autowired
-    private CourseRepository courseRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public CartController(CartService cartService, CourseService courseService, UserService userService) {
+        this.cartService = cartService;
+        this.courseService = courseService;
+        this.userService = userService;
+    }
 
     @GetMapping("/cart")
-    public String viewCart(HttpSession session, Model model,
-            org.springframework.security.core.Authentication authentication) {
+    public String viewCart(HttpSession session, Model model, Authentication authentication) {
 
+        List<Course> cartCourses = new ArrayList<>();
         int totalCourses = 0;
         int totalPrice = 0;
-        List<Course> cartCourses = new ArrayList<>();
 
         if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            Optional<User> userOpt = userRepository.findByUserName(username);
+            Optional<User> userOpt = userService.findByUserName(authentication.getName());
 
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
                 Cart cart = user.getCart();
 
-                if (cart != null && cart.getCourses() != null) {
-                    cartCourses = cart.getCourses();
-                    totalCourses = cartCourses.size();
+                cartCourses = cartService.getCourses(cart);
+                totalCourses = cartService.totalCourses(cart);
+                totalPrice = cartService.totalPrice(cart);
 
-                    for (Course c : cartCourses) {
-                        totalPrice += c.getPrice();
-                    }
-
+                if (cart != null) {
                     session.setAttribute("cartId", cart.getId());
                 }
             }
@@ -68,28 +63,22 @@ public class CartController {
         return "cart";
     }
 
-    
     @PostMapping("/course/{id}/add-cart")
-    public String addToCart(@PathVariable long id,
-            org.springframework.security.core.Authentication authentication,
-            HttpSession session) {
+    public String addToCart(@PathVariable long id, Authentication authentication, HttpSession session) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
 
-        String username = authentication.getName();
-
-        Optional<User> userOpt = userRepository.findByUserName(username);
-        Optional<Course> courseOpt = courseRepository.findById(id);
+        Optional<User> userOpt = userService.findByUserName(authentication.getName());
+        Optional<Course> courseOpt = courseService.findById(id);
 
         if (userOpt.isPresent() && courseOpt.isPresent()) {
             User user = userOpt.get();
             Course course = courseOpt.get();
 
             Cart cart = user.getCart();
-            
-            
+
             if (cart == null) {
                 cart = new Cart("Carrito de " + user.getUserName(), 0);
                 user.setCart(cart);
@@ -99,8 +88,8 @@ public class CartController {
                 cart.addCourse(course);
             }
 
-            cartRepository.save(cart);
-            userRepository.save(user);
+            cartService.save(cart);
+            userService.saveUser(user);
 
             session.setAttribute("cartId", cart.getId());
         }
@@ -109,17 +98,14 @@ public class CartController {
     }
 
     @PostMapping("/cart/remove/{id}")
-    public String removeCourse(@PathVariable long id,
-            org.springframework.security.core.Authentication authentication) {
+    public String removeCourse(@PathVariable long id, Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
 
-        String username = authentication.getName();
-
-        Optional<User> userOpt = userRepository.findByUserName(username);
-        Optional<Course> courseOpt = courseRepository.findById(id);
+        Optional<User> userOpt = userService.findByUserName(authentication.getName());
+        Optional<Course> courseOpt = courseService.findById(id);
 
         if (userOpt.isPresent() && courseOpt.isPresent()) {
             User user = userOpt.get();
@@ -128,14 +114,8 @@ public class CartController {
 
             if (cart != null && cart.getCourses() != null) {
                 cart.getCourses().remove(course);
-
-                int total = 0;
-                for (Course c : cart.getCourses()) {
-                    total += c.getPrice();
-                }
-                cart.setPrice(total);
-
-                cartRepository.save(cart);
+                cart.setPrice(cartService.totalPrice(cart));
+                cartService.save(cart);
             }
         }
 
@@ -143,45 +123,37 @@ public class CartController {
     }
 
     @PostMapping("/complete-purchase")
-    public String completePurchase(HttpSession session, Model model,
-            org.springframework.security.core.Authentication authentication) {
+    public String completePurchase(HttpSession session, Model model, Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
 
-        String username = authentication.getName();
-
-        Optional<User> userOpt = userRepository.findByUserName(username);
+        Optional<User> userOpt = userService.findByUserName(authentication.getName());
 
         if (userOpt.isEmpty()) {
             return "redirect:/login";
         }
 
-        User userFromDb = userOpt.get();
-
-        Cart cart = userFromDb.getCart();
-        List<Course> cartCourses = new ArrayList<>();
-
-        if (cart != null && cart.getCourses() != null) {
-            cartCourses = cart.getCourses();
-        }
+        User user = userOpt.get();
+        Cart cart = user.getCart();
+        List<Course> cartCourses = cartService.getCourses(cart);
 
         if (cartCourses.isEmpty()) {
             return "course_purchase_error";
         }
 
         for (Course course : cartCourses) {
-            if (!userFromDb.getPurchasedCourses().contains(course)) {
-                userFromDb.addPurchasedCourse(course);
+            if (!user.getPurchasedCourses().contains(course)) {
+                user.addPurchasedCourse(course);
             }
         }
 
         cart.getCourses().clear();
         cart.setPrice(0);
 
-        cartRepository.save(cart);
-        userRepository.save(userFromDb);
+        cartService.save(cart);
+        userService.saveUser(user);
 
         session.setAttribute("cartId", cart.getId());
 

@@ -130,4 +130,8 @@ public class CommentService {
     public List<Comment> findByCourseId(Long courseId) {
         return commentRepository.findByCourseIdOrderByPublicationDateDesc(courseId);
     }
+
+    public List<Comment> findByUser(String userName) {
+        return commentRepository.findByUser(userName);
+    }
 }
