@@ -25,6 +25,10 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.Collection;
+import es.codeurjc.AcademiaElSoto.dto.CommentResponseDto;
+import es.codeurjc.AcademiaElSoto.mapper.CommentMapper;
+import es.codeurjc.AcademiaElSoto.service.CommentService;
 import es.codeurjc.AcademiaElSoto.dto.CourseRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
 import es.codeurjc.AcademiaElSoto.mapper.CourseMapper;
@@ -34,7 +38,7 @@ import es.codeurjc.AcademiaElSoto.service.ImageService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/courses")
+@RequestMapping("/api/v1/courses")
 public class CourseRestController {
 
     @Autowired
@@ -45,6 +49,12 @@ public class CourseRestController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private CommentMapper commentMapper;
 
     // --- BASIC CRUD METHODS ---
 
@@ -74,7 +84,8 @@ public class CourseRestController {
     }
 
     @PutMapping("/{id}")
-    public CourseResponseDto updateCourse(@PathVariable Long id, @Valid @RequestBody CourseRequestDto courseRequestDto) {
+    public CourseResponseDto updateCourse(@PathVariable Long id,
+            @Valid @RequestBody CourseRequestDto courseRequestDto) {
         Course existingCourse = courseService.findById(id).orElseThrow();
         mapper.updateEntity(courseRequestDto, existingCourse);
         Course updatedCourse = courseService.save(existingCourse);
@@ -88,12 +99,19 @@ public class CourseRestController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}/comments")
+    public Collection<CommentResponseDto> getCourseComments(@PathVariable Long id) {
+        Course course = courseService.findById(id).orElseThrow();
+        return commentMapper.toDTOs(commentService.findByCourseId(course.getId()));
+    }
+
     // --- NEW DISK IMAGE SYSTEM (ITEM 15) ---
 
     // 1. Upload/Add image to course
     @PostMapping("/{id}/image")
-    public ResponseEntity<Object> uploadCourseImage(@PathVariable Long id, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        
+    public ResponseEntity<Object> uploadCourseImage(@PathVariable Long id,
+            @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+
         if (imageFile.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -110,7 +128,7 @@ public class CourseRestController {
         }
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/courses/{id}/image")
+                .path("/api/v1/courses/{id}/image")
                 .buildAndExpand(id)
                 .toUri();
 
@@ -127,7 +145,7 @@ public class CourseRestController {
             Resource file = imageService.getImageFile(course.getImage().getId());
 
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg") 
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
                     .body(file);
         } else {
             return ResponseEntity.notFound().build();
@@ -150,12 +168,16 @@ public class CourseRestController {
         return ResponseEntity.noContent().build();
     }
 
-
     // --- EXTERNAL API (GOOGLE BOOKS) ---
 
-    record BooksResponse(List<Book> items) {}
-    record Book(VolumeInfo volumeInfo) {}
-    record VolumeInfo(String title) {}
+    record BooksResponse(List<Book> items) {
+    }
+
+    record Book(VolumeInfo volumeInfo) {
+    }
+
+    record VolumeInfo(String title) {
+    }
 
     @GetMapping("/{id}/recommended-books")
     public List<String> getRecommendedBooks(@PathVariable Long id) {

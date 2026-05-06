@@ -10,7 +10,6 @@ public class CommentRequestDto {
     @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
 
-    @NotBlank(message = "User is required")
     private String user;
 
     @NotNull(message = "Course id is required")

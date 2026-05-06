@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,14 +19,10 @@ import es.codeurjc.AcademiaElSoto.security.jwt.JwtTokenProvider;
 import es.codeurjc.AcademiaElSoto.security.jwt.UnauthorizedHandlerJwt;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import es.codeurjc.AcademiaElSoto.security.jwt.JwtRequestFilter;
-import es.codeurjc.AcademiaElSoto.security.jwt.JwtTokenProvider;
-import es.codeurjc.AcademiaElSoto.security.jwt.UnauthorizedHandlerJwt;
 
 @Configuration
 @EnableWebSecurity
@@ -60,6 +55,22 @@ public class SecurityConfiguration {
         }
 
         @Bean
+        @Order(0)
+        public SecurityFilterChain apiDocsFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .securityMatcher(
+                                                "/v3/api-docs/**",
+                                                "/v3/api-docs.yaml",
+                                                "/swagger-ui/**",
+                                                "/swagger-ui.html")
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .anyRequest().permitAll())
+                                .csrf(csrf -> csrf.disable());
+
+                return http.build();
+        }
+
+        @Bean
         @Order(1)
         public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 
@@ -74,18 +85,20 @@ public class SecurityConfiguration {
                                 .authorizeHttpRequests(authorize -> authorize
 
                                                 // Auth endpoints
-                                                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/signup").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/refresh").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/logout").permitAll()
 
                                                 // Public GET endpoints
                                                 .requestMatchers(HttpMethod.GET,
                                                                 "/api/v1/courses",
                                                                 "/api/v1/courses/*",
                                                                 "/api/v1/courses/*/image",
+                                                                "/api/v1/courses/*/comments",
+                                                                "/api/v1/courses/*/books",
                                                                 "/api/v1/comments",
                                                                 "/api/v1/comments/*",
-                                                                "/api/v1/comments/course/*",
                                                                 "/api/v1/users/*/image")
                                                 .permitAll()
 
@@ -95,6 +108,7 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.PUT, "/api/v1/courses/*").hasRole("ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/*")
                                                 .hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/users").hasRole("ADMIN")
 
                                                 // Logged users
                                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/*")
@@ -111,7 +125,33 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/**")
                                                 .hasAnyRole("USER", "ADMIN")
 
-                                                .anyRequest().permitAll());
+                                                // Course image management: admin only
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/courses/*/image")
+                                                .hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/*/image")
+                                                .hasRole("ADMIN")
+
+                                                // Carts
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/carts").hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/carts/me")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.GET, "/api/v1/carts/*")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/carts/me/courses/*")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/me/courses")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/me/courses/*")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/*").hasRole("ADMIN")
+
+                                                // User image changes
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/users/*/image")
+                                                .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*/image")
+                                                .hasAnyRole("USER", "ADMIN")
+
+                                                .anyRequest().authenticated());
 
                 http.formLogin(formLogin -> formLogin.disable());
                 http.csrf(csrf -> csrf.disable());
@@ -143,46 +183,12 @@ public class SecurityConfiguration {
                                                                 "/register", "/login", "/loginerror",
                                                                 "/403", "/404", "/500",
                                                                 "/css/**", "/js/**", "/img/**", "/assets/**",
-                                                                "/error/**")
+                                                                "/error/**", "/v3/api-docs/**",
+                                                                "/swagger-ui/**",
+                                                                "/swagger-ui.html",
+                                                                "/v3/api-docs/**",
+                                                                "/v3/api-docs.yaml")
                                                 .permitAll()
-
-                                                // Public REST authentication endpoints
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/signup").permitAll()
-
-                                                // Public REST GET endpoints
-                                                .requestMatchers(HttpMethod.GET,
-                                                                "/api/v1/courses",
-                                                                "/api/v1/courses/*",
-                                                                "/api/v1/courses/*/image",
-                                                                "/api/v1/comments",
-                                                                "/api/v1/comments/*",
-                                                                "/api/v1/comments/course/*",
-                                                                "/api/v1/users/*/image")
-                                                .permitAll()
-
-                                                // Admin-only REST endpoints
-                                                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
-
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/courses").hasRole("ADMIN")
-                                                .requestMatchers(HttpMethod.PUT, "/api/v1/courses/*").hasRole("ADMIN")
-                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/*")
-                                                .hasRole("ADMIN")
-
-                                                // Logged users REST endpoints
-                                                .requestMatchers(HttpMethod.GET, "/api/v1/users/*")
-                                                .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.PUT, "/api/v1/users/*")
-                                                .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*")
-                                                .hasAnyRole("USER", "ADMIN")
-
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/comments/**")
-                                                .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.PUT, "/api/v1/comments/**")
-                                                .hasAnyRole("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/**")
-                                                .hasAnyRole("USER", "ADMIN")
 
                                                 // Private web pages
                                                 .requestMatchers(

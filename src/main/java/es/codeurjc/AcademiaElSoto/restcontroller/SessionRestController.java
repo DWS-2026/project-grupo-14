@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.codeurjc.AcademiaElSoto.security.jwt.AuthResponse;
@@ -12,6 +13,7 @@ import es.codeurjc.AcademiaElSoto.security.jwt.UserLoginService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
+@RequestMapping("/api/v1")
 public class SessionRestController {
 
     private final UserLoginService userLoginService;
@@ -20,7 +22,7 @@ public class SessionRestController {
         this.userLoginService = userLoginService;
     }
 
-    @PostMapping("/api/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
             @RequestBody LoginRequest loginRequest,
             HttpServletResponse response) {
@@ -28,7 +30,7 @@ public class SessionRestController {
         return userLoginService.login(response, loginRequest);
     }
 
-    @PostMapping("/api/auth/refresh")
+    @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refreshToken(
             @CookieValue(name = "RefreshToken", required = false) String refreshToken,
             HttpServletResponse response) {
@@ -36,7 +38,7 @@ public class SessionRestController {
         return userLoginService.refresh(response, refreshToken);
     }
 
-    @PostMapping("/api/auth/logout")
+    @PostMapping("/logout")
     public ResponseEntity<AuthResponse> logOut(HttpServletResponse response) {
 
         return ResponseEntity.ok(

@@ -50,7 +50,7 @@ public class UserResponseDto {
         return purchasedCourses;
     }
 
-    // --- SETTERS (¡La pieza que faltaba!) ---
+    // --- SETTERS ---
 
     public void setId(Long id) {
         this.id = id;

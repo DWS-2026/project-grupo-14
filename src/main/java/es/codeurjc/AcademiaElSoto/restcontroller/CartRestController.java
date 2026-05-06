@@ -1,25 +1,35 @@
 package es.codeurjc.AcademiaElSoto.restcontroller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import java.net.URI;
+import java.util.Map;
 
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import es.codeurjc.AcademiaElSoto.dto.CartResponseDto;
-import es.codeurjc.AcademiaElSoto.dto.CourseResponseDto;
 import es.codeurjc.AcademiaElSoto.mapper.CartMapper;
 import es.codeurjc.AcademiaElSoto.model.Cart;
 import es.codeurjc.AcademiaElSoto.model.Course;
+import es.codeurjc.AcademiaElSoto.model.User;
+import es.codeurjc.AcademiaElSoto.service.AuthorizationService;
 import es.codeurjc.AcademiaElSoto.service.CartService;
 import es.codeurjc.AcademiaElSoto.service.CourseService;
+import es.codeurjc.AcademiaElSoto.service.UserService;
 
 @RestController
-@RequestMapping("/api/carts")
+@RequestMapping("/api/v1/carts")
 public class CartRestController {
 
     @Autowired
@@ -31,71 +41,169 @@ public class CartRestController {
     @Autowired
     private CartMapper cartMapper;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AuthorizationService authorizationService;
+
     // 1. GET THE CART PAGINATED
     @GetMapping
-    public Page<CartResponseDto> getCarts(Pageable pageable) {
+    public Page<CartResponseDto> getCarts(Pageable pageable, Authentication authentication) {
+        if (!authorizationService.isAdmin(authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can list all carts");
+        }
+
         return cartService.findAll(pageable).map(this::toDTO);
     }
 
+    @GetMapping("/me")
+    public CartResponseDto getMyCart(Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        Cart cart = getOrCreateUserCart(user);
+
+        return toDTO(cart);
+    }
+
     // 2. ADD A COURSE TO THE CART
-    @PostMapping("/{cartId}/courses/{courseId}")
-    public ResponseEntity<CartResponseDto> addCourseToCart(@PathVariable Long cartId, @PathVariable Long courseId) {
-        
-        Optional<Cart> cartOpt = cartService.findById(cartId);
-        Optional<Course> courseOpt = courseService.findById(courseId);
+    @PostMapping("/me/courses/{courseId}")
+    public ResponseEntity<CartResponseDto> addCourseToMyCart(
+            @PathVariable Long courseId,
+            Authentication authentication) {
 
-        if (cartOpt.isPresent() && courseOpt.isPresent()) {
-            Cart cart = cartOpt.get();
-            Course course = courseOpt.get();
+        User user = getAuthenticatedUser(authentication);
+        Cart cart = getOrCreateUserCart(user);
 
-            cart.getCourses().add(course);
-            cartService.save(cart);
+        Course course = courseService.findById(courseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
-            return ResponseEntity.ok(toDTO(cart));
+        if (cart.getCourses().contains(course)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Course is already in the cart");
         }
 
-        return ResponseEntity.notFound().build(); 
+        cart.addCourse(course);
+
+        Cart savedCart = cartService.save(cart);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .build()
+                .toUri();
+
+        return ResponseEntity.created(location).body(toDTO(savedCart));
     }
 
     // 3. REMOVE A COURSE FROM THE CART
-    @DeleteMapping("/{cartId}/courses/{courseId}")
-    public ResponseEntity<CartResponseDto> removeCourseFromCart(@PathVariable Long cartId, @PathVariable Long courseId) {
-        
-        Optional<Cart> cartOpt = cartService.findById(cartId);
-        Optional<Course> courseOpt = courseService.findById(courseId);
+    @DeleteMapping("/me/courses/{courseId}")
+    public ResponseEntity<CartResponseDto> removeCourseFromMyCart(
+            @PathVariable Long courseId,
+            Authentication authentication) {
 
-        if (cartOpt.isPresent() && courseOpt.isPresent()) {
-            Cart cart = cartOpt.get();
-            Course course = courseOpt.get();
+        User user = getAuthenticatedUser(authentication);
+        Cart cart = getOrCreateUserCart(user);
 
-            cart.getCourses().remove(course);
-            cartService.save(cart);
+        Course course = courseService.findById(courseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
-            return ResponseEntity.ok(toDTO(cart));
+        boolean removed = cart.getCourses().remove(course);
+
+        if (!removed) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course is not in the cart");
         }
 
-        return ResponseEntity.notFound().build();
+        recalculateCartPrice(cart);
+
+        Cart savedCart = cartService.save(cart);
+
+        return ResponseEntity.ok(toDTO(savedCart));
     }
-    
+
     // 4. CLEAR THE CART COMPLETELY
-    @DeleteMapping("/{cartId}/clear")
-    public ResponseEntity<CartResponseDto> clearCart(@PathVariable Long cartId) {
-        
-        Optional<Cart> cartOpt = cartService.findById(cartId);
+    @DeleteMapping("/me/courses")
+    public ResponseEntity<CartResponseDto> clearMyCart(Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        Cart cart = getOrCreateUserCart(user);
 
-        if (cartOpt.isPresent()) {
-            Cart cart = cartOpt.get();
-            
-            cart.getCourses().clear();
-            cartService.save(cart);
-            
-            return ResponseEntity.ok(toDTO(cart));
-        }
+        cart.getCourses().clear();
+        cart.setPrice(0);
 
-        return ResponseEntity.notFound().build();
+        Cart savedCart = cartService.save(cart);
+
+        return ResponseEntity.ok(toDTO(savedCart));
     }
 
-    
+    @GetMapping("/{cartId}")
+    public CartResponseDto getCartById(
+            @PathVariable Long cartId,
+            Authentication authentication) {
+
+        Cart cart = cartService.findById(cartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+
+        checkCartAccess(cart, authentication);
+
+        return toDTO(cart);
+    }
+
+    @DeleteMapping("/{cartId}")
+    public ResponseEntity<Map<String, String>> deleteCart(
+            @PathVariable Long cartId,
+            Authentication authentication) {
+
+        if (!authorizationService.isAdmin(authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete carts");
+        }
+
+        Cart cart = cartService.findById(cartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+
+        cartService.deleteById(cart.getId());
+
+        return ResponseEntity.ok(Map.of("message", "Cart deleted successfully"));
+    }
+
+    private User getAuthenticatedUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication is required");
+        }
+
+        return userService.findByUserName(authentication.getName())
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authenticated user not found"));
+    }
+
+    private Cart getOrCreateUserCart(User user) {
+        Cart cart = user.getCart();
+
+        if (cart == null) {
+            cart = new Cart("Cart of " + user.getUserName(), 0);
+            user.setCart(cart);
+            userService.saveUser(user);
+        }
+
+        return cart;
+    }
+
+    private void checkCartAccess(Cart cart, Authentication authentication) {
+        if (authorizationService.isAdmin(authentication)) {
+            return;
+        }
+
+        User user = getAuthenticatedUser(authentication);
+
+        if (cart.getUser() == null || !cart.getUser().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only access your own cart");
+        }
+    }
+
+    private void recalculateCartPrice(Cart cart) {
+        int totalPrice = cart.getCourses().stream()
+                .mapToInt(Course::getPrice)
+                .sum();
+
+        cart.setPrice(totalPrice);
+    }
+
     private CartResponseDto toDTO(Cart cart) {
         return cartMapper.toDTO(cart);
     }

@@ -72,11 +72,12 @@ public class CartService {
      * Adds a course to the given cart if both the cart exists
      * and the course id is found in the database.
      *
-     * @param cart the target cart
+     * @param cart     the target cart
      * @param courseId the id of the course to add
      */
     public void addCourse(Cart cart, Long courseId) {
-        if (cart == null) return;
+        if (cart == null)
+            return;
 
         Optional<Course> courseOpt = courseRepository.findById(courseId);
         courseOpt.ifPresent(course -> {
@@ -89,11 +90,12 @@ public class CartService {
      * Removes a course from the given cart if both the cart exists
      * and the course id is found in the database.
      *
-     * @param cart the target cart
+     * @param cart     the target cart
      * @param courseId the id of the course to remove
      */
     public void removeCourse(Cart cart, Long courseId) {
-        if (cart == null || cart.getCourses() == null) return;
+        if (cart == null || cart.getCourses() == null)
+            return;
 
         Optional<Course> courseOpt = courseRepository.findById(courseId);
         courseOpt.ifPresent(course -> {
@@ -128,7 +130,11 @@ public class CartService {
         return 0;
     }
 
-    public void save(Cart cart) {
-        cartRepository.save(cart);
+    public Cart save(Cart cart) {
+        return cartRepository.save(cart);
+    }
+
+    public void deleteById(Long id) {
+        cartRepository.deleteById(id);
     }
 }
