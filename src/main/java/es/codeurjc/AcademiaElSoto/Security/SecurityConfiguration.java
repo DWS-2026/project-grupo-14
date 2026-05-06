@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import es.codeurjc.AcademiaElSoto.security.jwt.JwtTokenProvider;
-import es.codeurjc.AcademiaElSoto.security.jwt.UnauthorizedHandlerJwt;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,9 +32,6 @@ public class SecurityConfiguration {
 
         @Autowired
         private JwtTokenProvider jwtTokenProvider;
-
-        @Autowired
-        private UnauthorizedHandlerJwt unauthorizedHandlerJwt;
 
         @Bean
         public PasswordEncoder passwordEncoder() {
@@ -79,7 +75,28 @@ public class SecurityConfiguration {
                 http
                                 .securityMatcher("/api/**")
                                 .exceptionHandling(handling -> handling
-                                                .authenticationEntryPoint(unauthorizedHandlerJwt));
+                                                .authenticationEntryPoint((request, response, authException) -> {
+                                                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                                        response.setContentType("application/json");
+                                                        response.getWriter().write("""
+                                                                        {
+                                                                          "status": 401,
+                                                                          "error": "Unauthorized",
+                                                                          "message": "Authentication is required"
+                                                                        }
+                                                                        """);
+                                                })
+                                                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                                                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                                                        response.setContentType("application/json");
+                                                        response.getWriter().write("""
+                                                                        {
+                                                                          "status": 403,
+                                                                          "error": "Forbidden",
+                                                                          "message": "Access denied"
+                                                                        }
+                                                                        """);
+                                                }));
 
                 http
                                 .authorizeHttpRequests(authorize -> authorize
