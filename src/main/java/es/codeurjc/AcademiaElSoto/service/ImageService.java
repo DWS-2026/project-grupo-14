@@ -23,7 +23,7 @@ public class ImageService {
     private ImageRepository imageRepository;
 
     // Folder on disk where images will be saved
-    private static final Path IMAGES_FOLDER = Paths.get("imagenes_guardadas");
+    private static final Path IMAGES_FOLDER = Paths.get("imagenes_guardadas").toAbsolutePath().normalize();
 
     public ImageService() throws IOException {
         // Create the folder on startup if it doesn't exist
@@ -34,19 +34,52 @@ public class ImageService {
         return imageRepository.findById(id).orElseThrow();
     }
 
+    private String getSafeExtension(String originalName) {
+        if (originalName == null || originalName.isBlank()) {
+            return "";
+        }
+
+        String cleanName = originalName.replace("\\", "/");
+        cleanName = Paths.get(cleanName).getFileName().toString();
+
+        int dotIndex = cleanName.lastIndexOf(".");
+        if (dotIndex == -1) {
+            return "";
+        }
+
+        String extension = cleanName.substring(dotIndex).toLowerCase();
+
+        if (!extension.matches("\\.(jpg|jpeg|png|gif|webp)$")) {
+            throw new IllegalArgumentException("Invalid image extension");
+        }
+
+        return extension;
+    }
+
+    private Path safeImagePath(String fileName) {
+        Path path = IMAGES_FOLDER.resolve(fileName).normalize();
+
+        if (!path.startsWith(IMAGES_FOLDER)) {
+            throw new IllegalArgumentException("Invalid file path");
+        }
+
+        return path;
+    }
+
     // ADD IMAGE (To disk and DB)
     public Image createImage(MultipartFile file) throws IOException {
         Image image = new Image();
-        
+
         // Save first to let the DB assign an ID (1, 2, 3...)
         image = imageRepository.save(image);
 
-        // Get the original name and prepend the ID to avoid overwriting (e.g., 1_photo.jpg)
-        String originalName = file.getOriginalFilename();
-        String fileName = image.getId() + "_" + originalName;
+        // Get the original name and prepend the ID to avoid overwriting (e.g.,
+        // 1_photo.jpg)
+        String extension = getSafeExtension(file.getOriginalFilename());
+        String fileName = "image_" + image.getId() + extension;
 
         // Save physically on disk
-        Path filePath = IMAGES_FOLDER.resolve(fileName);
+        Path filePath = safeImagePath(fileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         // Update the entity with the file name and save again
@@ -59,8 +92,14 @@ public class ImageService {
         Image image = imageRepository.findById(id).orElseThrow();
 
         if (image.getFileName() != null) {
-            Path filePath = IMAGES_FOLDER.resolve(image.getFileName());
-            return new UrlResource(filePath.toUri());
+            Path filePath = safeImagePath(image.getFileName());
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists() || !resource.isReadable()) {
+                throw new RuntimeException("Image file not found");
+            }
+
+            return resource;
         } else {
             throw new RuntimeException("Image file not found");
         }
@@ -72,15 +111,15 @@ public class ImageService {
 
         // If it already had an image, delete it from disk to avoid clutter
         if (image.getFileName() != null) {
-            Path oldPath = IMAGES_FOLDER.resolve(image.getFileName());
+            Path oldPath = safeImagePath(image.getFileName());
             Files.deleteIfExists(oldPath);
         }
 
         // Save the new one with its original name
-        String originalName = file.getOriginalFilename();
-        String newFileName = id + "_" + originalName;
+        String extension = getSafeExtension(file.getOriginalFilename());
+        String newFileName = "image_" + id + extension;
 
-        Path filePath = IMAGES_FOLDER.resolve(newFileName);
+        Path filePath = safeImagePath(newFileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         image.setFileName(newFileName);
@@ -90,18 +129,18 @@ public class ImageService {
     // DELETE IMAGE (From DB and disk)
     public Image deleteImage(long id) {
         Image image = imageRepository.findById(id).orElseThrow();
-        
+
         // Delete from physical disk
         if (image.getFileName() != null) {
             try {
-                Path filePath = IMAGES_FOLDER.resolve(image.getFileName());
+                Path filePath = safeImagePath(image.getFileName());
                 Files.deleteIfExists(filePath);
             } catch (IOException e) {
                 // Basic error handling in case the file was already gone
-                e.printStackTrace(); 
+                e.printStackTrace();
             }
         }
-        
+
         // Delete from database
         imageRepository.deleteById(id);
         return image;
