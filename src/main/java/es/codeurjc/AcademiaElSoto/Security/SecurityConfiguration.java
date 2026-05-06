@@ -35,7 +35,8 @@ public class SecurityConfiguration {
 
         @Bean
         public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
+                // Increased cost factor to 12 for stronger encryption and better protection against brute-force attacks
+                return new BCryptPasswordEncoder(12);
         }
 
         @Bean
