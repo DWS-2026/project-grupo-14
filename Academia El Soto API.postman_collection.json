@@ -1,0 +1,4356 @@
+{
+  "info": {
+    "_postman_id": "c92dca40-a3a7-4f7b-afb1-1ee4cdca4669",
+    "name": "Academia El Soto API",
+    "description": "REST API for Academia El Soto\n\nContact Support:\n Name: Grupo 14",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54561018"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "users",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "image",
+                      "item": [
+                        {
+                          "name": "get User Image",
+                          "request": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id",
+                                "image"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "users",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "*/*"
+                                }
+                              ],
+                              "cookie": [],
+                              "body": "string"
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "users",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        },
+                        {
+                          "name": "upload User Image",
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"imageFile\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id",
+                                "image"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"imageFile\": \"string\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "users",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "*/*"
+                                }
+                              ],
+                              "cookie": [],
+                              "body": "{}"
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"imageFile\": \"string\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "users",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        },
+                        {
+                          "name": "delete User Image",
+                          "request": {
+                            "method": "DELETE",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id",
+                                "image"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "users",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/users/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "users",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "get User By Id",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 7734,\n  \"userName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"string\",\n  \"roles\": [\n    \"string\",\n    \"string\"\n  ],\n  \"purchasedCourses\": [\n    {\n      \"id\": 8501,\n      \"title\": \"string\",\n      \"price\": 329\n    },\n    {\n      \"id\": 2017,\n      \"title\": \"string\",\n      \"price\": 6188\n    }\n  ]\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "update User",
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 7734,\n  \"userName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"string\",\n  \"roles\": [\n    \"string\",\n    \"string\"\n  ],\n  \"purchasedCourses\": [\n    {\n      \"id\": 8501,\n      \"title\": \"string\",\n      \"price\": 329\n    },\n    {\n      \"id\": 2017,\n      \"title\": \"string\",\n      \"price\": 6188\n    }\n  ]\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "delete User",
+                      "request": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"key_0\": \"string\",\n  \"key_1\": \"string\",\n  \"key_2\": \"string\"\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/users/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "get Users",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/users?page=989&size=9663&sort=string,string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "users"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "989"
+                        },
+                        {
+                          "key": "size",
+                          "value": "9663"
+                        },
+                        {
+                          "key": "sort",
+                          "value": "string,string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/users?page=989&size=9663&sort=string,string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "key": "page",
+                              "value": "989"
+                            },
+                            {
+                              "key": "size",
+                              "value": "9663"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "string,string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"totalElements\": 3590,\n  \"totalPages\": 4098,\n  \"first\": true,\n  \"last\": false,\n  \"size\": 4844,\n  \"content\": [\n    {\n      \"id\": 2501,\n      \"userName\": \"string\",\n      \"lastName\": \"string\",\n      \"email\": \"string\",\n      \"roles\": [\n        \"string\",\n        \"string\"\n      ],\n      \"purchasedCourses\": [\n        {\n          \"id\": 4170,\n          \"title\": \"string\",\n          \"price\": 4189\n        },\n        {\n          \"id\": 2718,\n          \"title\": \"string\",\n          \"price\": 2504\n        }\n      ]\n    },\n    {\n      \"id\": 2383,\n      \"userName\": \"string\",\n      \"lastName\": \"string\",\n      \"email\": \"string\",\n      \"roles\": [\n        \"string\",\n        \"string\"\n      ],\n      \"purchasedCourses\": [\n        {\n          \"id\": 4160,\n          \"title\": \"string\",\n          \"price\": 9104\n        },\n        {\n          \"id\": 4219,\n          \"title\": \"string\",\n          \"price\": 939\n        }\n      ]\n    }\n  ],\n  \"number\": 5901,\n  \"sort\": {\n    \"empty\": false,\n    \"sorted\": true,\n    \"unsorted\": false\n  },\n  \"numberOfElements\": 7765,\n  \"pageable\": {\n    \"offset\": 1031,\n    \"sort\": {\n      \"empty\": true,\n      \"sorted\": false,\n      \"unsorted\": true\n    },\n    \"paged\": true,\n    \"pageNumber\": 467,\n    \"pageSize\": 8341,\n    \"unpaged\": true\n  },\n  \"empty\": false\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/users?page=989&size=9663&sort=string,string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "key": "page",
+                              "value": "989"
+                            },
+                            {
+                              "key": "size",
+                              "value": "9663"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "string,string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "create User",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/users",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "users"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/users",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "users"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 7734,\n  \"userName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"string\",\n  \"roles\": [\n    \"string\",\n    \"string\"\n  ],\n  \"purchasedCourses\": [\n    {\n      \"id\": 8501,\n      \"title\": \"string\",\n      \"price\": 329\n    },\n    {\n      \"id\": 2017,\n      \"title\": \"string\",\n      \"price\": 6188\n    }\n  ]\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/users",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "users"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "courses",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "image",
+                      "item": [
+                        {
+                          "name": "download Course Image",
+                          "request": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id/image",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id",
+                                "image"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "*/*"
+                                }
+                              ],
+                              "cookie": [],
+                              "body": "string"
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        },
+                        {
+                          "name": "upload Course Image",
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"imageFile\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id/image",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id",
+                                "image"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"imageFile\": \"string\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "*/*"
+                                }
+                              ],
+                              "cookie": [],
+                              "body": "{}"
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"imageFile\": \"string\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:id/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":id",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "recommended-books",
+                      "item": [
+                        {
+                          "name": "get Recommended Books",
+                          "request": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id/recommended-books",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id",
+                                "recommended-books"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:id/recommended-books",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":id",
+                                    "recommended-books"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "*/*"
+                                }
+                              ],
+                              "cookie": [],
+                              "body": "[\n  \"string\",\n  \"string\"\n]"
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:id/recommended-books",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":id",
+                                    "recommended-books"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "comments",
+                      "item": [
+                        {
+                          "name": "get Course Comments",
+                          "request": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id/comments",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id",
+                                "comments"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:id/comments",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":id",
+                                    "comments"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "*/*"
+                                }
+                              ],
+                              "cookie": [],
+                              "body": "[\n  {\n    \"id\": 1883,\n    \"description\": \"string\",\n    \"user\": \"string\",\n    \"publicationDate\": \"string\",\n    \"courseId\": 9408,\n    \"courseName\": \"string\"\n  },\n  {\n    \"id\": 4293,\n    \"description\": \"string\",\n    \"user\": \"string\",\n    \"publicationDate\": \"string\",\n    \"courseId\": 7724,\n    \"courseName\": \"string\"\n  }\n]"
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:id/comments",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":id",
+                                    "comments"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "get Course By Id",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/courses/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "courses",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 6827,\n  \"courseName\": \"string\",\n  \"teacher\": \"string\",\n  \"price\": 78,\n  \"description\": \"string\",\n  \"students\": [\n    {\n      \"id\": 932,\n      \"userName\": \"string\",\n      \"email\": \"string\"\n    },\n    {\n      \"id\": 1432,\n      \"userName\": \"string\",\n      \"email\": \"string\"\n    }\n  ],\n  \"imageIds\": [\n    8082,\n    5400\n  ]\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "update Course",
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"courseName\": \"string\",\n  \"description\": \"string\",\n  \"price\": 5648,\n  \"students\": 6564,\n  \"teacher\": \"string\",\n  \"imageIds\": [\n    4308,\n    7211\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/courses/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "courses",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"courseName\": \"string\",\n  \"description\": \"string\",\n  \"price\": 5648,\n  \"students\": 6564,\n  \"teacher\": \"string\",\n  \"imageIds\": [\n    4308,\n    7211\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 6827,\n  \"courseName\": \"string\",\n  \"teacher\": \"string\",\n  \"price\": 78,\n  \"description\": \"string\",\n  \"students\": [\n    {\n      \"id\": 932,\n      \"userName\": \"string\",\n      \"email\": \"string\"\n    },\n    {\n      \"id\": 1432,\n      \"userName\": \"string\",\n      \"email\": \"string\"\n    }\n  ],\n  \"imageIds\": [\n    8082,\n    5400\n  ]\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"courseName\": \"string\",\n  \"description\": \"string\",\n  \"price\": 5648,\n  \"students\": 6564,\n  \"teacher\": \"string\",\n  \"imageIds\": [\n    4308,\n    7211\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "delete Course",
+                      "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/courses/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "courses",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "{courseId}",
+                  "item": [
+                    {
+                      "name": "image",
+                      "item": [
+                        {
+                          "name": "delete Course Image",
+                          "request": {
+                            "method": "DELETE",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/courses/:courseId/image",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "courses",
+                                ":courseId",
+                                "image"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "courseId",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:courseId/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":courseId",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "courseId",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/courses/:courseId/image",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "courses",
+                                    ":courseId",
+                                    "image"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "courseId",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "get Courses",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/courses?page=989&size=9663&sort=string,string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "courses"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "989"
+                        },
+                        {
+                          "key": "size",
+                          "value": "9663"
+                        },
+                        {
+                          "key": "sort",
+                          "value": "string,string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/courses?page=989&size=9663&sort=string,string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "courses"
+                          ],
+                          "query": [
+                            {
+                              "key": "page",
+                              "value": "989"
+                            },
+                            {
+                              "key": "size",
+                              "value": "9663"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "string,string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"totalElements\": 7940,\n  \"totalPages\": 1674,\n  \"first\": false,\n  \"last\": false,\n  \"size\": 9395,\n  \"content\": [\n    {\n      \"id\": 1983,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 5105,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 7302,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 3798,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        4064,\n        2484\n      ]\n    },\n    {\n      \"id\": 8846,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 5568,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 6367,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 5375,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        6168,\n        7206\n      ]\n    }\n  ],\n  \"number\": 4925,\n  \"sort\": {\n    \"empty\": true,\n    \"sorted\": false,\n    \"unsorted\": true\n  },\n  \"numberOfElements\": 8391,\n  \"pageable\": {\n    \"offset\": 167,\n    \"sort\": {\n      \"empty\": true,\n      \"sorted\": true,\n      \"unsorted\": false\n    },\n    \"paged\": true,\n    \"pageNumber\": 234,\n    \"pageSize\": 8149,\n    \"unpaged\": true\n  },\n  \"empty\": false\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/courses?page=989&size=9663&sort=string,string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "courses"
+                          ],
+                          "query": [
+                            {
+                              "key": "page",
+                              "value": "989"
+                            },
+                            {
+                              "key": "size",
+                              "value": "9663"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "string,string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "create Course",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"courseName\": \"string\",\n  \"description\": \"string\",\n  \"price\": 5648,\n  \"students\": 6564,\n  \"teacher\": \"string\",\n  \"imageIds\": [\n    4308,\n    7211\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/courses",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "courses"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"courseName\": \"string\",\n  \"description\": \"string\",\n  \"price\": 5648,\n  \"students\": 6564,\n  \"teacher\": \"string\",\n  \"imageIds\": [\n    4308,\n    7211\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/courses",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "courses"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 6827,\n  \"courseName\": \"string\",\n  \"teacher\": \"string\",\n  \"price\": 78,\n  \"description\": \"string\",\n  \"students\": [\n    {\n      \"id\": 932,\n      \"userName\": \"string\",\n      \"email\": \"string\"\n    },\n    {\n      \"id\": 1432,\n      \"userName\": \"string\",\n      \"email\": \"string\"\n    }\n  ],\n  \"imageIds\": [\n    8082,\n    5400\n  ]\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"courseName\": \"string\",\n  \"description\": \"string\",\n  \"price\": 5648,\n  \"students\": 6564,\n  \"teacher\": \"string\",\n  \"imageIds\": [\n    4308,\n    7211\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/courses",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "courses"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "comments",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "get Comment By Id",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/comments/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "comments",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/comments/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "comments",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 4942,\n  \"description\": \"string\",\n  \"user\": \"string\",\n  \"publicationDate\": \"string\",\n  \"courseId\": 1930,\n  \"courseName\": \"string\"\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/comments/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "comments",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "update Comment",
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"courseId\": 2488,\n  \"description\": \"string\",\n  \"user\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/comments/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "comments",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"courseId\": 2488,\n  \"description\": \"string\",\n  \"user\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/comments/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "comments",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 4942,\n  \"description\": \"string\",\n  \"user\": \"string\",\n  \"publicationDate\": \"string\",\n  \"courseId\": 1930,\n  \"courseName\": \"string\"\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"courseId\": 2488,\n  \"description\": \"string\",\n  \"user\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/comments/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "comments",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "delete Comment",
+                      "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/comments/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "comments",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/comments/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "comments",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/comments/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "comments",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "get Comments",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/comments?page=989&size=9663&sort=string,string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "comments"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "989"
+                        },
+                        {
+                          "key": "size",
+                          "value": "9663"
+                        },
+                        {
+                          "key": "sort",
+                          "value": "string,string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/comments?page=989&size=9663&sort=string,string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "comments"
+                          ],
+                          "query": [
+                            {
+                              "key": "page",
+                              "value": "989"
+                            },
+                            {
+                              "key": "size",
+                              "value": "9663"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "string,string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"totalElements\": 3802,\n  \"totalPages\": 112,\n  \"first\": true,\n  \"last\": false,\n  \"size\": 5494,\n  \"content\": [\n    {\n      \"id\": 5158,\n      \"description\": \"string\",\n      \"user\": \"string\",\n      \"publicationDate\": \"string\",\n      \"courseId\": 4914,\n      \"courseName\": \"string\"\n    },\n    {\n      \"id\": 7512,\n      \"description\": \"string\",\n      \"user\": \"string\",\n      \"publicationDate\": \"string\",\n      \"courseId\": 8930,\n      \"courseName\": \"string\"\n    }\n  ],\n  \"number\": 2899,\n  \"sort\": {\n    \"empty\": false,\n    \"sorted\": false,\n    \"unsorted\": true\n  },\n  \"numberOfElements\": 1002,\n  \"pageable\": {\n    \"offset\": 6614,\n    \"sort\": {\n      \"empty\": true,\n      \"sorted\": true,\n      \"unsorted\": true\n    },\n    \"paged\": true,\n    \"pageNumber\": 7607,\n    \"pageSize\": 3025,\n    \"unpaged\": false\n  },\n  \"empty\": false\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/comments?page=989&size=9663&sort=string,string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "comments"
+                          ],
+                          "query": [
+                            {
+                              "key": "page",
+                              "value": "989"
+                            },
+                            {
+                              "key": "size",
+                              "value": "9663"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "string,string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "create Comment",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"courseId\": 2488,\n  \"description\": \"string\",\n  \"user\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/comments",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "comments"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"courseId\": 2488,\n  \"description\": \"string\",\n  \"user\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/comments",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "comments"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 4942,\n  \"description\": \"string\",\n  \"user\": \"string\",\n  \"publicationDate\": \"string\",\n  \"courseId\": 1930,\n  \"courseName\": \"string\"\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"courseId\": 2488,\n  \"description\": \"string\",\n  \"user\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/comments",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "comments"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "signup",
+              "item": [
+                {
+                  "name": "signup",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/signup",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "signup"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/signup",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "signup"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 7734,\n  \"userName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"string\",\n  \"roles\": [\n    \"string\",\n    \"string\"\n  ],\n  \"purchasedCourses\": [\n    {\n      \"id\": 8501,\n      \"title\": \"string\",\n      \"price\": 329\n    },\n    {\n      \"id\": 2017,\n      \"title\": \"string\",\n      \"price\": 6188\n    }\n  ]\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"HK57zVi7841xOg@FodJlmQmNuGGGYAQeUXvNW.vtzb\",\n  \"lastName\": \"string\",\n  \"password\": \"string\",\n  \"userName\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/signup",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "signup"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "refresh",
+              "item": [
+                {
+                  "name": "refresh Token",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/refresh",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "refresh"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/refresh",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "refresh"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"string\",\n  \"error\": \"string\"\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/refresh",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "refresh"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "logout",
+              "item": [
+                {
+                  "name": "log Out",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/logout",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "logout"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/logout",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "logout"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"string\",\n  \"error\": \"string\"\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/logout",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "logout"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "login",
+              "item": [
+                {
+                  "name": "login",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"string\",\n  \"password\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/login",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"username\": \"string\",\n  \"password\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"string\",\n  \"error\": \"string\"\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"username\": \"string\",\n  \"password\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "carts",
+              "item": [
+                {
+                  "name": "me",
+                  "item": [
+                    {
+                      "name": "courses",
+                      "item": [
+                        {
+                          "name": "{courseId}",
+                          "item": [
+                            {
+                              "name": "add Course To My Cart",
+                              "request": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/carts/me/courses/:courseId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "carts",
+                                    "me",
+                                    "courses",
+                                    ":courseId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "courseId",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "response": [
+                                {
+                                  "name": "OK",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "*/*"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/api/v1/carts/me/courses/:courseId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "api",
+                                        "v1",
+                                        "carts",
+                                        "me",
+                                        "courses",
+                                        ":courseId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "courseId",
+                                          "value": "833"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "OK",
+                                  "code": 200,
+                                  "_postman_previewlanguage": "text",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "*/*"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "body": "{\n  \"id\": 7037,\n  \"product\": \"string\",\n  \"price\": 7578,\n  \"userName\": \"string\",\n  \"courses\": [\n    {\n      \"id\": 9295,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 2767,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5215,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 966,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        4713,\n        1404\n      ]\n    },\n    {\n      \"id\": 4188,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 480,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5097,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 4751,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        1474,\n        9042\n      ]\n    }\n  ]\n}"
+                                },
+                                {
+                                  "name": "Not Found",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/api/v1/carts/me/courses/:courseId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "api",
+                                        "v1",
+                                        "carts",
+                                        "me",
+                                        "courses",
+                                        ":courseId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "courseId",
+                                          "value": "833"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Not Found",
+                                  "code": 404,
+                                  "_postman_previewlanguage": "text",
+                                  "header": [],
+                                  "cookie": [],
+                                  "body": ""
+                                }
+                              ]
+                            },
+                            {
+                              "name": "remove Course From My Cart",
+                              "request": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/carts/me/courses/:courseId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "carts",
+                                    "me",
+                                    "courses",
+                                    ":courseId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "courseId",
+                                      "value": "833"
+                                    }
+                                  ]
+                                }
+                              },
+                              "response": [
+                                {
+                                  "name": "OK",
+                                  "originalRequest": {
+                                    "method": "DELETE",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "*/*"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/api/v1/carts/me/courses/:courseId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "api",
+                                        "v1",
+                                        "carts",
+                                        "me",
+                                        "courses",
+                                        ":courseId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "courseId",
+                                          "value": "833"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "OK",
+                                  "code": 200,
+                                  "_postman_previewlanguage": "text",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "*/*"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "body": "{\n  \"id\": 7037,\n  \"product\": \"string\",\n  \"price\": 7578,\n  \"userName\": \"string\",\n  \"courses\": [\n    {\n      \"id\": 9295,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 2767,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5215,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 966,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        4713,\n        1404\n      ]\n    },\n    {\n      \"id\": 4188,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 480,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5097,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 4751,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        1474,\n        9042\n      ]\n    }\n  ]\n}"
+                                },
+                                {
+                                  "name": "Not Found",
+                                  "originalRequest": {
+                                    "method": "DELETE",
+                                    "header": [
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/api/v1/carts/me/courses/:courseId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "api",
+                                        "v1",
+                                        "carts",
+                                        "me",
+                                        "courses",
+                                        ":courseId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "courseId",
+                                          "value": "833"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Not Found",
+                                  "code": 404,
+                                  "_postman_previewlanguage": "text",
+                                  "header": [],
+                                  "cookie": [],
+                                  "body": ""
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "clear My Cart",
+                          "request": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/carts/me/courses",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "carts",
+                                "me",
+                                "courses"
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "*/*"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/carts/me/courses",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "carts",
+                                    "me",
+                                    "courses"
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "*/*"
+                                }
+                              ],
+                              "cookie": [],
+                              "body": "{\n  \"id\": 7037,\n  \"product\": \"string\",\n  \"price\": 7578,\n  \"userName\": \"string\",\n  \"courses\": [\n    {\n      \"id\": 9295,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 2767,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5215,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 966,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        4713,\n        1404\n      ]\n    },\n    {\n      \"id\": 4188,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 480,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5097,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 4751,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        1474,\n        9042\n      ]\n    }\n  ]\n}"
+                            },
+                            {
+                              "name": "Not Found",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/v1/carts/me/courses",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "v1",
+                                    "carts",
+                                    "me",
+                                    "courses"
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "get My Cart",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/carts/me",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "carts",
+                            "me"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/carts/me",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "carts",
+                                "me"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 7037,\n  \"product\": \"string\",\n  \"price\": 7578,\n  \"userName\": \"string\",\n  \"courses\": [\n    {\n      \"id\": 9295,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 2767,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5215,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 966,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        4713,\n        1404\n      ]\n    },\n    {\n      \"id\": 4188,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 480,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5097,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 4751,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        1474,\n        9042\n      ]\n    }\n  ]\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/carts/me",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "carts",
+                                "me"
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "{cartId}",
+                  "item": [
+                    {
+                      "name": "get Cart By Id",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/carts/:cartId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "carts",
+                            ":cartId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "cartId",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/carts/:cartId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "carts",
+                                ":cartId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "cartId",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 7037,\n  \"product\": \"string\",\n  \"price\": 7578,\n  \"userName\": \"string\",\n  \"courses\": [\n    {\n      \"id\": 9295,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 2767,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5215,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 966,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        4713,\n        1404\n      ]\n    },\n    {\n      \"id\": 4188,\n      \"courseName\": \"string\",\n      \"teacher\": \"string\",\n      \"price\": 480,\n      \"description\": \"string\",\n      \"students\": [\n        {\n          \"id\": 5097,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        },\n        {\n          \"id\": 4751,\n          \"userName\": \"string\",\n          \"email\": \"string\"\n        }\n      ],\n      \"imageIds\": [\n        1474,\n        9042\n      ]\n    }\n  ]\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/carts/:cartId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "carts",
+                                ":cartId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "cartId",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "delete Cart",
+                      "request": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/carts/:cartId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "carts",
+                            ":cartId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "cartId",
+                              "value": "833"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/carts/:cartId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "carts",
+                                ":cartId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "cartId",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"key_0\": \"string\",\n  \"key_1\": \"string\",\n  \"key_2\": \"string\"\n}"
+                        },
+                        {
+                          "name": "Not Found",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/carts/:cartId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "carts",
+                                ":cartId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "cartId",
+                                  "value": "833"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "get Carts",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/carts?page=989&size=9663&sort=string,string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "carts"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "989"
+                        },
+                        {
+                          "key": "size",
+                          "value": "9663"
+                        },
+                        {
+                          "key": "sort",
+                          "value": "string,string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/carts?page=989&size=9663&sort=string,string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "carts"
+                          ],
+                          "query": [
+                            {
+                              "key": "page",
+                              "value": "989"
+                            },
+                            {
+                              "key": "size",
+                              "value": "9663"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "string,string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"totalElements\": 2289,\n  \"totalPages\": 6108,\n  \"first\": true,\n  \"last\": false,\n  \"size\": 8280,\n  \"content\": [\n    {\n      \"id\": 2856,\n      \"product\": \"string\",\n      \"price\": 3950,\n      \"userName\": \"string\",\n      \"courses\": [\n        {\n          \"id\": 1232,\n          \"courseName\": \"string\",\n          \"teacher\": \"string\",\n          \"price\": 706,\n          \"description\": \"string\",\n          \"students\": [\n            {\n              \"id\": 6192,\n              \"userName\": \"string\",\n              \"email\": \"string\"\n            },\n            {\n              \"id\": 2241,\n              \"userName\": \"string\",\n              \"email\": \"string\"\n            }\n          ],\n          \"imageIds\": [\n            7863,\n            894\n          ]\n        },\n        {\n          \"id\": 7018,\n          \"courseName\": \"string\",\n          \"teacher\": \"string\",\n          \"price\": 5150,\n          \"description\": \"string\",\n          \"students\": [\n            {\n              \"id\": 8367,\n              \"userName\": \"string\",\n              \"email\": \"string\"\n            },\n            {\n              \"id\": 6619,\n              \"userName\": \"string\",\n              \"email\": \"string\"\n            }\n          ],\n          \"imageIds\": [\n            4208,\n            791\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": 2444,\n      \"product\": \"string\",\n      \"price\": 2282,\n      \"userName\": \"string\",\n      \"courses\": [\n        {\n          \"id\": 9889,\n          \"courseName\": \"string\",\n          \"teacher\": \"string\",\n          \"price\": 4424,\n          \"description\": \"string\",\n          \"students\": [\n            {\n              \"id\": 5581,\n              \"userName\": \"string\",\n              \"email\": \"string\"\n            },\n            {\n              \"id\": 6197,\n              \"userName\": \"string\",\n              \"email\": \"string\"\n            }\n          ],\n          \"imageIds\": [\n            3115,\n            3788\n          ]\n        },\n        {\n          \"id\": 8292,\n          \"courseName\": \"string\",\n          \"teacher\": \"string\",\n          \"price\": 1980,\n          \"description\": \"string\",\n          \"students\": [\n            {\n              \"id\": 9339,\n              \"userName\": \"string\",\n              \"email\": \"string\"\n            },\n            {\n              \"id\": 8524,\n              \"userName\": \"string\",\n              \"email\": \"string\"\n            }\n          ],\n          \"imageIds\": [\n            2979,\n            6324\n          ]\n        }\n      ]\n    }\n  ],\n  \"number\": 5455,\n  \"sort\": {\n    \"empty\": true,\n    \"sorted\": false,\n    \"unsorted\": true\n  },\n  \"numberOfElements\": 3786,\n  \"pageable\": {\n    \"offset\": 1181,\n    \"sort\": {\n      \"empty\": false,\n      \"sorted\": true,\n      \"unsorted\": false\n    },\n    \"paged\": true,\n    \"pageNumber\": 8666,\n    \"pageSize\": 8801,\n    \"unpaged\": true\n  },\n  \"empty\": false\n}"
+                    },
+                    {
+                      "name": "Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/carts?page=989&size=9663&sort=string,string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "carts"
+                          ],
+                          "query": [
+                            {
+                              "key": "page",
+                              "value": "989"
+                            },
+                            {
+                              "key": "size",
+                              "value": "9663"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "string,string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:8443"
+    }
+  ]
+}
