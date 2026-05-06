@@ -9,13 +9,13 @@ public class CourseResponseDto {
     private String teacher;
     private int price;
     private String description;
-    private List<UserBasicDto> students;
-    private List<Long> imageIds; 
+    private int students;
+    private List<Long> imageIds;
 
     public CourseResponseDto() {
     }
 
-    public CourseResponseDto(Long id, String courseName, String teacher, int price, String description, List<UserBasicDto> students) {
+    public CourseResponseDto(Long id, String courseName, String teacher, int price, String description, int students) {
         this.id = id;
         this.courseName = courseName;
         this.teacher = teacher;
@@ -24,8 +24,13 @@ public class CourseResponseDto {
         this.students = students;
     }
 
-    public List<Long> getImageIds() { return imageIds; }
-    public void setImageIds(List<Long> imageIds) { this.imageIds = imageIds; }
+    public List<Long> getImageIds() {
+        return imageIds;
+    }
+
+    public void setImageIds(List<Long> imageIds) {
+        this.imageIds = imageIds;
+    }
 
     public Long getId() {
         return id;
@@ -67,11 +72,11 @@ public class CourseResponseDto {
         this.description = description;
     }
 
-    public List<UserBasicDto> getStudents() {
+    public int getStudents() {
         return students;
     }
 
-    public void setStudents(List<UserBasicDto> students) {
+    public void setStudents(int students) {
         this.students = students;
     }
 }

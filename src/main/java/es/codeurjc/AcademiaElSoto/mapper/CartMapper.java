@@ -1,6 +1,7 @@
 package es.codeurjc.AcademiaElSoto.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,10 +9,10 @@ import es.codeurjc.AcademiaElSoto.dto.CartRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CartResponseDto;
 import es.codeurjc.AcademiaElSoto.model.Cart;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = CourseMapper.class)
 public interface CartMapper {
 
-
+    @Mapping(target = "userName", source = "user.userName")
     CartResponseDto toDTO(Cart cart);
 
     List<CartResponseDto> toDTOs(Collection<Cart> carts);

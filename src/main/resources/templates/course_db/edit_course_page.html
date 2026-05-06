@@ -31,7 +31,8 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
 
-                    <form class="bg-white p-4 rounded shadow" action="/admin/courses/{{course.id}}/edit" method="post" enctype="multipart/form-data">
+                    <form class="bg-white p-4 rounded shadow" action="/admin/courses/{{course.id}}/edit" method="post"
+                        enctype="multipart/form-data">
                         <input type="hidden" name="_csrf" value="{{token}}" />
                         <!-- Edit course form -->
 
@@ -49,6 +50,12 @@
                         <div class="mb-3">
                             <label class="form-label">Precio (€)</label>
                             <input type="number" name="price" class="form-control" value="{{course.price}}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Imagen del curso</label>
+                            <input type="file" name="imageFile" class="form-control" accept="image/*">
+                            <small class="text-muted">Si no subes una nueva imagen se mantendrá la actual</small>
                         </div>
 
                         <div class="mb-4">

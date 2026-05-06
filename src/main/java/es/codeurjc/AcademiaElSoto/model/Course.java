@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne; // Add this import
 
@@ -23,13 +22,12 @@ public class Course {
     private String courseName;
     private int price;
     private String description;
+    private int students;
 
-    // 1. GOODBYE BLOB! We replace it with a OneToOne relationship to our new Image entity
+    // 1. GOODBYE BLOB! We replace it with a OneToOne relationship to our new Image
+    // entity
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Image image;
-
-    @ManyToMany
-    private List<User> students;
 
     // We keep this in case you are using a gallery of multiple images elsewhere
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -42,7 +40,7 @@ public class Course {
     public Course() {
     }
 
-    public Course(String teacher, String courseName, int price, String description, List<User> students) {
+    public Course(String teacher, String courseName, int price, String description, int students) {
         this.teacher = teacher;
         this.courseName = courseName;
         this.price = price;
@@ -92,11 +90,11 @@ public class Course {
         this.description = description;
     }
 
-    public List<User> getStudents() {
+    public int getStudents() {
         return students;
     }
 
-    public void setStudents(List<User> students) {
+    public void setStudents(int students) {
         this.students = students;
     }
 

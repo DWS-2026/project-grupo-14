@@ -65,7 +65,7 @@ public class CourseController {
     @PostMapping("/admin/courses/new")
     public String newCourse(Model model,
             Course course,
-            @RequestParam("image") MultipartFile imageFile) {
+            @RequestParam(name = "imageFile", required = false) MultipartFile imageFile) {
 
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
@@ -128,7 +128,7 @@ public class CourseController {
     public String editCourseProcess(Model model,
             @PathVariable long id,
             Course editedCourse,
-            @RequestParam(name = "image", required = false) MultipartFile imageFile) {
+            @RequestParam(name = "imageFile", required = false) MultipartFile imageFile) {
 
         Optional<Course> courseOptional = courseService.findById(id);
 
