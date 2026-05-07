@@ -156,6 +156,8 @@ public class SecurityConfiguration {
                                                 .hasAnyRole("USER", "ADMIN")
                                                 .requestMatchers(HttpMethod.GET, "/api/v1/carts/*")
                                                 .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/carts/*")
+                                                .hasAnyRole("USER", "ADMIN")
                                                 .requestMatchers(HttpMethod.POST, "/api/v1/carts/me/courses/*")
                                                 .hasAnyRole("USER", "ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/carts/me/courses")

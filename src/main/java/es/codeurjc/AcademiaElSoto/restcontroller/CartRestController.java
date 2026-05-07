@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import es.codeurjc.AcademiaElSoto.dto.CartRequestDto;
 import es.codeurjc.AcademiaElSoto.dto.CartResponseDto;
 import es.codeurjc.AcademiaElSoto.mapper.CartMapper;
 import es.codeurjc.AcademiaElSoto.model.Cart;
@@ -54,6 +55,50 @@ public class CartRestController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrative privileges required");
         }
         return cartService.findAll(pageable).map(this::toDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<CartResponseDto> createCart(
+             @RequestBody CartRequestDto cartRequestDto, 
+            Authentication authentication) {
+
+        
+        if (!authorizationService.isAdmin(authentication)) {
+            logger.warn("SECURITY ALERT: User '{}' tried to create a cart manually without ADMIN role.", authentication.getName());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can create carts manually");
+        }
+
+        
+        User user = userService.findById(cartRequestDto.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        
+        if (user.getCart() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already has a cart assigned");
+        }
+
+        
+        Cart cart = new Cart();
+        cart.setProduct(cartRequestDto.getProduct());
+        cart.setPrice(cartRequestDto.getPrice());
+        cart.setUser(user);
+
+        Cart savedCart = cartService.save(cart);
+        
+        
+        user.setCart(savedCart);
+        userService.saveUser(user);
+
+        logger.info("ADMIN ACTION: Cart ID {} created for user '{}' by admin '{}'.", 
+                    savedCart.getId(), user.getUserName(), authentication.getName());
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedCart.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(toDTO(savedCart));
     }
 
     @GetMapping("/me")
@@ -175,6 +220,11 @@ public class CartRestController {
 
         Cart cart = cartService.findById(cartId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+                User user = cart.getUser();
+        if (user != null) {
+            user.setCart(null);
+            userService.saveUser(user); 
+        }
 
         cartService.deleteById(cart.getId());
         logger.info("ADMIN ACTION: Cart ID {} deleted by admin '{}'.", cartId, authentication.getName());
