@@ -20,6 +20,7 @@ public class HtmlSanitizerService {
                     "span",
                     "a"
             )
+            
             .allowUrlProtocols("http", "https", "mailto")
             .allowAttributes("href").onElements("a")
             .allowAttributes("class")
