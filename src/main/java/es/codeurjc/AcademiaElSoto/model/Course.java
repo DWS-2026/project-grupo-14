@@ -24,8 +24,7 @@ public class Course {
     private String description;
     private int students;
 
-    // 1. GOODBYE BLOB! We replace it with a OneToOne relationship to our new Image
-    // entity
+    
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Image image;
 

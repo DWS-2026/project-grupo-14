@@ -73,10 +73,10 @@
 
             const input = document.getElementById('description-input');
 
-            // Cargamos el contenido inicial en el input oculto por si el usuario no toca nada y guarda
+            
             input.value = quill.getText().trim();
 
-            // Actualizamos el input cada vez que el usuario escriba
+            
             quill.on('text-change', function() {
                 const html = quill.getText().trim();
                 input.value = (html === '<p><br></p>') ? '' : html;
