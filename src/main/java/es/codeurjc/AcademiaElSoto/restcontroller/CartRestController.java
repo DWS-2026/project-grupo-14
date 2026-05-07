@@ -3,18 +3,15 @@ package es.codeurjc.AcademiaElSoto.restcontroller;
 import java.net.URI;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,7 +29,8 @@ import es.codeurjc.AcademiaElSoto.service.UserService;
 @RequestMapping("/api/v1/carts")
 public class CartRestController {
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CartRestController.class);
+    // A09: Using professional logging for security audit trails
+    private static final Logger logger = LoggerFactory.getLogger(CartRestController.class);
 
     @Autowired
     private CartService cartService;
@@ -49,14 +47,12 @@ public class CartRestController {
     @Autowired
     private AuthorizationService authorizationService;
 
-    // 1. GET THE CART PAGINATED
     @GetMapping
     public Page<CartResponseDto> getCarts(Pageable pageable, Authentication authentication) {
         if (!authorizationService.isAdmin(authentication)) {
-            logger.warn("Access denied for user '{}' attempting to list all carts", authentication.getName());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can list all carts");
+            logger.warn("UNAUTHORIZED ACCESS: User '{}' attempted to list all carts.", authentication.getName());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrative privileges required");
         }
-
         return cartService.findAll(pageable).map(this::toDTO);
     }
 
@@ -64,11 +60,9 @@ public class CartRestController {
     public CartResponseDto getMyCart(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
         Cart cart = getOrCreateUserCart(user);
-
         return toDTO(cart);
     }
 
-    // 2. ADD A COURSE TO THE CART
     @PostMapping("/me/courses/{courseId}")
     public ResponseEntity<CartResponseDto> addCourseToMyCart(
             @PathVariable Long courseId,
@@ -80,13 +74,31 @@ public class CartRestController {
         Course course = courseService.findById(courseId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
+        // A08: Data Integrity - Check if the user already purchased the course
+        if (user.getPurchasedCourses().contains(course)) {
+            logger.info("Integrity Check: User '{}' tried to re-add purchased course ID: {}", user.getUserName(), courseId);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Course already purchased");
+        }
+
+        // A08: Data Integrity - Check for course capacity
+        if (course.getStudents() <= 0) {
+            logger.warn("Integrity Check: User '{}' tried to add a full course ID: {}", user.getUserName(), courseId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Course is full");
+        }
+
         if (cart.getCourses().contains(course)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Course is already in the cart");
         }
 
         cart.addCourse(course);
+        
+        // A08: Consistency - Ensure price is recalculated upon addition
+        recalculateCartPrice(cart);
 
         Cart savedCart = cartService.save(cart);
+        
+        // A09: Logging the modification for auditing purposes
+        logger.info("CART UPDATE: User '{}' added course '{}' to cart.", user.getUserName(), course.getCourseName());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -96,7 +108,6 @@ public class CartRestController {
         return ResponseEntity.created(location).body(toDTO(savedCart));
     }
 
-    // 3. REMOVE A COURSE FROM THE CART
     @DeleteMapping("/me/courses/{courseId}")
     public ResponseEntity<CartResponseDto> removeCourseFromMyCart(
             @PathVariable Long courseId,
@@ -115,13 +126,14 @@ public class CartRestController {
         }
 
         recalculateCartPrice(cart);
-
         Cart savedCart = cartService.save(cart);
+
+        // A09: Logging removal
+        logger.info("CART UPDATE: User '{}' removed course ID {} from cart.", user.getUserName(), courseId);
 
         return ResponseEntity.ok(toDTO(savedCart));
     }
 
-    // 4. CLEAR THE CART COMPLETELY
     @DeleteMapping("/me/courses")
     public ResponseEntity<CartResponseDto> clearMyCart(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
@@ -131,6 +143,9 @@ public class CartRestController {
         cart.setPrice(0);
 
         Cart savedCart = cartService.save(cart);
+
+        // A09: Logging significant state change
+        logger.warn("CART ALERT: User '{}' cleared their cart completely.", user.getUserName());
 
         return ResponseEntity.ok(toDTO(savedCart));
     }
@@ -143,14 +158,7 @@ public class CartRestController {
         Cart cart = cartService.findById(cartId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
 
-        try {
-            // Security: Check if user owns the cart or is admin
-            checkCartAccess(cart, authentication);
-        } catch (ResponseStatusException e) {
-            // Security Reporting
-            logger.warn("Access denied for user '{}' on cart ID: {}", authentication.getName(), cartId);
-            throw e;
-        }
+        checkCartAccess(cart, authentication);
 
         return toDTO(cart);
     }
@@ -161,7 +169,7 @@ public class CartRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
-            logger.warn("Access denied for user '{}' attempting to delete cart ID: {}", authentication.getName(), cartId);
+            logger.warn("SECURITY ALERT: Unauthorized cart deletion attempt by user '{}' on cart ID: {}", authentication.getName(), cartId);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete carts");
         }
 
@@ -169,29 +177,28 @@ public class CartRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
 
         cartService.deleteById(cart.getId());
+        logger.info("ADMIN ACTION: Cart ID {} deleted by admin '{}'.", cartId, authentication.getName());
 
         return ResponseEntity.ok(Map.of("message", "Cart deleted successfully"));
     }
 
     private User getAuthenticatedUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication is required");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
         }
 
         return userService.findByUserName(authentication.getName())
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authenticated user not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
     }
 
     private Cart getOrCreateUserCart(User user) {
         Cart cart = user.getCart();
-
         if (cart == null) {
             cart = new Cart("Cart of " + user.getUserName(), 0);
             user.setCart(cart);
             userService.saveUser(user);
+            logger.info("New cart initialized for user: {}", user.getUserName());
         }
-
         return cart;
     }
 
@@ -202,8 +209,10 @@ public class CartRestController {
 
         User user = getAuthenticatedUser(authentication);
 
+        // A01: Broken Access Control - Ensuring users can't snoop on other carts
         if (cart.getUser() == null || !cart.getUser().getId().equals(user.getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only access your own cart");
+            logger.error("SECURITY BREACH ATTEMPT: User '{}' tried to access Cart ID: {}", user.getUserName(), cart.getId());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied to requested cart");
         }
     }
 
@@ -211,7 +220,6 @@ public class CartRestController {
         int totalPrice = cart.getCourses().stream()
                 .mapToInt(Course::getPrice)
                 .sum();
-
         cart.setPrice(totalPrice);
     }
 

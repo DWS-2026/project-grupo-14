@@ -7,6 +7,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+// A09: Using SLF4J for security event monitoring and operational auditing
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -14,17 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication; // <-- Important for security
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -44,7 +40,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/users")
 public class UserRestController {
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(UserRestController.class);
+    // A09: Logger initialization for system-wide traceability
+    private static final Logger log = LoggerFactory.getLogger(UserRestController.class);
 
     @Autowired
     private UserService userService;
@@ -61,14 +58,14 @@ public class UserRestController {
     @Autowired
     private AuthorizationService authorizationService;
 
-    // --- BASIC CRUD METHODS (SECURED) ---
+    // --- BASIC CRUD METHODS ---
 
     @GetMapping
     public Page<UserResponseDto> getUsers(Pageable pageable, Authentication authentication) {
-        // Check if user has ADMIN role
+        // A01: Administrative role verification
         if (!authorizationService.isAdmin(authentication)) {
-            logger.warn("Access denied for user '{}' attempting to list all users", authentication.getName());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can list all users");
+            log.warn("SECURITY ALERT: Unauthorized attempt to list all users by '{}'", authentication.getName());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrative privileges required");
         }
 
         return userService.getUsers(pageable).map(this::toDto);
@@ -77,35 +74,41 @@ public class UserRestController {
     @GetMapping("/{id}")
     public UserResponseDto getUserById(@PathVariable Long id, Authentication authentication) {
         try {
-            // Security Wall: Check if user is accessing their own data or is ADMIN
+            // A01: Broken Access Control check - Verify if requester owns the profile or is Admin
             authorizationService.checkUserAccess(id, authentication);
         } catch (ResponseStatusException e) {
-            logger.warn("Access denied for user '{}' on user ID: {}", authentication.getName(), id);
+            log.error("SECURITY ALERT: User '{}' denied access to profile ID: {}", authentication.getName(), id);
             throw e;
         }
 
-        User user = userService.findById(id).orElseThrow();
+        User user = userService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return toDto(user);
     }
 
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-        // Creating a user (registering) is usually public, no security wall needed here
         if (userService.existsByUserName(userRequestDto.getUserName())) {
+            log.warn("SIGNUP ATTEMPT FAILED: Username '{}' is already in use.", userRequestDto.getUserName());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
         }
 
         if (userService.existsByEmail(userRequestDto.getEmail())) {
+            log.warn("SIGNUP ATTEMPT FAILED: Email '{}' is already in use.", userRequestDto.getEmail());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
 
+        // A08: Integrity - DTO mapping prevents Mass Assignment of sensitive fields (like ROLES)
         User user = toEntity(userRequestDto);
 
         user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        user.setRoles(List.of("USER"));
-        user.setCart(new Cart("Carrito de " + userRequestDto.getUserName(), 0));
+        user.setRoles(List.of("USER")); // Defaulting to lowest privilege
+        user.setCart(new Cart("Cart for " + userRequestDto.getUserName(), 0));
 
         User savedUser = userService.saveUser(user);
+        
+        // A09: Audit log for new user registration
+        log.info("API ACTION: New user '{}' registered with ID {}", savedUser.getUserName(), savedUser.getId());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -113,9 +116,7 @@ public class UserRestController {
                 .buildAndExpand(savedUser.getId())
                 .toUri();
 
-        return ResponseEntity
-                .created(location)
-                .body(toDto(savedUser));
+        return ResponseEntity.created(location).body(toDto(savedUser));
     }
 
     @PutMapping("/{id}")
@@ -124,25 +125,31 @@ public class UserRestController {
         try {
             authorizationService.checkUserAccess(id, authentication);
         } catch (ResponseStatusException e) {
-            logger.warn("Access denied for user '{}' attempting to update user ID: {}", authentication.getName(), id);
+            log.error("SECURITY ALERT: User '{}' denied update access for profile ID: {}", authentication.getName(), id);
             throw e;
         }
 
-        User existingUser = userService.findById(id).orElseThrow();
+        User existingUser = userService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         boolean wasLocked = !existingUser.isAccountNonLocked();
 
+        // A08: Data Integrity - Controlled mapping via DTO
         mapper.updateEntity(userRequestDto, existingUser);
 
         if (userRequestDto.getPassword() != null && !userRequestDto.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         }
 
+        // A01: Business Rule - Non-admins cannot unlock their own accounts if they were locked
         if (!authorizationService.isAdmin(authentication) && wasLocked) {
             existingUser.setAccountNonLocked(false);
         }
 
         User updatedUser = userService.saveUser(existingUser);
+        
+        // A09: Logging successful profile updates
+        log.info("API ACTION: User profile ID {} updated by '{}'.", id, authentication.getName());
 
         return toDto(updatedUser);
     }
@@ -152,22 +159,24 @@ public class UserRestController {
         try {
             authorizationService.checkUserAccess(id, authentication);
         } catch (ResponseStatusException e) {
-            logger.warn("Access denied for user '{}' attempting to delete user ID: {}", authentication.getName(), id);
+            log.error("SECURITY ALERT: User '{}' denied deletion access for profile ID: {}", authentication.getName(), id);
             throw e;
         }
 
-        User existingUser = userService.findById(id).orElseThrow();
+        User existingUser = userService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (existingUser.getProfileImage() != null) {
             imageService.deleteImage(existingUser.getProfileImage().getId());
         }
 
         userService.deleteById(existingUser.getId());
+        
+        // A09: Important log for account termination auditing
+        log.warn("API ALERT: User ID {} ('{}') has been permanently deleted by '{}'.", 
+                 id, existingUser.getUserName(), authentication.getName());
 
-        // Create the response with the success message
-        Map<String, String> response = Map.of("message", "User deleted successfully");
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
     }
 
     // --- DISK IMAGE SYSTEM (SECURED) ---
@@ -178,7 +187,7 @@ public class UserRestController {
         try {
             authorizationService.checkUserAccess(id, authentication);
         } catch (ResponseStatusException e) {
-            logger.warn("Access denied for user '{}' attempting to upload image for user ID: {}", authentication.getName(), id);
+            log.error("SECURITY ALERT: Unauthorized image upload attempt by '{}' for user ID: {}", authentication.getName(), id);
             throw e;
         }
 
@@ -186,14 +195,17 @@ public class UserRestController {
             return ResponseEntity.badRequest().build();
         }
 
-        User user = userService.findById(id).orElseThrow();
+        User user = userService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (user.getProfileImage() != null) {
             imageService.replaceImageFile(user.getProfileImage().getId(), imageFile);
+            log.info("IMAGE SYSTEM: Profile image replaced for user ID: {}", id);
         } else {
             Image newImage = imageService.createImage(imageFile);
             user.setProfileImage(newImage);
             userService.saveUser(user);
+            log.info("IMAGE SYSTEM: New profile image uploaded for user ID: {}", id);
         }
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -206,11 +218,11 @@ public class UserRestController {
 
     @GetMapping("/{id}/image")
     public ResponseEntity<Resource> getUserImage(@PathVariable Long id) throws MalformedURLException {
-        // Downloading the image is public, so everyone can see avatars. No security
-        // wall.
-        User user = userService.findById(id).orElseThrow();
+        User user = userService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (user.getProfileImage() != null) {
+            // A08: Using Internal IDs for file fetching prevents Path Traversal
             Resource file = imageService.getImageFile(user.getProfileImage().getId());
 
             return ResponseEntity.ok()
@@ -226,24 +238,23 @@ public class UserRestController {
         try {
             authorizationService.checkUserAccess(id, authentication);
         } catch (ResponseStatusException e) {
-            logger.warn("Access denied for user '{}' attempting to delete image for user ID: {}", authentication.getName(), id);
+            log.error("SECURITY ALERT: Unauthorized image deletion attempt by '{}' for user ID: {}", authentication.getName(), id);
             throw e;
         }
 
-        User user = userService.findById(id).orElseThrow();
+        User user = userService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (user.getProfileImage() != null) {
             Long imageId = user.getProfileImage().getId();
-
             user.setProfileImage(null);
             userService.saveUser(user);
-
             imageService.deleteImage(imageId);
+            log.warn("IMAGE SYSTEM: Profile image deleted for user ID: {}", id);
         }
 
         return ResponseEntity.noContent().build();
     }
-
 
     // --- MAPPERS ---
 

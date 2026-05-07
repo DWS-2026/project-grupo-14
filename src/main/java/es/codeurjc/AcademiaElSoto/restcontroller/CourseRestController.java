@@ -5,6 +5,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collection;
+
+// A09: Logger for security auditing and monitoring
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -13,22 +18,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.security.core.Authentication;
 
-import java.util.Collection;
 import es.codeurjc.AcademiaElSoto.dto.CommentResponseDto;
 import es.codeurjc.AcademiaElSoto.mapper.CommentMapper;
 import es.codeurjc.AcademiaElSoto.service.AuthorizationService;
@@ -41,12 +36,14 @@ import es.codeurjc.AcademiaElSoto.service.CourseService;
 import es.codeurjc.AcademiaElSoto.service.ImageService;
 import es.codeurjc.AcademiaElSoto.service.HtmlSanitizerService;
 import jakarta.validation.Valid;
+import org.springframework.web.client.RestClient;
 
 @RestController
 @RequestMapping("/api/v1/courses")
 public class CourseRestController {
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CourseRestController.class);
+    // A09: Logger initialization for audit trails
+    private static final Logger log = LoggerFactory.getLogger(CourseRestController.class);
 
     @Autowired
     private CourseService courseService;
@@ -78,7 +75,8 @@ public class CourseRestController {
 
     @GetMapping("/{id}")
     public CourseResponseDto getCourseById(@PathVariable Long id) {
-        Course course = courseService.findById(id).orElseThrow();
+        Course course = courseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
         return mapper.toDTO(course);
     }
 
@@ -88,13 +86,20 @@ public class CourseRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
-            logger.warn("Access denied for user '{}' attempting to create a course", authentication.getName());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can create courses");
+            log.warn("SECURITY ALERT: Unauthorized course creation attempt by user '{}'", authentication.getName());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrative privileges required");
         }
 
         Course course = mapper.toEntity(courseRequestDto);
+        
+        // A03: Sanitize input to prevent XSS
         course.setDescription(htmlSanitizerService.sanitize(course.getDescription()));
+        
         Course savedCourse = courseService.save(course);
+
+        // A09: Audit log for record creation
+        log.info("ADMIN ACTION: New course '{}' created via API by user '{}'", 
+                 savedCourse.getCourseName(), authentication.getName());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -112,16 +117,25 @@ public class CourseRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
-            logger.warn("Access denied for user '{}' attempting to update course ID: {}", authentication.getName(), id);
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can update courses");
+            log.error("SECURITY ALERT: Unauthorized update attempt on course ID {} by user '{}'", id, authentication.getName());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrative privileges required");
         }
 
         Course existingCourse = courseService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
+        // A08: Data Integrity - Map only allowed fields from DTO
         mapper.updateEntity(courseRequestDto, existingCourse);
+        
+        // Re-enforcing integrity for the 'students' capacity field
+        existingCourse.setStudents(courseRequestDto.getStudents());
+        
         existingCourse.setDescription(htmlSanitizerService.sanitize(courseRequestDto.getDescription()));
+        
         Course updatedCourse = courseService.save(existingCourse);
+
+        // A09: Logging administrative modification
+        log.info("ADMIN ACTION: Course ID {} ('{}') updated via API.", id, updatedCourse.getCourseName());
 
         return mapper.toDTO(updatedCourse);
     }
@@ -132,27 +146,30 @@ public class CourseRestController {
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
-            logger.warn("Access denied for user '{}' attempting to delete course ID: {}", authentication.getName(), id);
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete courses");
+            log.error("SECURITY ALERT: Unauthorized deletion attempt on course ID {} by user '{}'", id, authentication.getName());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrative privileges required");
         }
 
         Course existingCourse = courseService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
         courseService.deleteById(existingCourse.getId());
+        
+        // A09: Warning log for permanent data removal
+        log.warn("ADMIN ALERT: Course ID {} ('{}') was permanently deleted via API.", id, existingCourse.getCourseName());
 
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/comments")
     public Collection<CommentResponseDto> getCourseComments(@PathVariable Long id) {
-        Course course = courseService.findById(id).orElseThrow();
+        Course course = courseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
         return commentMapper.toDTOs(commentService.findByCourseId(course.getId()));
     }
 
-    // --- NEW DISK IMAGE SYSTEM (ITEM 15) ---
+    // --- IMAGE SYSTEM (DISK PERSISTENCE) ---
 
-    // 1. Upload/Add image to course
     @PostMapping("/{id}/image")
     public ResponseEntity<Object> uploadCourseImage(
             @PathVariable Long id,
@@ -160,8 +177,8 @@ public class CourseRestController {
             Authentication authentication) throws IOException {
 
         if (!authorizationService.isAdmin(authentication)) {
-            logger.warn("Access denied for user '{}' attempting to upload image for course ID: {}", authentication.getName(), id);
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can upload course images");
+            log.warn("SECURITY ALERT: Unauthorized image upload for course ID: {}", id);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrative privileges required");
         }
 
         if (imageFile.isEmpty()) {
@@ -171,11 +188,14 @@ public class CourseRestController {
         Course course = courseService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
+        // A08: Integrity Check - Manage physical file replacement
         if (course.getImage() != null) {
             imageService.replaceImageFile(course.getImage().getId(), imageFile);
+            log.info("IMAGE SYSTEM: Replaced image for course ID: {}", id);
         } else {
             es.codeurjc.AcademiaElSoto.model.Image newImage = imageService.createImage(imageFile);
             courseService.addImageToCourse(id, newImage);
+            log.info("IMAGE SYSTEM: New image uploaded for course ID: {}", id);
         }
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -186,13 +206,13 @@ public class CourseRestController {
         return ResponseEntity.created(location).build();
     }
 
-    // 2. Download/View the image
     @GetMapping("/{id}/image")
     public ResponseEntity<Resource> downloadCourseImage(@PathVariable Long id) throws MalformedURLException {
-        Course course = courseService.findById(id).orElseThrow();
+        Course course = courseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
 
         if (course.getImage() != null) {
-            // Fetch the physical file using the image ID
+            // A08: Fetch file via Internal ID to prevent Path Traversal
             Resource file = imageService.getImageFile(course.getImage().getId());
 
             return ResponseEntity.ok()
@@ -203,15 +223,14 @@ public class CourseRestController {
         }
     }
 
-    // 3. Delete the image
     @DeleteMapping("/{courseId}/image")
     public ResponseEntity<Void> deleteCourseImage(
             @PathVariable Long courseId,
             Authentication authentication) {
 
         if (!authorizationService.isAdmin(authentication)) {
-            logger.warn("Access denied for user '{}' attempting to delete image for course ID: {}", authentication.getName(), courseId);
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can delete course images");
+            log.warn("SECURITY ALERT: Unauthorized image deletion for course ID: {}", courseId);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrative privileges required");
         }
 
         Course course = courseService.findById(courseId)
@@ -221,46 +240,53 @@ public class CourseRestController {
             Long imageId = course.getImage().getId();
             courseService.removeImageCourse(courseId, course.getImage());
             imageService.deleteImage(imageId);
+            log.warn("IMAGE SYSTEM: Image ID {} deleted for course ID: {}", imageId, courseId);
         }
 
         return ResponseEntity.noContent().build();
     }
 
-    // --- EXTERNAL API (GOOGLE BOOKS) ---
+    // --- EXTERNAL API INTEGRATION (A08: Supply Chain Integrity) ---
 
-    record BooksResponse(List<Book> items) {
-    }
-
-    record Book(VolumeInfo volumeInfo) {
-    }
-
-    record VolumeInfo(String title) {
-    }
+    record BooksResponse(List<Book> items) {}
+    record Book(VolumeInfo volumeInfo) {}
+    record VolumeInfo(String title) {}
 
     @GetMapping("/{id}/recommended-books")
     public List<String> getRecommendedBooks(@PathVariable Long id) {
-        Course course = courseService.findById(id).orElseThrow();
+        Course course = courseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+        
         String courseName = course.getCourseName();
+
+        // A09: Logging outbound call to external service
+        log.info("EXTERNAL API: Fetching recommended books for course '{}' from Google Books.", courseName);
 
         RestClient restClient = RestClient.create();
 
-        BooksResponse data = restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                    .scheme("https")
-                    .host("www.googleapis.com")
-                    .path("/books/v1/volumes")
-                    .queryParam("q", "intitle:" + courseName)
-                    .build())
-                .retrieve()
-                .body(BooksResponse.class);
+        try {
+            BooksResponse data = restClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                        .scheme("https")
+                        .host("www.googleapis.com")
+                        .path("/books/v1/volumes")
+                        .queryParam("q", "intitle:" + courseName)
+                        .build())
+                    .retrieve()
+                    .body(BooksResponse.class);
 
-        List<String> titles = new ArrayList<>();
-        if (data != null && data.items() != null) {
-            for (Book book : data.items()) {
-                titles.add(book.volumeInfo().title());
+            List<String> titles = new ArrayList<>();
+            if (data != null && data.items() != null) {
+                for (Book book : data.items()) {
+                    titles.add(book.volumeInfo().title());
+                }
             }
+            return titles;
+            
+        } catch (Exception e) {
+            // A08: Handling third-party integrity/availability failures
+            log.error("EXTERNAL API ERROR: Failed to fetch books from Google. Potential connectivity or integrity issue.");
+            return new ArrayList<>();
         }
-
-        return titles;
     }
 }

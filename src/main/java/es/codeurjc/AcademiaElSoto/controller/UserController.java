@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// Logger imports for system monitoring and security auditing
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +34,9 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
+
+    // SLF4J Logger for operational monitoring and security auditing
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
     private final CommentService commentService;
@@ -59,25 +66,30 @@ public class UserController {
     @PostMapping("/register")
     public String registerUser(Model model, User user) {
 
+        // Validate user uniqueness to maintain data integrity
         if (userService.existsByUserName(user.getUserName()) || userService.existsByEmail(user.getEmail())) {
-            model.addAttribute("error", "El nombre de usuario o el correo ya están en uso. ¡Prueba con otro!");
+            log.warn("Registration failed: Username or Email already in use: {}", user.getUserName());
+            model.addAttribute("error", "The username or email is already in use.");
             return "auth/register";
         }
 
+        // Secure password hashing before persistence
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        // Initializing user state (Cart and default Roles)
         Cart newCart = new Cart("Carrito de " + user.getUserName(), 0);
         user.setCart(newCart);
-
         user.setRoles(List.of("USER"));
 
         userService.saveUser(user);
+        log.info("New user registered successfully: {}", user.getUserName());
 
         return "redirect:/login";
     }
 
     @GetMapping("/loginerror")
     public String loginError() {
+        log.warn("Unauthorized access attempt or invalid credentials entered.");
         return "auth/loginerror";
     }
 
@@ -93,6 +105,7 @@ public class UserController {
         Optional<User> userOpt = userService.findByUserName(authentication.getName());
 
         if (userOpt.isEmpty()) {
+            log.error("Authenticated user session found, but user record is missing in database.");
             session.invalidate();
             return "redirect:/login";
         }
@@ -103,6 +116,7 @@ public class UserController {
             session.setAttribute("cartId", user.getCart().getId());
         }
 
+        // Passing specific user data to view to avoid exposing full entity
         model.addAttribute("id", user.getId());
         model.addAttribute("userName", user.getUserName());
         model.addAttribute("lastName", user.getLastName());
@@ -127,6 +141,7 @@ public class UserController {
                 User user = userOptional.get();
 
                 if (user.getProfileImage() != null) {
+                    // Accessing file via internal ID to prevent Path Traversal
                     Resource file = imageService.getImageFile(user.getProfileImage().getId());
 
                     return ResponseEntity.ok()
@@ -135,7 +150,7 @@ public class UserController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to retrieve profile image for user ID: {}", id);
         }
 
         return ResponseEntity.notFound().build();
@@ -156,7 +171,6 @@ public class UserController {
         }
 
         User user = userOpt.get();
-
         model.addAttribute("id", user.getId());
         model.addAttribute("userName", user.getUserName());
         model.addAttribute("lastName", user.getLastName());
@@ -184,6 +198,7 @@ public class UserController {
 
         User existingUser = userOpt.get();
 
+        // Data Integrity: Manual mapping ensures users only edit allowed profile fields
         existingUser.setUserName(editedUser.getUserName());
         existingUser.setLastName(editedUser.getLastName());
         existingUser.setEmail(editedUser.getEmail());
@@ -202,31 +217,26 @@ public class UserController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Profile image update failed for user: {}", existingUser.getUserName());
         }
 
         userService.saveUser(existingUser);
+        log.info("User profile updated successfully: {}", existingUser.getUserName());
 
-        session.invalidate();
-
+        session.invalidate(); // Force re-login to refresh security context
         return "redirect:/login";
     }
 
     @GetMapping("/admin/users")
     public String showAdminUsers(Model model) {
-
         List<User> users = userService.getUsers();
 
+        // Using DTO for admin view to separate internal logic from presentation
         List<AdminUserView> adminUsers = users.stream().map(user -> {
-            int totalPurchasedCourses = user.getPurchasedCourses() != null
-                    ? user.getPurchasedCourses().size()
-                    : 0;
-
+            int totalPurchasedCourses = user.getPurchasedCourses() != null ? user.getPurchasedCourses().size() : 0;
             String purchasedCourseNames = user.getPurchasedCourses() != null && !user.getPurchasedCourses().isEmpty()
-                    ? user.getPurchasedCourses().stream()
-                    .map(Course::getCourseName)
-                    .collect(Collectors.joining(", "))
-                    : "Sin cursos";
+                    ? user.getPurchasedCourses().stream().map(Course::getCourseName).collect(Collectors.joining(", "))
+                    : "None";
 
             return new AdminUserView(
                     user.getId(),
@@ -237,13 +247,11 @@ public class UserController {
         }).toList();
 
         model.addAttribute("users", adminUsers);
-
         return "admin/admin_users";
     }
 
     @GetMapping("/admin/user/{id}")
     public String showAdminUserProfile(@PathVariable Long id, Model model) {
-
         Optional<User> userOpt = userService.findById(id);
 
         if (userOpt.isEmpty()) {
@@ -251,7 +259,6 @@ public class UserController {
         }
 
         User user = userOpt.get();
-
         model.addAttribute("userName", user.getUserName());
         model.addAttribute("lastName", user.getLastName());
         model.addAttribute("email", user.getEmail());
@@ -265,14 +272,14 @@ public class UserController {
 
     @PostMapping("/admin/user/{id}/delete")
     public String deleteUser(@PathVariable Long id) {
-
         Optional<User> userOpt = userService.findById(id);
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
+            log.warn("ADMIN ACTION: Permanent deletion of user account: {}", user.getUserName());
 
+            // Cascading manual cleanup to ensure data integrity
             List<Comment> userComments = commentService.findByUser(user.getUserName());
-
             for (Comment comment : userComments) {
                 commentService.deleteById(comment.getId());
             }
@@ -292,7 +299,6 @@ public class UserController {
 
     @GetMapping("/admin/user/{id}/edit")
     public String editUser(Model model, @PathVariable Long id) {
-
         Optional<User> userOpt = userService.findById(id);
 
         if (userOpt.isEmpty()) {
@@ -300,7 +306,6 @@ public class UserController {
         }
 
         User user = userOpt.get();
-
         model.addAttribute("id", user.getId());
         model.addAttribute("userName", user.getUserName());
         model.addAttribute("lastName", user.getLastName());
@@ -318,11 +323,13 @@ public class UserController {
         Optional<User> userOpt = userService.findById(id);
 
         if (userOpt.isEmpty()) {
+            log.error("Admin edit attempt on non-existent user ID: {}", id);
             return "user_db/user_not_found";
         }
 
         User existingUser = userOpt.get();
 
+        // Integrity Protection: Ensuring Admin only modifies intended fields
         existingUser.setUserName(editedUser.getUserName());
         existingUser.setLastName(editedUser.getLastName());
         existingUser.setEmail(editedUser.getEmail());
@@ -341,10 +348,11 @@ public class UserController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to update user profile image via admin panel for user: {}", existingUser.getUserName());
         }
 
         userService.saveUser(existingUser);
+        log.info("ADMIN ACTION: User ID {} successfully modified by administrator.", id);
 
         model.addAttribute("userName", existingUser.getUserName());
         model.addAttribute("lastName", existingUser.getLastName());

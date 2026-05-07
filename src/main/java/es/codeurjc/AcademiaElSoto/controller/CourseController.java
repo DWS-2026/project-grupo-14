@@ -3,6 +3,10 @@ package es.codeurjc.AcademiaElSoto.controller;
 import java.util.List;
 import java.util.Optional;
 
+// Logger imports for system monitoring and audit trails
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,9 @@ import es.codeurjc.AcademiaElSoto.service.HtmlSanitizerService;
 
 @Controller
 public class CourseController {
+
+    // SLF4J Logger for operational monitoring and security auditing
+    private static final Logger log = LoggerFactory.getLogger(CourseController.class);
 
     private final CourseService courseService;
     private final CommentService commentService;
@@ -51,14 +58,11 @@ public class CourseController {
 
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
-
             model.addAttribute("course", course);
             model.addAttribute("hasImage", course.getImage() != null);
             model.addAttribute("comments", commentService.findByCourseId(id));
-
             return "course_db/show_course";
         }
-
         return "course_db/course_not_found";
     }
 
@@ -73,11 +77,16 @@ public class CourseController {
                 course.setImage(newImage);
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            // Log processing errors to avoid leaking system stack traces
+            log.error("Failed to process image during new course creation: {}", course.getCourseName());
         }
 
+        // Sanitize user input to prevent Cross-Site Scripting (XSS)
         course.setDescription(htmlSanitizerService.sanitize(course.getDescription()));
         courseService.save(course);
+
+        // Audit record for course creation
+        log.info("ADMIN ACTION: New course '{}' created successfully.", course.getCourseName());
 
         return "course_db/saved_course";
     }
@@ -94,21 +103,16 @@ public class CourseController {
         try {
             Optional<Course> courseOptional = courseService.findById(id);
 
-            if (courseOptional.isPresent()) {
-                Course course = courseOptional.get();
-
-                if (course.getImage() != null) {
-                    Resource file = imageService.getImageFile(course.getImage().getId());
-
-                    return ResponseEntity.ok()
-                            .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                            .body(file);
-                }
+            if (courseOptional.isPresent() && courseOptional.get().getImage() != null) {
+                // Secure file retrieval using internal IDs
+                Resource file = imageService.getImageFile(courseOptional.get().getImage().getId());
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                        .body(file);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Internal error or unauthorized file access attempt for course ID: {}", id);
         }
-
         return ResponseEntity.notFound().build();
     }
 
@@ -120,7 +124,6 @@ public class CourseController {
             model.addAttribute("course", courseOptional.get());
             return "course_db/edit_course_page";
         }
-
         return "course_db/course_not_found";
     }
 
@@ -133,16 +136,22 @@ public class CourseController {
         Optional<Course> courseOptional = courseService.findById(id);
 
         if (courseOptional.isEmpty()) {
+            log.warn("Access attempt on non-existent course ID: {}", id);
             return "course_db/course_not_found";
         }
 
         Course existingCourse = courseOptional.get();
 
+        // Manual field mapping ensures data integrity and prevents mass assignment
         existingCourse.setCourseName(editedCourse.getCourseName());
         existingCourse.setTeacher(editedCourse.getTeacher());
         existingCourse.setPrice(editedCourse.getPrice());
-        existingCourse.setDescription(htmlSanitizerService.sanitize(editedCourse.getDescription()));
+        
+        // Updated: Mapping 'students' as an int for better data integrity
         existingCourse.setStudents(editedCourse.getStudents());
+
+        // Sanitize rich text input
+        existingCourse.setDescription(htmlSanitizerService.sanitize(editedCourse.getDescription()));
 
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
@@ -154,10 +163,13 @@ public class CourseController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Integrity error during image update for course ID: {}", id);
         }
 
         courseService.save(existingCourse);
+        
+        // Monitoring administrative updates
+        log.info("ADMIN ACTION: Course ID {} has been updated with {} students capacity.", id, existingCourse.getStudents());
 
         model.addAttribute("course", existingCourse);
         return "course_db/edited_course";
@@ -172,12 +184,14 @@ public class CourseController {
         }
 
         Course course = courseOptional.get();
-
         if (course.getImage() != null) {
             imageService.deleteImage(course.getImage().getId());
         }
 
         courseService.deleteById(id);
+
+        // Alert log for permanent data removal
+        log.warn("ADMIN ALERT: Course ID {} was permanently deleted.", id);
 
         return "course_db/deleted_course";
     }
