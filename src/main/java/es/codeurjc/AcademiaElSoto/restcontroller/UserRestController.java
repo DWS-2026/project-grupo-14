@@ -130,10 +130,16 @@ public class UserRestController {
 
         User existingUser = userService.findById(id).orElseThrow();
 
+        boolean wasLocked = !existingUser.isAccountNonLocked();
+
         mapper.updateEntity(userRequestDto, existingUser);
 
         if (userRequestDto.getPassword() != null && !userRequestDto.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        }
+
+        if (!authorizationService.isAdmin(authentication) && wasLocked) {
+            existingUser.setAccountNonLocked(false);
         }
 
         User updatedUser = userService.saveUser(existingUser);

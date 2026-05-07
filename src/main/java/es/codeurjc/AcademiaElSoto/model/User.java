@@ -30,8 +30,10 @@ public class User {
     private String email;
     private String password;
     private String lastName;
+    private int failedAttempts = 0; //fault counter
+    private boolean accountNonLocked = true; //If it is false we reject access
 
-    // GOODBYE BLOB! Replaced with a OneToOne relationship to the Image entity
+    
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Image profileImage;
 
@@ -68,6 +70,22 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getFailedAttempts(){
+        return this.failedAttempts;
+    }
+
+    public void setFailedAttempts(int failedAttempts){
+        this.failedAttempts = failedAttempts;
+    }
+
+    public boolean isAccountNonLocked () {
+        return this.accountNonLocked;
+    }
+
+    public void setAccountNonLocked (boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
     }
 
     public String getInfo() {

@@ -62,4 +62,20 @@ public class UserService {
     public java.util.Optional<User> findByUserName(String userName) {
         return userRepository.findByUserName(userName);
     }
+
+    public void increaseFailedAttempts(User user) {
+        int newAttempts = user.getFailedAttempts() + 1;
+        user.setFailedAttempts(newAttempts);
+        if (newAttempts >= 5) {
+            user.setAccountNonLocked(false);
+        }
+        userRepository.save(user);
+    }
+
+    public void resetFailedAttempts(String userName) {
+        findByUserName(userName).ifPresent(user -> {
+            user.setFailedAttempts(0);
+            userRepository.save(user);
+        });
+    }
 }
