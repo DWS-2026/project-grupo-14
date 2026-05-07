@@ -313,7 +313,7 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 ## 🛠 **Práctica 3: Incorporación de una API REST a la aplicación web, análisis de vulnerabilidades y contramedidas**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
+📹 **[Enlace al vídeo en YouTube](https://youtu.be/dBEqLrwv1bQ)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Documentación de la API REST**
@@ -369,14 +369,14 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - [Max Albert Vintila Popescu]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Principalmente la API de las entidades y mitigación de vulnerabilidades de tipo inyección]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Added REST for comments](https://github.com/DWS-2026/dws-2026-project-base/commit/de6cc8acc10901f5f0e4a95203c1c4ac2dfc9895)  | [CommentRestController](src/main/java/es/codeurjc/AcademiaElSoto/restcontroller/CommentRestController.java)   |
+|2| [Added REST for Courses](https://github.com/DWS-2026/dws-2026-project-base/commit/f9c62073a21ebce8e98496e703fe432501d195f3)  | [CourseRestController](src/main/java/es/codeurjc/AcademiaElSoto/restcontroller/CourseRestController.java)   |
+|3| [Reinforced course REST security](https://github.com/DWS-2026/dws-2026-project-base/commit/1962382b59ab074416c533b7716400fa09bbb859)  | [CourseRestController](src/main/java/es/codeurjc/AcademiaElSoto/restcontroller/CourseRestController.java)   |
+|4| [Mitigated XSS](https://github.com/DWS-2026/dws-2026-project-base/commit/de822c21c10f29b890589d6e9faaf76e4c93fb30)  | [HtmlSanitizerService.java](src/main/java/es/codeurjc/AcademiaElSoto/service/HtmlSanitizerService.java)   |
+|5| [Path Traversal](https://github.com/DWS-2026/dws-2026-project-base/commit/d0b7542c12bbae7f1fb1cbb2996e294d5762a7b0)  | [ImageService.java](src/main/java/es/codeurjc/AcademiaElSoto/service/ImageService.java)   |
