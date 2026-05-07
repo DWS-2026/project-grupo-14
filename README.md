@@ -336,9 +336,8 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 | Rol | Usuario | Contraseña |
 |:---|:---|:---|
-| Administrador | admin | admin123 |
-| Usuario Registrado | user1 | user123 |
-| Usuario Registrado | user2 | user123 |
+| Administrador | admin | adminpass |
+| Usuario Registrado | user | pass |
 
 ### **Participación de Miembros en la Práctica 3**
 
@@ -356,35 +355,21 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - [Ignacio Enfedaque Cordero]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Principalmente la defensa ante algunas de las vulnerabilidades de la OWASP TOP 10]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Broken Access Control](https://github.com/DWS-2026/project-grupo-14/commit/b5aa2f14eb927c9a013b5b33a00714c68d9db18e)  | [UserRestController](src/main/java/es/codeurjc/AcademiaElSoto/restcontroller/UserRestController.java)   |
+|2| [Mishandling of Exceptional Conditions](https://github.com/DWS-2026/project-grupo-14/commit/ea3cc2005fc28445388e90ccab94d3f2f74dd5e8)  | [DatabaseUsersLoader](src/main/java/es/codeurjc/AcademiaElSoto/Security/DatabaseUsersLoader.java)   |
+|3| [Cryptographic Failures](https://github.com/DWS-2026/project-grupo-14/commit/9b93dd25e2d98a8f9fa1835eadbe7785bfcd533a)  | [aplication.properties](src/main/resources/application.properties)   |
+|4| [XSRF](https://github.com/DWS-2026/project-grupo-14/commit/c2bffd34ba3708005f30a9617f1a66e4f7847146)  | [CSRFHandlerConfiguration](src/main/java/es/codeurjc/AcademiaElSoto/Security/CSRFHandlerConfiguration.java)   |
+|5| [Security Logging & Alerting Failures && Software or Data Integrity Failures](https://github.com/DWS-2026/project-grupo-14/commit/84c87af72052dc557127ef8710677b1a46a49ee3)  | [CourseController](src/main/java/es/codeurjc/AcademiaElSoto/controller/CourseController.java)   |
 
 ---
 
 #### **Alumno 3 - [Nombre Completo]**
-
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
-
-| Nº    | Commits      | Files      |
-|:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
-
----
-
-#### **Alumno 4 - [Nombre Completo]**
 
 [Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
 
