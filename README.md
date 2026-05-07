@@ -330,7 +330,7 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 Diagrama actualizado incluyendo los @RestController y su relación con los @Service compartidos:
 
-![Diagrama de Clases Actualizado](images/complete-classes-diagram.png)
+![Diagrama de Clases Actualizado](images/classes-diagram-actualiced.png)
 
 #### **Credenciales de Usuarios de Ejemplo**
 
@@ -341,17 +341,17 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ### **Participación de Miembros en la Práctica 3**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - [Mario Jándara Alcón]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Principalmentep parte de la defensa ante vulnerabilidades OWASP TOP 10 y algunos ejemplos del temario]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Texto enriquecido]([URL_commit_1](https://github.com/DWS-2026/project-grupo-14/commit/639e7a4bcccbba9b779d1eaed6aaa83251d35e2d))  | [edit_comment_page](src/main/resources/templates/comment_db/edit_comment_page.html)   |
+|2| [Ejem 10/11]([URL_commit_2](https://github.com/DWS-2026/project-grupo-14/commit/73d50ae08f4d78abc4070619893a6b4548d5f654))  | [CartMapper](src/main/java/es/codeurjc/AcademiaElSoto/mapper/CartMapper.java)   |
+|3| [Security Misconfiguration]([URL_commit_3](https://github.com/DWS-2026/project-grupo-14/commit/96523d0d0f4d1e63c6f2da36e2110618a9b5de9a))  | [CartController](src/main/java/es/codeurjc/AcademiaElSoto/controller/CartController.java)   |
+|4| [Defense in depth]([URL_commit_4](https://github.com/DWS-2026/project-grupo-14/commit/79c94bbc0da762f9d3a0a88d0b587665f041e2ee))  | [CommentRestController](src/main/java/es/codeurjc/AcademiaElSoto/restcontroller/CommentRestController.java)   |
+|5| [Authentication Failures]([URL_commit_5](https://github.com/DWS-2026/project-grupo-14/commit/62545c322a5c0453eb8cdce6583cd50cd0291382))  | [AuthetnticationEvents](src/main/java/es/codeurjc/AcademiaElSoto/Security/AuthenticationEvents.java)   |
 
 ---
 
